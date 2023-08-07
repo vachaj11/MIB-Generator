@@ -1,3 +1,4 @@
+"""This module serves the purpose of generating MIB databases from inputed objects and checking their validity."""
 import longdata
 
 out_path = "/home/vachaj11/Documents/MIB/test1/MIB"

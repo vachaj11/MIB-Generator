@@ -1,3 +1,4 @@
+"""This module serves the purpose of storing various data that would otherwise cluster the code elsewhere."""
 pid = [
     {"name": "PID_TYPE", "type": ["n", 3], "mandatory": True},
     {"name": "PID_STYPE", "type": ["n", 3], "mandatory": True},

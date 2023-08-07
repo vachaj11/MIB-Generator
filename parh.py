@@ -1,3 +1,4 @@
+"""This module serves the purpose of parsing C header files containing information about the structure of packets."""
 import json5
 
 types = {"uint8_t", "uint16_t", "uint32_t", "uint64_t", "char", "unsigned int"}
