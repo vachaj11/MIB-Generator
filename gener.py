@@ -1,7 +1,7 @@
 """This module serves the purpose of generating MIB databases from inputed objects and checking their validity."""
 import longdata
 
-out_path = "/home/vachaj11/Documents/MIB/test1/MIB"
+out_path = "/home/vachaj11/Documents/MIB/analysis/MIB"
 
 
 def list_to_mib(lis):
@@ -19,10 +19,10 @@ def save_mib(mib, name):
     fil = open(path, "w")
     fil.write(mib)
     fil.close()
-    
+
 
 def check(value, typ):
-    """Check whether the given value matches the given type.""" 
+    """Check whether the given value matches the given type."""
     if len(value) > typ[1]:
         return False
     if typ[0] == "n":
@@ -31,9 +31,10 @@ def check(value, typ):
         except:
             return False
     if typ[0] == "c":
-        if (not value.isascii()) or bool({'"', "&","<",">"}&set(value)):
+        if (not value.isascii()) or bool({'"', "&", "<", ">"} & set(value)):
             return False
     return True
+
 
 def generate(table_type, source):
     """From a list of entries (per rows) generate and save a MIB database of a given type."""
@@ -46,18 +47,34 @@ def generate(table_type, source):
             if l["name"] in i.keys():
                 val = str(i[l["name"]])
                 row.append(val)
-                if not check(val,l["type"]):
-                    print("The value in table " + table_type + ", column " +l["name"] + ", row "+str(row_ind)+ " doesn't have the required type.")
-                    print("Value: "+str(val)+"; Type: "+str(l["type"]))
+                if not check(val, l["type"]):
+                    print(
+                        "The value in table "
+                        + table_type
+                        + ", column "
+                        + l["name"]
+                        + ", row "
+                        + str(row_ind)
+                        + " doesn't have the required type."
+                    )
+                    print("Value: " + str(val) + "; Type: " + str(l["type"]))
             else:
                 row.append("")
                 if l["mandatory"]:
-                    print("Missing a mandatory entry in table " + table_type + ", column "+l["name"]+", row "+str(row_ind)+".")
-                
+                    print(
+                        "Missing a mandatory entry in table "
+                        + table_type
+                        + ", column "
+                        + l["name"]
+                        + ", row "
+                        + str(row_ind)
+                        + "."
+                    )
+
         table.append(row)
         row_ind += 1
     mib = list_to_mib(table)
-    save_mib(mib,table_type)
+    save_mib(mib, table_type)
 
 
 def pid_generate(packets):
@@ -86,55 +103,56 @@ def pcf_generate(packets):
     for i in packets:
         for l in i.pcf:
             rows.append(l)
-    generate("pcf",rows)
-    
-    
+    generate("pcf", rows)
+
+
 def plf_generate(packets):
     rows = []
     for i in packets:
         for l in i.plf:
             rows.append(l)
-    generate("plf",rows)
-    
+    generate("plf", rows)
+
 
 def mcf_generate(mcfs):
     rows = []
     for i in mcfs:
         rows.append(i.mcf)
     generate("mcf", rows)
- 
- 
+
+
 def txf_generate(txfs):
     rows = []
     for i in txfs:
         rows.append(i.txf)
     generate("txf", rows)
-    
-    
+
+
 def txp_generate(txfs):
     rows = []
     for i in txfs:
         for l in i.txp:
             rows.append(l)
-    generate("txp",rows)
-    
+    generate("txp", rows)
+
+
 def lgf_generate(lgfs):
     rows = []
     for i in lgfs:
         rows.append(i.lgf)
     generate("lgf", rows)
- 
- 
+
+
 def caf_generate(cafs):
     rows = []
     for i in cafs:
         rows.append(i.caf)
     generate("caf", rows)
-    
-    
+
+
 def cap_generate(cafs):
     rows = []
     for i in cafs:
         for l in i.cap:
             rows.append(l)
-    generate("cap",rows)
+    generate("cap", rows)

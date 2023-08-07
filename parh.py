@@ -190,6 +190,7 @@ def str_parse_r(offset, stri):
 
 class structure:
     """class of first order header structures/object"""
+
     def __init__(self, typ, inds, inde, cont):
         self.type = typ
         self.start = inds
@@ -200,6 +201,7 @@ class structure:
 
 class enum(structure):
     """class of enum structure"""
+
     def __init__(self, typ, inds, inde, cont):
         structure.__init__(self, typ, inds, inde, cont)
         self.name, self.entries = self.ele_parse(cont)
@@ -241,6 +243,7 @@ class enum(structure):
 
 class define(structure):
     """class of #define makro"""
+
     def __init__(self, typ, inds, inde, cont):
         structure.__init__(self, typ, inds, inde, cont)
         self.name, self.expression = self.def_parse(cont)
@@ -258,6 +261,7 @@ class define(structure):
 
 class extern(structure):
     """class of external declaration of a constant"""
+
     def __init__(self, typ, inds, inde, cont):
         structure.__init__(self, typ, inds, inde, cont)
         self.flav, self.name, self.array = self.ext_parse(cont)
@@ -288,6 +292,7 @@ class extern(structure):
 
 class struct(structure):
     """class of declaration of a C structure"""
+
     def __init__(self, typ, inds, inde, cont):
         structure.__init__(self, typ, inds, inde, cont)
         self.name, self.packed, self.elements = self.stc_parse(cont)
@@ -311,6 +316,7 @@ class struct(structure):
 
 class struct_r(structure):
     """class of a reference to a C structure"""
+
     def __init__(self, typ, inds, inde, cont):
         structure.__init__(self, typ, inds, inde, cont)
         self.name, self.form, self.array = self.str_parse(cont)
@@ -330,7 +336,7 @@ class struct_r(structure):
             ind = rest.find("[")
             inde = rest.find("]")
             array = rest[ind + 1 : inde]
-            rest = rest[:ind] + rest[inde+1:]
+            rest = rest[:ind] + rest[inde + 1 :]
         else:
             array = "-1"
         return rest.replace(" ", ""), form, array
@@ -338,6 +344,7 @@ class struct_r(structure):
 
 class enum_r(structure):
     """class of a reference to an enum"""
+
     def __init__(self, typ, inds, inde, cont):
         structure.__init__(self, typ, inds, inde, cont)
         self.name, self.form, self.bites, self.array = self.enr_parse(cont)
@@ -357,7 +364,7 @@ class enum_r(structure):
             ind = rest.find("[")
             inde = rest.find("]")
             array = rest[ind + 1 : inde]
-            rest = rest[:ind] + rest[inde+1:]
+            rest = rest[:ind] + rest[inde + 1 :]
         else:
             array = "-1"
         if ":" in rest:
@@ -374,6 +381,7 @@ class enum_r(structure):
 
 class misc_r(structure):
     """class of a declaration of a constant"""
+
     def __init__(self, typ, inds, inde, cont):
         structure.__init__(self, typ, inds, inde, cont)
         self.name, self.bites, self.array = self.mir_parse(cont)
@@ -385,7 +393,7 @@ class misc_r(structure):
             ind = rest.find("[")
             inde = rest.find("]")
             array = rest[ind + 1 : inde]
-            rest = rest[:ind] + rest[inde+1:]
+            rest = rest[:ind] + rest[inde + 1 :]
         else:
             array = "-1"
         if ":" in rest:
@@ -421,6 +429,7 @@ def com_parse(comm):
 
 class comment:
     """class of an occurence of a comment in the file"""
+
     def __init__(self, start, end, text):
         self.text = text
         self.start = start
@@ -428,11 +437,12 @@ class comment:
         try:
             self.entries = json5.loads(text)
         except:
-            print("Error at"+self.text)
+            print("Error at" + self.text)
 
 
 class file:
     """class resresenting the file being analysed, its structure, etc..."""
+
     def __init__(self, stri):
         self.text = stri
         self.max_position = len(stri)

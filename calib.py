@@ -1,4 +1,6 @@
 """This module puts together all classes and function that represent the calibration part of MIB databases."""
+
+
 def calib_extract(comments):
     """Extract declaration of various calibrations if they occur in the comments"""
     mcfs = []
@@ -21,10 +23,11 @@ def calib_extract(comments):
 
 class mcf_calib:
     """class of a mcf calibration"""
+
     def __init__(self, comment):
         self.comment = comment
         self.mcf = self.mcf_dictionary()
-        
+
     def mcf_dictionary(self):
         """Define elements for entry in mcf table."""
         diction = {}
@@ -32,18 +35,21 @@ class mcf_calib:
         diction["MCF_DESCR"] = self.comment.entries["desc"]
         for i in range(5):
             try:
-                diction["MCF_POL"+str(i+1)] = self.comment.entries["mcf"]["a"+str(i)]
+                diction["MCF_POL" + str(i + 1)] = self.comment.entries["mcf"][
+                    "a" + str(i)
+                ]
             except:
-                diction["MCF_POL"+str(i+1)] = ""
+                diction["MCF_POL" + str(i + 1)] = ""
         return diction
-        
-        
+
+
 class lgf_calib:
     """class of a lgf calibration"""
+
     def __init__(self, comment):
         self.comment = comment
         self.lgf = self.lgf_dictionary()
-        
+
     def lgf_dictionary(self):
         """Define elements for entry in lgf table."""
         diction = {}
@@ -51,20 +57,23 @@ class lgf_calib:
         diction["LGF_DESCR"] = self.comment.entries["desc"]
         for i in range(5):
             try:
-                diction["LGF_POL"+str(i+1)] = self.comment.entries["lgf"]["a"+str(i)]
+                diction["LGF_POL" + str(i + 1)] = self.comment.entries["lgf"][
+                    "a" + str(i)
+                ]
             except:
-                diction["LGF_POL"+str(i+1)] = ""
+                diction["LGF_POL" + str(i + 1)] = ""
         return diction
 
 
 class txf_calib:
     """class of a txf calibration"""
+
     def __init__(self, comment):
         self.comment = comment
         self.type, self.length = self.txf_data()
         self.txf = self.txf_dictionary()
         self.txp = self.txp_listdict()
-        
+
     def txf_data(self):
         """Get information about the nature of data calibrated."""
         try:
@@ -80,7 +89,7 @@ class txf_calib:
             flav = ""
             leng = ""
         return flav, leng
-        
+
     def txf_dictionary(self):
         """Define elements for entry in txf table."""
         diction = {}
@@ -89,7 +98,7 @@ class txf_calib:
         diction["TXF_RAWFMT"] = self.type
         diction["TXF_NALIAS"] = self.length
         return diction
-        
+
     def txp_listdict(self):
         """Define elements for entry in txp table."""
         entrydict = []
@@ -110,15 +119,17 @@ class txf_calib:
                 diction["TXP_ALTXT"] = ""
             entrydict.append(diction)
         return entrydict
-        
+
+
 class caf_calib:
     """class of a caf calibration"""
+
     def __init__(self, comment):
         self.comment = comment
         self.type, self.length = self.caf_data()
         self.caf = self.caf_dictionary()
         self.cap = self.cap_listdict()
-        
+
     def caf_data(self):
         """Get information about the nature of data calibrated."""
         try:
@@ -145,8 +156,8 @@ class caf_calib:
             flav_r = ""
             flav_e = ""
             leng = ""
-        return [flav_r,flav_e], leng
-        
+        return [flav_r, flav_e], leng
+
     def caf_dictionary(self):
         """Define elements for entry in caf table."""
         diction = {}
@@ -154,12 +165,12 @@ class caf_calib:
         diction["CAF_DESCR"] = self.comment.entries["desc"]
         diction["CAF_ENGFMT"] = self.type[1]
         diction["CAF_RAWFMT"] = self.type[0]
-        #diction["CAF_RADIX"] =
-        #diction["CAF_UNIT"] =
+        # diction["CAF_RADIX"] =
+        # diction["CAF_UNIT"] =
         diction["CAF_NCURVE"] = self.length
-        #diction["CAF_INTER"] =
+        # diction["CAF_INTER"] =
         return diction
-        
+
     def cap_listdict(self):
         """Define elements for entry in cap table."""
         entrydict = []

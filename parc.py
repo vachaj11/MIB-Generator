@@ -135,6 +135,7 @@ def str_parse(stri):
 
 class instance_og:
     """class of general C structures/object"""
+
     def __init__(self, typ, inds, inde, cont):
         self.type = typ
         self.start = inds
@@ -144,7 +145,8 @@ class instance_og:
 
 
 class instance(instance_og):
-    """class of first order C structures/object""" 
+    """class of first order C structures/object"""
+
     def __init__(self, typ, inds, inde, cont):
         instance_og.__init__(self, typ, inds, inde, cont)
         self.name, self.array, self.elements = self.str_parse(cont)
@@ -190,6 +192,7 @@ class instance(instance_og):
 
 class struct(instance):
     """class of an instance of an array of structs"""
+
     def __init__(self, typ, inds, inde, cont):
         instance.__init__(self, typ, inds, inde, cont)
         self.flav, self.name = self.add_parse(self.name)
@@ -214,6 +217,7 @@ class struct(instance):
 
 class miscal(instance):
     """class of an instance of an array of constants"""
+
     def __init__(self, typ, inds, inde, cont):
         instance.__init__(self, typ, inds, inde, cont)
         self.name = self.add_parse(self.name)
@@ -238,6 +242,7 @@ class miscal(instance):
 
 class struct_r(instance_og):
     """class of a singular instance of struct (within array)"""
+
     def __init__(self, typ, inds, inde, cont):
         instance_og.__init__(self, typ, inds, inde, cont)
         self.position, self.entries = self.srr_parse(cont)
@@ -275,6 +280,7 @@ class struct_r(instance_og):
 
 class misc_r(instance_og):
     """class of a singular instance of a constant (within array)"""
+
     def __init__(self, typ, inds, inde, cont):
         instance_og.__init__(self, typ, inds, inde, cont)
         self.position, self.value = self.mis_parse(cont)
@@ -312,6 +318,7 @@ def com_parse(comm):
 
 class comment:
     """class of an occurence of a comment in the file"""
+
     def __init__(self, start, end, text):
         self.text = text
         self.start = start
@@ -319,11 +326,12 @@ class comment:
         try:
             self.entries = json5.loads(text)
         except:
-            print("Error at"+self.text)
+            print("Error at" + self.text)
 
 
 class file:
     """class representing the file being analysed, its structure, etc..."""
+
     def __init__(self, stri):
         self.text = stri
         self.max_position = len(stri)
