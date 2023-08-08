@@ -455,6 +455,29 @@ cur = [
     {"name": "CUR_VALPAR", "type": ["n", 5], "mandatory": True},
     {"name": "CUR_SELECT", "type": ["c", 10], "mandatory": True},
 ]
+vdf = [
+    {"name": "VDF_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "VDF_COMMENT", "type": ["c", 32], "mandatory": False},
+    {"name": "VDF_DOMAINID", "type": ["n", 5], "mandatory": False},
+    {"name": "VDF_RELEASE", "type": ["n", 5], "mandatory": False},
+    {"name": "VDF_ISSUE", "type": ["n", 5], "mandatory": False},
+]
+ocf = [
+    {"name": "OCF_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "OCF_NBCHCK", "type": ["n", 2], "mandatory": True},
+    {"name": "OCF_NBOOL", "type": ["n", 2], "mandatory": True},
+    {"name": "OCF_INTER", "type": ["c", 1], "mandatory": True},
+    {"name": "OCF_CODIN", "type": ["c", 1], "mandatory": True},
+]
+ocp = [
+    {"name": "OCP_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "OCP_POS", "type": ["n", 2], "mandatory": True},
+    {"name": "OCP_TYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "OCP_LVALU", "type": ["c", 14], "mandatory": False},
+    {"name": "OCP_HVALU", "type": ["c", 14], "mandatory": False},
+    {"name": "OCP_RLCHK", "type": ["c", 8], "mandatory": False},
+    {"name": "OCP_VALPAR", "type": ["n", 5], "mandatory": False},
+]
 sizes = {
     "uint8_t": 8,
     "uint16_t": 16,
@@ -513,5 +536,8 @@ tables_format = {
     "pas": pas,
     "prf": prf,
     "prv": prv,
+    "vdf": vdf,
+    "ocf": ocf,
+    "ocp": ocp,
 }
 uint_pfc = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 24, 32, 48, 64]
