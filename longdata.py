@@ -67,6 +67,82 @@ plf = [
     {"name": "PLF_TIME", "type": ["n", 9], "mandatory": False},
     {"name": "PLF_TDOCC", "type": ["n", 9], "mandatory": False},
 ]
+vpd = [
+    {"name": "VPD_TPSD", "type": ["n", 10], "mandatory": True},
+    {"name": "VPD_POS", "type": ["n", 4], "mandatory": True},
+    {"name": "VPD_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "VPD_GRPSIZE", "type": ["n", 3], "mandatory": False},
+    {"name": "VPD_FIXREP", "type": ["n", 3], "mandatory": False},
+    {"name": "VPD_CHOICE", "type": ["c", 1], "mandatory": False},
+    {"name": "VPD_PIDREF", "type": ["c", 1], "mandatory": False},
+    {"name": "VPD_DISDESC", "type": ["c", 16], "mandatory": True},
+    {"name": "VPD_WIDTH", "type": ["n", 2], "mandatory": True},
+    {"name": "VPD_JUSTIFY", "type": ["c", 1], "mandatory": False},
+    {"name": "VPD_NEWLINE", "type": ["c", 1], "mandatory": False},
+    {"name": "VPD_DCHAR", "type": ["n", 1], "mandatory": False},
+    {"name": "VPD_FORM", "type": ["c", 1], "mandatory": False},
+    {"name": "VPD_OFFSET", "type": ["n", 6], "mandatory": False},
+]
+grp = [
+    {"name": "GRP_NAME", "type": ["c", 14], "mandatory": True},
+    {"name": "GRP_DESCR", "type": ["n", 24], "mandatory": True},
+    {"name": "GRP_GTYPE", "type": ["c", 2], "mandatory": True},
+]
+grpa = [
+    {"name": "GRPA_GNAME", "type": ["c", 14], "mandatory": True},
+    {"name": "GRPA_PANAME", "type": ["c", 8], "mandatory": True},
+    {"name": "GRPK_GNAME", "type": ["c", 14], "mandatory": True},
+    {"name": "GRPK_PKSPID", "type": ["n", 10], "mandatory": True},
+]
+dpf = [
+    {"name": "DPF_NUMBE", "type": ["c", 8], "mandatory": True},
+    {"name": "DPF_TYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "DPF_HEAD", "type": ["c", 32], "mandatory": False},
+]
+dpc = [
+    {"name": "DPC_NUMBE", "type": ["c", 8], "mandatory": True},
+    {"name": "DPC_NAME", "type": ["c", 8], "mandatory": False},
+    {"name": "DPC_FLDN", "type": ["n", 2], "mandatory": True},
+    {"name": "DPC_COMM", "type": ["n", 4], "mandatory": False},
+    {"name": "DPC_MODE", "type": ["c", 1], "mandatory": False},
+    {"name": "DPC_FORM", "type": ["c", 1], "mandatory": False},
+    {"name": "DPC_TEXT", "type": ["c", 32], "mandatory": False},
+]
+gpf = [
+    {"name": "GPF_NUMBE", "type": ["c", 8], "mandatory": True},
+    {"name": "GPF_TYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "GPF_HEAD", "type": ["c", 32], "mandatory": False},
+    {"name": "GPF_SCROL", "type": ["c", 1], "mandatory": False},
+    {"name": "GPF_HCOPY", "type": ["c", 1], "mandatory": False},
+    {"name": "GPF_DAYS", "type": ["n", 2], "mandatory": True},
+    {"name": "GPF_HOURS", "type": ["n", 2], "mandatory": True},
+    {"name": "GPF_MINUT", "type": ["n", 2], "mandatory": True},
+    {"name": "GPF_AXCLR", "type": ["c", 1], "mandatory": True},
+    {"name": "GPF_XTICK", "type": ["n", 2], "mandatory": True},
+    {"name": "GPF_YTICK", "type": ["n", 2], "mandatory": True},
+    {"name": "GPF_XGRID", "type": ["n", 2], "mandatory": True},
+    {"name": "GPF_YGRID", "type": ["n", 2], "mandatory": True},
+    {"name": "GPF_UPUN", "type": ["n", 2], "mandatory": False},
+]
+gpc = [
+    {"name": "GPC_NUMBE", "type": ["c", 8], "mandatory": True},
+    {"name": "GPC_POS", "type": ["n", 1], "mandatory": True},
+    {"name": "GPC_WHERE", "type": ["c", 1], "mandatory": True},
+    {"name": "GPC_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "GPC_RAW", "type": ["c", 1], "mandatory": False},
+    {"name": "GPC_MINIM", "type": ["c", 14], "mandatory": True},
+    {"name": "GPC_MAXIM", "type": ["c", 14], "mandatory": True},
+    {"name": "GPC_PRCLR", "type": ["c", 1], "mandatory": True},
+    {"name": "GPC_SYMBO", "type": ["c", 1], "mandatory": False},
+    {"name": "GPC_LINE", "type": ["c", 1], "mandatory": False},
+    {"name": "GPC_DOMAIN", "type": ["n", 5], "mandatory": False},
+]
+spf = [
+    {"name": "SPF_NUMBE", "type": ["c", 8], "mandatory": True},
+    {"name": "SPF_HEAD", "type": ["c", 32], "mandatory": False},
+    {"name": "SPF_NPAR", "type": ["n", 1], "mandatory": True},
+    {"name": "SPF_UPUN", "type": ["n", 2], "mandatory": False},
+]
 mcf = [
     {"name": "MCF_IDENT", "type": ["c", 10], "mandatory": True},
     {"name": "MCF_DESCR", "type": ["c", 32], "mandatory": False},
@@ -75,6 +151,266 @@ mcf = [
     {"name": "MCF_POL3", "type": ["c", 14], "mandatory": False},
     {"name": "MCF_POL4", "type": ["c", 14], "mandatory": False},
     {"name": "MCF_POL5", "type": ["c", 14], "mandatory": False},
+]
+spc = [
+    {"name": "SPC_NUMBE", "type": ["c", 8], "mandatory": True},
+    {"name": "SPC_POS", "type": ["n", 1], "mandatory": True},
+    {"name": "SPC_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "SPC_UPDT", "type": ["c", 1], "mandatory": False},
+    {"name": "SPC_MODE", "type": ["c", 1], "mandatory": False},
+    {"name": "SPC_FORM", "type": ["c", 1], "mandatory": False},
+    {"name": "SPC_BACK", "type": ["c", 1], "mandatory": False},
+    {"name": "SPC_FORE", "type": ["c", 1], "mandatory": True},
+]
+ppf = [
+    {"name": "PPF_NUMBE", "type": ["c", 4], "mandatory": True},
+    {"name": "PPF_HEAD", "type": ["c", 32], "mandatory": False},
+    {"name": "PPF_NBPR", "type": ["n", 2], "mandatory": False},
+]
+ppc = [
+    {"name": "PPC_NUMBE", "type": ["c", 4], "mandatory": True},
+    {"name": "PPC_POS", "type": ["n", 2], "mandatory": True},
+    {"name": "PPC_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "PPC_FORM", "type": ["c", 1], "mandatory": False},
+]
+tcp = [
+    {"name": "TCP_ID", "type": ["c", 8], "mandatory": True},
+    {"name": "TCP_DESC", "type": ["c", 24], "mandatory": False},
+]
+pcpc = [
+    {"name": "PCPC_PNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "PCPC_DESC", "type": ["c", 24], "mandatory": True},
+    {"name": "PCPC_CODE", "type": ["c", 1], "mandatory": False},
+]
+pcdf = [
+    {"name": "PCDF_TCNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "PCDF_DESC", "type": ["c", 24], "mandatory": False},
+    {"name": "PCDF_TYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "PCDF_LEN", "type": ["n", 4], "mandatory": True},
+    {"name": "PCDF_BIT", "type": ["n", 4], "mandatory": True},
+    {"name": "PCDF_PNAME", "type": ["c", 8], "mandatory": False},
+    {"name": "PCDF_VALUE", "type": ["c", 10], "mandatory": True},
+    {"name": "PCDF_RADIX", "type": ["c", 1], "mandatory": False},
+]
+ccf = [
+    {"name": "CCF_CNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "CCF_DESCR", "type": ["c", 24], "mandatory": True},
+    {"name": "CCF_DESCR2", "type": ["c", 64], "mandatory": False},
+    {"name": "CCF_CTYPE", "type": ["c", 8], "mandatory": False},
+    {"name": "CCF_CRITICAL", "type": ["c", 1], "mandatory": False},
+    {"name": "CCF_PKTID", "type": ["c", 8], "mandatory": True},
+    {"name": "CCF_TYPE", "type": ["n", 3], "mandatory": False},
+    {"name": "CCF_STYPE", "type": ["n", 3], "mandatory": False},
+    {"name": "CCF_APID", "type": ["n", 5], "mandatory": False},
+    {"name": "CCF_NPARS", "type": ["n", 3], "mandatory": False},
+    {"name": "CCF_PLAN", "type": ["c", 1], "mandatory": False},
+    {"name": "CCF_EXEC", "type": ["c", 1], "mandatory": False},
+    {"name": "CCF_ILSCOPE", "type": ["c", 1], "mandatory": False},
+    {"name": "CCF_ILSTAGE", "type": ["c", 1], "mandatory": False},
+    {"name": "CCF_SUBSYS", "type": ["n", 3], "mandatory": False},
+    {"name": "CCF_HIPRI", "type": ["c", 1], "mandatory": False},
+    {"name": "CCF_MAPID", "type": ["n", 2], "mandatory": False},
+    {"name": "CCF_DEFSET", "type": ["c", 8], "mandatory": False},
+    {"name": "CCF_RAPID", "type": ["n", 5], "mandatory": False},
+    {"name": "CCF_ACK", "type": ["n", 2], "mandatory": False},
+    {"name": "CCF_SUBSCHEDID", "type": ["n", 5], "mandatory": False},
+]
+dst = [
+    {"name": "DST_APID", "type": ["n", 5], "mandatory": True},
+    {"name": "DST_ROUTE", "type": ["c", 30], "mandatory": True},
+]
+cpc = [
+    {"name": "CPC_PNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "CPC_DESCR", "type": ["c", 24], "mandatory": False},
+    {"name": "CPC_PTC", "type": ["n", 2], "mandatory": True},
+    {"name": "CPC_PFC", "type": ["n", 5], "mandatory": True},
+    {"name": "CPC_DISPFMT", "type": ["c", 1], "mandatory": False},
+    {"name": "CPC_RADIX", "type": ["c", 1], "mandatory": False},
+    {"name": "CPC_UNIT", "type": ["c", 4], "mandatory": False},
+    {"name": "CPC_CATEG", "type": ["c", 1], "mandatory": False},
+    {"name": "CPC_PRFREF", "type": ["c", 10], "mandatory": False},
+    {"name": "CPC_CCAREF", "type": ["c", 10], "mandatory": False},
+    {"name": "CPC_PAFREF", "type": ["c", 10], "mandatory": False},
+    {"name": "CPC_INTER", "type": ["c", 1], "mandatory": False},
+    {"name": "CPC_DEFVAL", "type": ["c", 999], "mandatory": False},
+    {"name": "CPC_CORR", "type": ["c", 1], "mandatory": False},
+    {"name": "CPC_OBTID", "type": ["n", 5], "mandatory": False},
+    {"name": "CPC_DESCR2", "type": ["c", 256], "mandatory": False},
+    {"name": "CPC_ENDIAN", "type": ["c", 1], "mandatory": False},
+]
+cdf = [
+    {"name": "CDF_CNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "CDF_ELTYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "CDF_DESCR", "type": ["c", 24], "mandatory": False},
+    {"name": "CDF_ELLEN", "type": ["n", 4], "mandatory": True},
+    {"name": "CDF_BIT", "type": ["n", 4], "mandatory": True},
+    {"name": "CDF_GRPSIZE", "type": ["n", 2], "mandatory": False},
+    {"name": "CDF_PNAME", "type": ["c", 8], "mandatory": False},
+    {"name": "CDF_INTER", "type": ["c", 1], "mandatory": False},
+    {"name": "CDF_VALUE", "type": ["c", 999], "mandatory": False},
+    {"name": "CDF_TMID", "type": ["c", 8], "mandatory": False},
+]
+ptv = [
+    {"name": "PTV_CNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "PTV_PARNAM", "type": ["c", 8], "mandatory": True},
+    {"name": "PTV_INTER", "type": ["c", 1], "mandatory": False},
+    {"name": "PTV_VAL", "type": ["c", 17], "mandatory": True},
+]
+csf = [
+    {"name": "CSF_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "CSF_DESC", "type": ["c", 24], "mandatory": True},
+    {"name": "CSF_DESC2", "type": ["c", 64], "mandatory": False},
+    {"name": "CSF_IFTT", "type": ["c", 1], "mandatory": False},
+    {"name": "CSF_NFPARS", "type": ["n", 3], "mandatory": False},
+    {"name": "CSF_ELEMS", "type": ["n", 5], "mandatory": False},
+    {"name": "CSF_CRITICAL", "type": ["c", 1], "mandatory": False},
+    {"name": "CSF_PLAN", "type": ["c", 1], "mandatory": False},
+    {"name": "CSF_EXEC", "type": ["c", 1], "mandatory": False},
+    {"name": "CSF_SUBSYS", "type": ["n", 3], "mandatory": False},
+    {"name": "CSF_GENTIME", "type": ["c", 17], "mandatory": False},
+    {"name": "CSF_DOCNAME", "type": ["c", 32], "mandatory": False},
+    {"name": "CSF_ISSUE", "type": ["c", 10], "mandatory": False},
+    {"name": "CSF_DATE", "type": ["c", 17], "mandatory": False},
+    {"name": "CSF_DEFSET", "type": ["c", 8], "mandatory": False},
+    {"name": "CSF_SUBSCHEDID", "type": ["n", 5], "mandatory": False},
+]
+css = [
+    {"name": "CSS_SQNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "CSS_COMM", "type": ["c", 32], "mandatory": False},
+    {"name": "CSS_ENTRY", "type": ["n", 5], "mandatory": True},
+    {"name": "CSS_TYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "CSS_ELEMID", "type": ["c", 8], "mandatory": False},
+    {"name": "CSS_NPARS", "type": ["n", 3], "mandatory": False},
+    {"name": "CSS_MANDISP", "type": ["c", 1], "mandatory": False},
+    {"name": "CSS_RELTYPE", "type": ["c", 1], "mandatory": False},
+    {"name": "CSS_RELTIME", "type": ["c", 12], "mandatory": False},
+    {"name": "CSS_EXTIME", "type": ["c", 17], "mandatory": False},
+    {"name": "CSS_PREVREL", "type": ["c", 1], "mandatory": False},
+    {"name": "CSS_GROUP", "type": ["c", 1], "mandatory": False},
+    {"name": "CSS_BLOCK", "type": ["c", 1], "mandatory": False},
+    {"name": "CSS_ILSCOPE", "type": ["c", 1], "mandatory": False},
+    {"name": "CSS_ILSTAGE", "type": ["c", 1], "mandatory": False},
+    {"name": "CSS_DYNPTV", "type": ["c", 1], "mandatory": False},
+    {"name": "CSS_STAPTV", "type": ["c", 1], "mandatory": False},
+    {"name": "CSS_CEV", "type": ["c", 1], "mandatory": False},
+]
+sdf = [
+    {"name": "SDF_SQNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "SDF_ENTRY", "type": ["n", 5], "mandatory": True},
+    {"name": "SDF_ELEMID", "type": ["c", 8], "mandatory": True},
+    {"name": "SDF_POS", "type": ["n", 4], "mandatory": True},
+    {"name": "SDF_PNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "SDF_FTYPE", "type": ["c", 1], "mandatory": False},
+    {"name": "SDF_VTYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "SDF_VALUE", "type": ["c", 999], "mandatory": False},
+    {"name": "SDF_VALSET", "type": ["c", 8], "mandatory": False},
+    {"name": "SDF_REPPOS", "type": ["n", 4], "mandatory": False},
+]
+csp = [
+    {"name": "CSP_SQNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "CSP_FPNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "CSP_FPNUM", "type": ["n", 5], "mandatory": True},
+    {"name": "CSP_DESCR", "type": ["c", 24], "mandatory": False},
+    {"name": "CSP_PTC", "type": ["n", 2], "mandatory": True},
+    {"name": "CSP_PFC", "type": ["n", 5], "mandatory": True},
+    {"name": "CSP_DISPFMT", "type": ["c", 1], "mandatory": False},
+    {"name": "CSP_RADIX", "type": ["c", 1], "mandatory": False},
+    {"name": "CSP_TYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "CSP:VTYPE", "type": ["c", 1], "mandatory": False},
+    {"name": "CSP_DEFVAL", "type": ["c", 999], "mandatory": False},
+    {"name": "CSP_CATEG", "type": ["c", 1], "mandatory": False},
+    {"name": "CSP_PRFREF", "type": ["c", 10], "mandatory": False},
+    {"name": "CSP_CCAREF", "type": ["c", 10], "mandatory": False},
+    {"name": "CSP_PAFREF", "type": ["c", 10], "mandatory": False},
+    {"name": "CSP_UNIT", "type": ["c", 4], "mandatory": False},
+]
+cvs = [
+    {"name": "CVS_ID", "type": ["n", 5], "mandatory": True},
+    {"name": "CVS_TYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "CVS_SOURCE", "type": ["c", 1], "mandatory": True},
+    {"name": "CVS_START", "type": ["n", 5], "mandatory": True},
+    {"name": "CVS_INTERVAL", "type": ["n", 5], "mandatory": True},
+    {"name": "CVS_SPID", "type": ["n", 10], "mandatory": False},
+    {"name": "CVS_UNCERTAINTY", "type": ["n", 5], "mandatory": False},
+]
+cve = [
+    {"name": "CVE_DVSID", "type": ["n", 5], "mandatory": True},
+    {"name": "CVE_PARNAM", "type": ["c", 8], "mandatory": True},
+    {"name": "CVE_INTER", "type": ["c", 1], "mandatory": False},
+    {"name": "CVE_VAL", "type": ["c", 17], "mandatory": False},
+    {"name": "CVE_TOL", "type": ["c", 17], "mandatory": False},
+    {"name": "CVE_CHECK", "type": ["c", 1], "mandatory": False},
+]
+cvp = [
+    {"name": "CVP_TASK", "type": ["c", 8], "mandatory": True},
+    {"name": "CVP_TYPE", "type": ["c", 1], "mandatory": False},
+    {"name": "CVP_CVSID", "type": ["n", 5], "mandatory": True},
+]
+pst = [
+    {"name": "PST_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "PST_DESCR", "type": ["c", 24], "mandatory": False},
+]
+psv = [
+    {"name": "PSV_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "PSV_PVSID", "type": ["c", 8], "mandatory": True},
+    {"name": "PSV_DESCR", "type": ["c", 24], "mandatory": False},
+]
+cps = [
+    {"name": "CPS_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "CPS_PAR", "type": ["c", 8], "mandatory": True},
+    {"name": "CPS_BIT", "type": ["n", 4], "mandatory": True},
+]
+pvs = [
+    {"name": "PVS_ID", "type": ["c", 8], "mandatory": True},
+    {"name": "PVS_PSID", "type": ["c", 8], "mandatory": True},
+    {"name": "PVS_PNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "PVS_INTER", "type": ["c", 1], "mandatory": False},
+    {"name": "PVS_VALS", "type": ["c", 999], "mandatory": False},
+    {"name": "PVS_BIT", "type": ["n", 4], "mandatory": True},
+]
+psm = [
+    {"name": "PSM_NAME", "type": ["c", 8], "mandatory": True},
+    {"name": "PSM_TYPE", "type": ["c", 1], "mandatory": True},
+    {"name": "PSM_PARSET", "type": ["c", 8], "mandatory": True},
+]
+cca = [
+    {"name": "CCA_NUMBR", "type": ["c", 10], "mandatory": True},
+    {"name": "CCA_DESCR", "type": ["c", 24], "mandatory": False},
+    {"name": "CCA_ENGFMT", "type": ["c", 1], "mandatory": False},
+    {"name": "CCA_RAWFMT", "type": ["c", 1], "mandatory": False},
+    {"name": "CCA_RADIX", "type": ["c", 1], "mandatory": False},
+    {"name": "CCA_UNIT", "type": ["c", 4], "mandatory": False},
+    {"name": "CCA_NCURVE", "type": ["n", 3], "mandatory": False},
+]
+ccs = [
+    {"name": "CCS_NUMBR", "type": ["c", 10], "mandatory": True},
+    {"name": "CCS_XVALS", "type": ["c", 999], "mandatory": True},
+    {"name": "CCS_YVALS", "type": ["c", 999], "mandatory": True},
+]
+paf = [
+    {"name": "PAF_NUMBR", "type": ["c", 10], "mandatory": True},
+    {"name": "PAF_DESCR", "type": ["c", 24], "mandatory": False},
+    {"name": "PAF_RAWFMT", "type": ["c", 1], "mandatory": False},
+    {"name": "PAF_NALIAS", "type": ["n", 3], "mandatory": False},
+]
+pas = [
+    {"name": "PAS_NUMBR", "type": ["c", 10], "mandatory": True},
+    {"name": "PAS_ALTXT", "type": ["c", 999], "mandatory": True},
+    {"name": "PAS_ALVAL", "type": ["c", 999], "mandatory": True},
+]
+prf = [
+    {"name": "PRF_NUMBR", "type": ["c", 10], "mandatory": True},
+    {"name": "PRF_DESCR", "type": ["c", 24], "mandatory": False},
+    {"name": "PRF_INTER", "type": ["c", 1], "mandatory": False},
+    {"name": "PRF_DSPFMT", "type": ["c", 1], "mandatory": False},
+    {"name": "PRF_RADIX", "type": ["c", 1], "mandatory": False},
+    {"name": "PRF_NRANGE", "type": ["n", 3], "mandatory": False},
+    {"name": "PRF_UNIT", "type": ["c", 4], "mandatory": False},
+]
+prv = [
+    {"name": "PRV_NUMBR", "type": ["c", 10], "mandatory": True},
+    {"name": "PRV_MINVAL", "type": ["c", 999], "mandatory": True},
+    {"name": "PRV_MAXVAL", "type": ["c", 999], "mandatory": False},
 ]
 txf = [
     {"name": "TXF_NUMBR", "type": ["c", 10], "mandatory": True},
@@ -140,5 +476,42 @@ tables_format = {
     "cap": cap,
     "lgf": lgf,
     "cur": cur,
+    "vpd": vpd,
+    "grp": grp,
+    "grpa": grpa,
+    "dpf": dpf,
+    "dpc": dpc,
+    "gpf": gpf,
+    "gpc": gpc,
+    "spf": spf,
+    "spc": spc,
+    "ppf": ppf,
+    "ppc": ppc,
+    "tcp": tcp,
+    "pcpc": pcpc,
+    "pcdf": pcdf,
+    "ccf": ccf,
+    "dst": dst,
+    "cpc": cpc,
+    "cdf": cdf,
+    "ptv": ptv,
+    "csf": csf,
+    "css": css,
+    "sdf": sdf,
+    "csp": csp,
+    "cvs": cvs,
+    "cve": cve,
+    "cvp": cvp,
+    "pst": pst,
+    "psv": psv,
+    "cps": cps,
+    "pvs": pvs,
+    "psm": psm,
+    "cca": cca,
+    "ccs": ccs,
+    "paf": paf,
+    "pas": pas,
+    "prf": prf,
+    "prv": prv,
 }
 uint_pfc = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 24, 32, 48, 64]
