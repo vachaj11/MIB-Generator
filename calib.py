@@ -1,5 +1,21 @@
 """This module puts together all classes and function that represent the calibration part of MIB databases."""
 
+def cur_update(packet,cal):
+    """Check whether calibration exists for parameters which require it and if yes, change cur entries correspondingly"""
+    calibs = []
+    for i in cal:
+        for l in cal[i]:
+            calibs.append(l)
+    for i in packet.cur:
+        match_count = 0
+        for l in calibs:
+            if i["CUR_SELECT"] == l.name:
+                i["CUR_SELECT"] = l.comment.entries["cal_ident"]
+                match_count += 1
+        if match_count == 0:
+            print("Wasn't able to find matching calibration for " +i["CUR_PNAME"]+" in packet "+ str(packet.pid["PID_SPID"]))
+            packet.cur.remove(i)
+
 
 def calib_extract(comments):
     """Extract declaration of various calibrations if they occur in the comments"""
@@ -18,14 +34,19 @@ def calib_extract(comments):
                 lgfs.append(lgf_calib(i))
             elif "num_cal" in keys:
                 cafs.append(caf_calib(i))
-    return mcfs, txfs, cafs, lgfs
+    return {"mcfs":mcfs, "txfs":txfs, "cafs":cafs, "lgfs":lgfs}
 
+class calib:
+    """general class of calibration"""
+    def __init__(self, comment):
+        self.comment = comment
+        self.name = comment.entries["cal_def"]
 
-class mcf_calib:
+class mcf_calib(calib):
     """class of a mcf calibration"""
 
     def __init__(self, comment):
-        self.comment = comment
+        calib.__init__(self, comment)
         self.mcf = self.mcf_dictionary()
 
     def mcf_dictionary(self):
@@ -43,11 +64,11 @@ class mcf_calib:
         return diction
 
 
-class lgf_calib:
+class lgf_calib(calib):
     """class of a lgf calibration"""
 
     def __init__(self, comment):
-        self.comment = comment
+        calib.__init__(self, comment)
         self.lgf = self.lgf_dictionary()
 
     def lgf_dictionary(self):
@@ -65,11 +86,11 @@ class lgf_calib:
         return diction
 
 
-class txf_calib:
+class txf_calib(calib):
     """class of a txf calibration"""
 
     def __init__(self, comment):
-        self.comment = comment
+        calib.__init__(self, comment)
         self.type, self.length = self.txf_data()
         self.txf = self.txf_dictionary()
         self.txp = self.txp_listdict()
@@ -121,11 +142,11 @@ class txf_calib:
         return entrydict
 
 
-class caf_calib:
+class caf_calib(calib):
     """class of a caf calibration"""
 
     def __init__(self, comment):
-        self.comment = comment
+        calib.__init__(self, comment)
         self.type, self.length = self.caf_data()
         self.caf = self.caf_dictionary()
         self.cap = self.cap_listdict()

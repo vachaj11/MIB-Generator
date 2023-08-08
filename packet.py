@@ -71,6 +71,7 @@ class TM_packet:
         self.tpcf = self.tpcf_dictionary()
         self.pcf = self.pcf_listdict()
         self.plf = self.plf_listdict()
+        self.cur = self.cur_listdict()
 
     def pid_dictionary(self):
         """Define elements for entry in pid table."""
@@ -161,7 +162,10 @@ class TM_packet:
             # diction["PCF_RELATED"] =
             diction["PCF_CATEG"] = categfromptc(diction["PCF_PTC"])
             # diction["PCF_NATUR"] =
-            # diction["PCF_CURTX"] =
+            try:
+                diction["PCF_CURTX"] = self.entries[i].comment[-1].entries["cal"]
+            except:
+                diction["PCF_CURTX"] = ""
             # diction["PCF_INTER"] =
             # diction["PCF_USCON"] =
             # diction["PCF_DECIM"] =
@@ -196,6 +200,22 @@ class TM_packet:
             # diction["PLF_TDOCC"] =
             entrydict.append(diction)
         return entrydict
+        
+    def cur_listdict(self):
+        """Define elements for entries in cur table."""
+        entrydict = []
+        for l in range(len(self.entries)):
+            i = self.entries[l]
+            if len(i.comment)>0 and "cal" in i.comment[-1].entries.keys():
+                diction = {}
+                diction["CUR_PNAME"] = self.pcf[l]["PCF_NAME"]
+                diction["CUR_SELECT"] = i.comment[-1].entries["cal"]
+                #diction["CUR_POS"] = 
+                #diction["CUR_RLCHK"] =
+                #diction["CUR_VALPAR"] =
+                entrydict.append(diction)
+        return entrydict
+                
 
     def header_search(self, typ):
         """Search for header information of the packet based on information in the comments."""

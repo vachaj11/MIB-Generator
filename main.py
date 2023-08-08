@@ -4,19 +4,22 @@ import load, gener, calib, packet
 
 def main():
     """Run this whole hellish thing."""
-    mcfs, txfs, cafs, lgfs = calib.calib_extract(load.head1.comments)
-    gener.mcf_generate(mcfs)
-    gener.txf_generate(txfs)
-    gener.txp_generate(txfs)
-    gener.caf_generate(cafs)
-    gener.cap_generate(cafs)
-    gener.lgf_generate(lgfs)
+    cal = calib.calib_extract(load.head1.comments)
+    gener.mcf_generate(cal["mcfs"])
+    gener.txf_generate(cal["txfs"])
+    gener.txp_generate(cal["txfs"])
+    gener.caf_generate(cal["cafs"])
+    gener.cap_generate(cal["cafs"])
+    gener.lgf_generate(cal["lgfs"])
     lis = []
     for i in load.c_file.structures[1].elements:
-        lis.append(packet.TM_packet(i))
+        pack = packet.TM_packet(i)
+        calib.cur_update(pack,cal)
+        lis.append(pack)
     gener.pid_generate(lis)
     gener.pic_generate(lis)
     gener.tpcf_generate(lis)
     gener.pcf_generate(lis)
     gener.plf_generate(lis)
+    gener.cur_generate(lis)
     return lis

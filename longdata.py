@@ -112,6 +112,13 @@ lgf = [
     {"name": "LGF_POL4", "type": ["c", 14], "mandatory": False},
     {"name": "LGF_POL5", "type": ["c", 14], "mandatory": False},
 ]
+cur = [
+    {"name": "CUR_PNAME", "type": ["c", 8], "mandatory": True},
+    {"name": "CUR_POS", "type": ["n", 2], "mandatory": True},
+    {"name": "CUR_RLCHK", "type": ["c", 8], "mandatory": True},
+    {"name": "CUR_VALPAR", "type": ["n", 5], "mandatory": True},
+    {"name": "CUR_SELECT", "type": ["c", 10], "mandatory": True},
+]
 sizes = {
     "uint8_t": 8,
     "uint16_t": 16,
@@ -132,5 +139,6 @@ tables_format = {
     "caf": caf,
     "cap": cap,
     "lgf": lgf,
+    "cur": cur,
 }
 uint_pfc = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 24, 32, 48, 64]

@@ -113,6 +113,13 @@ def plf_generate(packets):
             rows.append(l)
     generate("plf", rows)
 
+def cur_generate(packets):
+    rows = []
+    for i in packets:
+        for l in i.cur:
+            rows.append(l)
+    generate("cur", rows)
+
 
 def mcf_generate(mcfs):
     rows = []
