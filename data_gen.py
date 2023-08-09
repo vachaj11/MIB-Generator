@@ -5,7 +5,7 @@ c = '"], '
 c = '", '
 d = '], "mandatory": '
 e = '},\n'
-file = "out.txt"
+file = "tmp/out.txt"
 
 while True:
 	A = ""

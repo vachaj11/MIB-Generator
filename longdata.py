@@ -541,3 +541,17 @@ tables_format = {
     "ocp": ocp,
 }
 uint_pfc = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 24, 32, 48, 64]
+translation = {
+    "type": "Type:",
+    "start": "Start index:",
+    "end": "End index:",
+    "name": "Name:",
+    "expression": "Expression:",
+    "flav": "Specific type:",
+    "array": "Array length:",
+    "packed": "Is packed:",
+    "form": "References to:",
+    "bites": "Bite length:",
+    "position": "Internal position:",
+    "value": "Value:"
+}

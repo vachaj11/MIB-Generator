@@ -1,15 +1,22 @@
 """Central location from which other modules can source data from files."""
-import parh, parc
+import parh, parc, json5
 
-c1_path = "/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.c"
-h1_path = "/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h"
-h2_path = "/home/vachaj11/Documents/MIB/start/src/PUS_TcTmDefs.h"
+file = open("paths.json5","r")
+paths = json5.load(file)
+file.close()
+
+c1_path = paths["TmFile"]
+h1_path = paths["TmHeader"]
+h2_path = paths["TcTmHeader"]
+out_dir = paths["OutDir"]
+
 try:
     head1 = parh.main(h1_path)
     head2 = parh.main(h2_path)
     c_file = parc.main(c1_path)
 except:
     print("Failed to load one of the C files")
+    exit()
 
 
 def extr_values(file):

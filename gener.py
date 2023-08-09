@@ -1,7 +1,7 @@
 """This module serves the purpose of generating MIB databases from inputed objects and checking their validity."""
-import longdata
+import longdata, load
 
-out_path = "/home/vachaj11/Documents/MIB/analysis/MIB"
+out_path = load.out_dir
 
 
 def list_to_mib(lis):
