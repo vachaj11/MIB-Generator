@@ -9,6 +9,17 @@ import load, longdata
 
 policy = QSizePolicy(QSizePolicy.Preferred,QSizePolicy.MinimumExpanding)
 
+class CommentWindow(QWidget):
+    def __init__(self, comment):
+        super().__init__()
+        self.setWindowTitle("Comment view")
+        layout = QVBoxLayout()
+        for i in comment:
+            label = QLabel(i.text)
+            layout.addWidget(label)
+        self.setLayout(layout)
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow, struct):
         if not MainWindow.objectName():
@@ -43,6 +54,18 @@ class Ui_MainWindow(object):
             table = QTableWidget(page)
             intable(table,data)
             verlay.addWidget(table)
+        if "comment" in methods and len(struct.comment) > 0:
+            button = QPushButton("View comments",page)
+            # I cannot believe this works
+            button.clicked.connect(lambda: self.view_comments(struct.comment))
+            verlay.addWidget(button)
+        if "entries" in methods:
+            label2 = QLabel(page)
+            label2.setText("Entries:")
+            verlay.addWidget(label2)
+            table2 = QTableWidget(page)
+            intable(table2,list(struct.entries.items()))
+            verlay.addWidget(table2)
         if "elements" in methods:
             label = QLabel(page)
             label.setText("Objects inside:")
@@ -52,14 +75,11 @@ class Ui_MainWindow(object):
                 subwid = self.inter(i)
                 toolbox.addItem(subwid, i.text.replace("\n","\\n"))
             verlay.addWidget(toolbox)
-        if "entries" in methods:
-            label2 = QLabel(page)
-            label2.setText("Entries:")
-            verlay.addWidget(label2)
-            table2 = QTableWidget(page)
-            intable(table2,list(struct.entries.items()))
-            verlay.addWidget(table2)
         return page
+        
+    def view_comments(self,comment):
+        self.a = CommentWindow(comment)
+        self.a.show()
             
 def getdata(struct):
     data = []
@@ -102,4 +122,4 @@ if __name__ == "__main__":
     window.show()
     sys.exit(app.exec())
 
-#TODO: try normal C file, make file input more variable, implement comments
+#TODO: try normal C file, make file input more variable, implement comments, set length of comments to correct size
