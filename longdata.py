@@ -553,5 +553,5 @@ translation = {
     "form": "References to:",
     "bites": "Bite length:",
     "position": "Internal position:",
-    "value": "Value:"
+    "value": "Value:",
 }

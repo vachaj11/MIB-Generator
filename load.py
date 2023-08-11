@@ -1,7 +1,7 @@
 """Central location from which other modules can source data from files."""
 import parh, parc, json5
 
-file = open("paths.json5","r")
+file = open("paths.json5", "r")
 paths = json5.load(file)
 file.close()
 

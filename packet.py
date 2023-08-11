@@ -200,22 +200,21 @@ class TM_packet:
             # diction["PLF_TDOCC"] =
             entrydict.append(diction)
         return entrydict
-        
+
     def cur_listdict(self):
         """Define elements for entries in cur table."""
         entrydict = []
         for l in range(len(self.entries)):
             i = self.entries[l]
-            if len(i.comment)>0 and "cal" in i.comment[-1].entries.keys():
+            if len(i.comment) > 0 and "cal" in i.comment[-1].entries.keys():
                 diction = {}
                 diction["CUR_PNAME"] = self.pcf[l]["PCF_NAME"]
                 diction["CUR_SELECT"] = i.comment[-1].entries["cal"]
-                #diction["CUR_POS"] = 
-                #diction["CUR_RLCHK"] =
-                #diction["CUR_VALPAR"] =
+                # diction["CUR_POS"] =
+                # diction["CUR_RLCHK"] =
+                # diction["CUR_VALPAR"] =
                 entrydict.append(diction)
         return entrydict
-                
 
     def header_search(self, typ):
         """Search for header information of the packet based on information in the comments."""

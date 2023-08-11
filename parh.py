@@ -489,4 +489,6 @@ def main(name="/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h"):
         fil.close()
     except:
         c = ""
-    return file(c)
+    x = file(c)
+    x.path = name
+    return x
