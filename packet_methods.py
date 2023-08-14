@@ -1,6 +1,7 @@
 """This module holds methods used for formatting parsed data into packet characteristics."""
 import load, longdata
 
+
 def apidnum(name):
     """Find the value of apid from evaluation of references, etc.
     I'm not following the direct logic of C here, because there seems to be some missing link.
@@ -56,7 +57,8 @@ def categfromptc(ptc):
     else:
         categ = "S"
     return categ
-    
+
+
 def header_search(typ):
     """Search for corresponding header structures of the packet based on information in the comments."""
     hstruct = []
@@ -70,8 +72,13 @@ def header_search(typ):
     if typ in load.enumerations.keys():
         hstruct.append(load.enumerations[typ])
     if not hstruct:
-        print("Warn.:\tWasn't able to establish the link of packet "+typ+" to any header structure.")
+        print(
+            "Warn.:\tWasn't able to establish the link of packet "
+            + typ
+            + " to any header structure."
+        )
     return hstruct
+
 
 def h_analysis(h_struct):
     """Make a list of all individual (all structs unpacked) entries in the header of the packet."""
@@ -93,7 +100,8 @@ def h_analysis(h_struct):
                     else:
                         entries = entries + h_analysis(i.form)
     return entries
-    
+
+
 def var_get(entries):
     "Extract variable parameters from list of all parameters."
     var = []
@@ -102,6 +110,7 @@ def var_get(entries):
         if com and "var" in com[-1].entries.keys():
             var.append(i)
     return var
+
 
 def count_size(entries):
     """Counts bit size of the packet header and bit position of entries within it."""
@@ -122,3 +131,13 @@ def count_size(entries):
                 print("Unknown size of type " + i.type)
     return int(size_bites / 8), positions + [size_bites]
 
+
+def pi_sid(entries, positions):
+    "Extract position of additional identification field from packet entries."
+    start = None
+    width = 0
+    for i in range(len(entries)):
+        if entries[i].name == "sid":
+            start = int(positions[i] / 8)
+            width = positions[i + 1] - positions[i]
+    return start, width

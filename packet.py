@@ -1,19 +1,22 @@
 """This module takes care of creating a representation of packets from parsed C-files and extracting entries for MIB databases."""
 import packet_methods as pm
+
+
 class TM_header:
     """class representing the TM header common to all TM-packages"""
+
     def __init__(self, file):
         self.structure = self.find_header(file)
         self.entries = pm.h_analysis(self.structure)
         self.size, self.positions = pm.count_size(self.entries)
-        
+
     def find_header(self, file):
         for i in file.structures:
             methods = i.__dir__()
             if "name" in methods and i.name == "TmHead":
                 return i
         print("Warn.:\tWasn't able to find the common Tm header.")
-        
+
 
 class TM_packet:
     """class representing each TM packet type and its properties"""
@@ -67,18 +70,19 @@ class TM_packet:
     def pic_dictionary(self):
         """Define elements for entry in pic table."""
         diction = {}
-        comm = self.structure.comment
         diction["PIC_TYPE"] = self.pid["PID_TYPE"]
         diction["PIC_STYPE"] = self.pid["PID_STYPE"]
-        if comm and "add_id1" in comm[-1].entries.keys():
-            diction["PIC_PI1_OFF"] = self.header.size
-            # + something probably, this would have to be further specified somewhere
-            diction["PIC_PI1_WID"] = ""
-            diction["PIC_PI2_OFF"] = self.header.size
-            diction["PIC_PI2_WID"] = ""
+        offset, width = pm.pi_sid(self.entries, self.positions)
+        if offset is not None:
+            diction["PIC_PI1_OFF"] = offset + self.header.size
+            diction["PIC_PI1_WID"] = width
         else:
             diction["PIC_PI1_OFF"] = -1
             diction["PIC_PI1_WID"] = 0
+        try:
+            diction["PIC_PI2_OFF"] = self.structure.comment[-1].entries["PI2"][0]
+            diction["PIC_PI2_WID"] = self.structure.comment[-1].entries["PI2"][1]
+        except:
             diction["PIC_PI2_OFF"] = -1
             diction["PIC_PI2_WID"] = 0
         diction["PID_APID"] = self.pid["PID_APID"]
@@ -157,9 +161,7 @@ class TM_packet:
     def plf_listdict(self):
         """Define elements for entries in plf table."""
         entrydict = []
-        positions = [
-            x + self.header.size * 8 for x in self.positions
-        ]
+        positions = [x + self.header.size * 8 for x in self.positions]
         for i in range(len(self.entries)):
             diction = {}
             size = positions[i + 1] - positions[i]

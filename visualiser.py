@@ -30,7 +30,7 @@ class CommentWindow(QWidget):
     def __init__(self, comment):
         super().__init__()
         self.setWindowTitle("Comment view")
-        #self.resize(600,500)
+        # self.resize(600,500)
         layout = QVBoxLayout()
         for i in comment:
             label = QLabel("Comment:")
@@ -149,7 +149,7 @@ class Ui_MainWindow(object):
             subview = self.inter(struct.form)
             subview.setParent(page)
             verlay.addWidget(subview)
-            
+
         return page
 
     def view_comments(self, comment):

@@ -181,8 +181,8 @@ class instance(instance_og):
                 if not lis:
                     lis.append(i)
                 else:
-                    block = clean(body[lis[-1]+1:i],{"\n","\t"}).replace(" ","")
-                    if len(block)>2:
+                    block = clean(body[lis[-1] + 1 : i], {"\n", "\t"}).replace(" ", "")
+                    if len(block) > 2:
                         lis.append(i)
         elem = []
         for i in range(len(lis) - 1):

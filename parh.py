@@ -220,7 +220,7 @@ class enum(structure):
         name = x[:brack]
         comma = [brack] + comma + [len(x) - 1]
         # takes care of trailing commas
-        if comma[-1]-comma[-2]<2:
+        if comma[-1] - comma[-2] < 2:
             comma.pop(-1)
         elem = []
         for i in range(len(comma) - 1):
