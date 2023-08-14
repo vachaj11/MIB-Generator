@@ -219,6 +219,9 @@ class enum(structure):
                 comma.append(i)
         name = x[:brack]
         comma = [brack] + comma + [len(x) - 1]
+        # takes care of trailing commas
+        if comma[-1]-comma[-2]<2:
+            comma.pop(-1)
         elem = []
         for i in range(len(comma) - 1):
             elem.append(x[comma[i] + 1 : comma[i + 1]])
@@ -437,7 +440,7 @@ class comment:
         try:
             self.entries = json5.loads(text)
         except:
-            print("Error at" + self.text)
+            print("Error:\tFailed loading json5 comment: " + self.text)
 
 
 class file:

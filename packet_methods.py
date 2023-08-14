@@ -58,19 +58,19 @@ def categfromptc(ptc):
     return categ
     
 def header_search(typ):
-    """Search for header information of the packet based on information in the comments."""
-    hstruct = None
+    """Search for corresponding header structures of the packet based on information in the comments."""
+    hstruct = []
     for i in load.TmH.structures:
         if i.type == "struct" and i.comment:
             uni = {}
             for l in i.comment:
                 uni.update(l.entries)
             if "pack_type" in uni.keys() and uni["pack_type"] == typ:
-                hstruct = i
-    if hstruct == None and typ in load.enumerations.keys():
-        hstruct = load.enumerations[typ]
-    elif hstruct == None:
-        print("Warn.:\t Wasn't able to establish the link of packet "+typ+" to any header structure.")
+                hstruct.append(i)
+    if typ in load.enumerations.keys():
+        hstruct.append(load.enumerations[typ])
+    if not hstruct:
+        print("Warn.:\tWasn't able to establish the link of packet "+typ+" to any header structure.")
     return hstruct
 
 def h_analysis(h_struct):

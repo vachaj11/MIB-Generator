@@ -177,7 +177,13 @@ class instance(instance_og):
             if (body[i] in {",", "{"} and depth == 1) or (
                 body[i] == "}" and depth == 0
             ):
-                lis.append(i)
+                # this ugly thing takes care of trailing commas
+                if not lis:
+                    lis.append(i)
+                else:
+                    block = clean(body[lis[-1]+1:i],{"\n","\t"}).replace(" ","")
+                    if len(block)>2:
+                        lis.append(i)
         elem = []
         for i in range(len(lis) - 1):
             start = self.start + ind + lis[i] + 2

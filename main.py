@@ -1,6 +1,7 @@
 """This module works as a startpoint and intersection for the creation of the MIB databases."""
 import load, gener, calib, packet
 import argparse
+import packet_methods
 
 
 def main(visual=True, generate=True, parseonly = False):
@@ -10,9 +11,11 @@ def main(visual=True, generate=True, parseonly = False):
         cal = calib.calib_extract(load.TmH.comments)
         TmHead = packet.TM_header(load.TmH)
         for i in load.TmC.structures[1].elements:
-            pack = packet.TM_packet(i,TmHead)
-            calib.cur_update(pack, cal)
-            lis.append(pack)
+            matched = packet_methods.header_search(i.entries[".type"])
+            for k in matched:
+                pack = packet.TM_packet(i,k,TmHead)
+                calib.cur_update(pack, cal)
+                lis.append(pack)
         if generate:
             gener.mcf_generate(cal["mcfs"])
             gener.txf_generate(cal["txfs"])

@@ -18,10 +18,10 @@ class TM_header:
 class TM_packet:
     """class representing each TM packet type and its properties"""
 
-    def __init__(self, structure, header):
+    def __init__(self, structure, h_structure, header):
         self.structure = structure
         self.header = header
-        self.h_structure = pm.header_search(structure.entries[".type"])
+        self.h_structure = h_structure
         self.entries = pm.h_analysis(self.h_structure)
         self.var_entries = pm.var_get(self.entries)
         self.size, self.positions = pm.count_size(self.entries)
