@@ -49,7 +49,7 @@ def generate(table_type, source):
                 row.append(val)
                 if not check(val, l["type"]):
                     print(
-                        "The value in table "
+                        "Warn.:\tThe value in table "
                         + table_type
                         + ", column "
                         + l["name"]
@@ -57,12 +57,12 @@ def generate(table_type, source):
                         + str(row_ind)
                         + " doesn't have the required type."
                     )
-                    print("Value: " + str(val) + "; Type: " + str(l["type"]))
+                    print("\tValue: " + str(val) + "; Type: " + str(l["type"]))
             else:
                 row.append("")
                 if l["mandatory"]:
                     print(
-                        "Missing a mandatory entry in table "
+                        "Warn.:\tMissing a mandatory entry in table "
                         + table_type
                         + ", column "
                         + l["name"]

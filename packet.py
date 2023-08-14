@@ -22,7 +22,7 @@ def evalu(string):
             x = load.enumerations[string]
         else:
             x = -1
-            print("Wasn't able to find the numerical value of " + string)
+            print("Warn.:\tWasn't able to find the numerical value of " + string)
     return x
 
 
@@ -90,7 +90,7 @@ class TM_packet:
             diction["PID_SPID"] = ""
             diction["PID_DESCR"] = ""
             print(
-                "Not enough information specified for the packet: "
+                "Warn.:\tNot enough information specified for the packet: "
                 + self.structure.entries[".type"]
             )
         # diction["PID_UNIT"] =
@@ -124,8 +124,9 @@ class TM_packet:
             diction["TPCF_NAME"] = self.structure.comment[-1].entries["text_id"]
         except:
             print(
-                "Not enough information specified for the packet: "
+                "Warn.:\tNot enough information specified for the packet: "
                 + self.structure.entries[".type"]
+                + "."
             )
         # diction["TPCF_SIZE"] =
         return diction
@@ -228,6 +229,8 @@ class TM_packet:
                     hstruct = i
         if hstruct == None and typ in load.enumerations.keys():
             hstruct = load.enumerations[typ]
+        elif hstruct == None:
+            print("Warn.:\t Wasn't able to establish the link of packet "+typ+" to any header structure.")
         return hstruct
 
     def h_analysis(self, h_struct):

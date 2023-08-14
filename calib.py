@@ -15,7 +15,7 @@ def cur_update(packet, cal):
                 match_count += 1
         if match_count == 0:
             print(
-                "Wasn't able to find matching calibration for "
+                "Warn.:\tWasn't able to find matching calibration for "
                 + i["CUR_PNAME"]
                 + " in packet "
                 + str(packet.pid["PID_SPID"])

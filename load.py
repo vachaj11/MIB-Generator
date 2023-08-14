@@ -15,7 +15,7 @@ try:
     head2 = parh.main(h2_path)
     c_file = parc.main(c1_path)
 except:
-    print("Failed to load one of the C files")
+    print("Error:\tFailed to load one of the C files")
     exit()
 
 

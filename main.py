@@ -31,7 +31,7 @@ def main(visual=True, generate=True, parseonly = False):
 
             visualiser.main([load.head1, load.head2, load.c_file])
         except ModuleNotFoundError:
-            print("Please install PySide6 in order to show the parsed files.")
+            print("Warn.:\tPySide6 not found. Please install it in order to show the parsed files.")
     return lis
 
 
