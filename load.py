@@ -1,4 +1,4 @@
-"""Central location from which other modules can source data from files."""
+"""Central location from which other modules can source data from the parsed C-files."""
 import parh, parc, json5
 
 file = open("paths.json5", "r")

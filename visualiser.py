@@ -30,6 +30,7 @@ class CommentWindow(QWidget):
     def __init__(self, comment):
         super().__init__()
         self.setWindowTitle("Comment view")
+        #self.resize(600,500)
         layout = QVBoxLayout()
         for i in comment:
             label = QLabel("Comment:")
@@ -81,7 +82,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow, struct):
         if not MainWindow.objectName():
             MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(710, 552)
+        MainWindow.resize(800, 600)
         centralwidget = QWidget(MainWindow)
         verlay = QVBoxLayout(centralwidget)
         scrolarea = QScrollArea(centralwidget)
@@ -141,6 +142,14 @@ class Ui_MainWindow(object):
                 subwid = self.inter(i)
                 toolbox.addItem(subwid, i.text.replace("\n", "\\n"))
             verlay.addWidget(toolbox)
+        if "form" in methods and type(struct.form) is not str:
+            label3 = QLabel(page)
+            label3.setText("In this structure:")
+            verlay.addWidget(label3)
+            subview = self.inter(struct.form)
+            subview.setParent(page)
+            verlay.addWidget(subview)
+            
         return page
 
     def view_comments(self, comment):
