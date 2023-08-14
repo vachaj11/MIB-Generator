@@ -210,7 +210,7 @@ def runt(struct):
     sys.exit(app.exec())
 
 
-def main(struct=[load.head1]):
+def main(struct=[load.TmH]):
     """For each file create a process and run the visualiser in it."""
     for i in struct:
         t = multiprocessing.Process(target=runt, args=[i])

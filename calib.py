@@ -21,6 +21,21 @@ def cur_update(packet, cal):
                 + str(packet.pid["PID_SPID"])
             )
             packet.cur.remove(i)
+    for i in packet.pcf:
+        if i["PCF_CURTX"]:
+            match_count = 0
+            for l in calibs:
+                if i["PCF_CURTX"] == l.name:
+                    i["PCF_CURTX"] = l.comment.entries["cal_ident"]
+                    match_count += 1
+            if match_count == 0:
+                print(
+                    "Warn.:\tWasn't able to find matching calibration for "
+                    + i["PCF_CURTX"]
+                    + " in packet "
+                    + str(packet.pid["PID_SPID"])
+                )
+                i["PCF_CURTX"] = ""
 
 
 def calib_extract(comments):

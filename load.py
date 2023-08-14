@@ -5,15 +5,15 @@ file = open("paths.json5", "r")
 paths = json5.load(file)
 file.close()
 
-c1_path = paths["TmFile"]
-h1_path = paths["TmHeader"]
-h2_path = paths["TcTmHeader"]
+TmC_path = paths["TmFile"]
+TmH_path = paths["TmHeader"]
+TcTmH_path = paths["TcTmHeader"]
 out_dir = paths["OutDir"]
 
 try:
-    head1 = parh.main(h1_path)
-    head2 = parh.main(h2_path)
-    c_file = parc.main(c1_path)
+    TmH = parh.main(TmH_path)
+    TcTmH = parh.main(TcTmH_path)
+    TmC = parc.main(TmC_path)
 except:
     print("Error:\tFailed to load one of the C files")
     exit()
@@ -40,6 +40,6 @@ def extr_values(file):
     return lis
 
 
-enum1 = extr_values(head1)
-enum2 = extr_values(head2)
+enum1 = extr_values(TmH)
+enum2 = extr_values(TcTmH)
 enumerations = enum1 | enum2

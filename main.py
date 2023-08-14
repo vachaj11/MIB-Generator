@@ -5,11 +5,12 @@ import argparse
 
 def main(visual=True, generate=True, parseonly = False):
     """Run this whole hellish thing."""
+    lis = []
     if not parseonly:
-        cal = calib.calib_extract(load.head1.comments)
-        lis = []
-        for i in load.c_file.structures[1].elements:
-            pack = packet.TM_packet(i)
+        cal = calib.calib_extract(load.TmH.comments)
+        TmHead = packet.TM_header(load.TmH)
+        for i in load.TmC.structures[1].elements:
+            pack = packet.TM_packet(i,TmHead)
             calib.cur_update(pack, cal)
             lis.append(pack)
         if generate:
@@ -29,7 +30,7 @@ def main(visual=True, generate=True, parseonly = False):
         try:
             import visualiser
 
-            visualiser.main([load.head1, load.head2, load.c_file])
+            visualiser.main([load.TmH, load.TcTmH, load.TmC])
         except ModuleNotFoundError:
             print("Warn.:\tPySide6 not found. Please install it in order to show the parsed files.")
     return lis
