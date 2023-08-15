@@ -36,6 +36,31 @@ def check(value, typ):
     return True
 
 
+def exclude_repetition(table, typ):
+    """Check whether there is any repetition in columns where entries should be unique and if so, delete additional rows."""
+    constraints = longdata.unique_entries[typ]
+    redundance = set()
+    for i in constraints:
+        bare_table = []
+        for l in table:
+            bare_table.append([l[x - 1] for x in i])
+        for x in range(len(bare_table)):
+            for y in range(len(bare_table)):
+                if bare_table[x] == bare_table[y] and y > x and "".join(bare_table[x]) != "":
+                    redundance.add(y)
+    if redundance:
+        print(
+            "Warn.:\tFound repetition in table "
+            + typ
+            + ". Deleting rows: "
+            + str(redundance)[1:-1]
+            + ". (This is to be expected for some tables.)"
+        )
+    indexes = sorted(list(redundance), reverse=True)
+    for i in indexes:
+        table.pop(i)
+
+
 def generate(table_type, source):
     """From a list of entries (per rows) generate and save a MIB database of a given type."""
     columns = longdata.tables_format[table_type]
@@ -73,6 +98,7 @@ def generate(table_type, source):
 
         table.append(row)
         row_ind += 1
+    exclude_repetition(table, table_type)
     mib = list_to_mib(table)
     save_mib(mib, table_type)
 

@@ -69,7 +69,7 @@ def header_search(typ):
                 uni.update(l.entries)
             if "pack_type" in uni.keys() and uni["pack_type"] == typ:
                 hstruct.append(i)
-    if typ in load.enumerations.keys():
+    if typ in load.enumerations.keys() and not hstruct:
         hstruct.append(load.enumerations[typ])
     if not hstruct:
         print(

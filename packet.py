@@ -41,8 +41,12 @@ class TM_packet:
         diction["PID_TYPE"] = pm.evalu(self.structure.entries[".serviceType"])
         diction["PID_STYPE"] = pm.evalu(self.structure.entries[".serviceSubType"])
         diction["PID_APID"] = pm.apidnum(self.structure.entries[".apid"])
-        # diction["PID_PI1_VAL"] =
-        # diction["PID_PI_VAL"] =
+        try: 
+            sid = [i.comment[-1].entries["const_value"] for i in self.h_structure.elements if i.name == "sid"]
+            diction["PID_PI1_VAL"] = pm.evalu(sid[0])
+        except:
+            diction["PID_PI1_VAL"] = "-1"
+        # diction["PID_PI2_VAL"] =
         try:
             diction["PID_SPID"] = self.structure.comment[-1].entries["num_id"]
             diction["PID_DESCR"] = self.structure.comment[-1].entries["desc"]
