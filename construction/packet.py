@@ -1,5 +1,5 @@
 """This module takes care of creating a representation of packets from parsed C-files and extracting entries for MIB databases."""
-import packet_methods as pm
+import construction.packet_methods as pm
 
 
 class TM_header:

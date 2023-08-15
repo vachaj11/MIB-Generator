@@ -1,7 +1,11 @@
 """This module works as a startpoint and intersection for the creation of the MIB databases."""
-import load, gener, calib, packet
 import argparse
-import packet_methods
+
+import load
+import generation.gener as gener 
+import construction.calib as calib
+import construction.packet as packet
+import construction.packet_methods as packet_methods
 
 
 def main(visual=True, generate=True, parseonly=False):

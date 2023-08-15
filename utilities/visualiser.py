@@ -1,6 +1,5 @@
 """This module allows for GUI representation of the parsed data"""
 from PySide6.QtCore import QMetaObject
-
 from PySide6.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -19,7 +18,9 @@ from PySide6.QtWidgets import (
     QAbstractScrollArea,
 )
 import sys, multiprocessing
-import load, longdata
+
+import load
+import data.longdata as longdata
 
 policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
 

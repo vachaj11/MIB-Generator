@@ -1,7 +1,10 @@
 """Central location from which other modules can source data from the parsed C-files."""
-import parh, parc, json5
+import json5
 
-file = open("paths.json5", "r")
+import parsing.parh as parh
+import parsing.parc as parc
+
+file = open("data/paths.json5", "r")
 paths = json5.load(file)
 file.close()
 

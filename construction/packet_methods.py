@@ -1,5 +1,6 @@
 """This module holds methods used for formatting parsed data into packet characteristics."""
-import load, longdata
+import load
+import data.longdata as longdata
 
 
 def apidnum(name):

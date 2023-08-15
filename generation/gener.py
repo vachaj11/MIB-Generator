@@ -1,5 +1,6 @@
 """This module serves the purpose of generating MIB databases from inputed objects and checking their validity."""
-import longdata, load
+import data.longdata as longdata
+import load
 
 out_path = load.out_dir
 
