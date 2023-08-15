@@ -47,7 +47,11 @@ def exclude_repetition(table, typ):
             bare_table.append([l[x - 1] for x in i])
         for x in range(len(bare_table)):
             for y in range(len(bare_table)):
-                if bare_table[x] == bare_table[y] and y > x and "".join(bare_table[x]) != "":
+                if (
+                    bare_table[x] == bare_table[y]
+                    and y > x
+                    and "".join(bare_table[x]) != ""
+                ):
                     redundance.add(y)
     if redundance:
         print(
@@ -103,6 +107,21 @@ def generate(table_type, source):
     mib = list_to_mib(table)
     save_mib(mib, table_type)
 
+
+def generation_hub(Tm_packets, calibrations):
+    mcf_generate(calibrations["mcfs"])
+    txf_generate(calibrations["txfs"])
+    txp_generate(calibrations["txfs"])
+    caf_generate(calibrations["cafs"])
+    cap_generate(calibrations["cafs"])
+    lgf_generate(calibrations["lgfs"])
+    pid_generate(Tm_packets)
+    pic_generate(Tm_packets)
+    tpcf_generate(Tm_packets)
+    pcf_generate(Tm_packets)
+    plf_generate(Tm_packets)
+    cur_generate(Tm_packets)
+    
 
 def pid_generate(packets):
     rows = []

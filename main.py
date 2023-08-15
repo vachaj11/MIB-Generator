@@ -1,4 +1,4 @@
-"""This module works as a startpoint and intersection for the creation of the MIB databases."""
+"""This module works as a startpoint and intersection for creation of the MIB databases."""
 import argparse
 
 
@@ -6,8 +6,9 @@ def main(visual=True, generate=True, parseonly=False, paths=False):
     """Run this whole hellish thing."""
     if paths:
         import utilities.path_update as path_update
+
         path_update.update()
-    
+
     lis = []
     import parsing.load as load
 
@@ -26,19 +27,8 @@ def main(visual=True, generate=True, parseonly=False, paths=False):
                 lis.append(pack)
         if generate:
             import generation.gener as gener
-
-            gener.mcf_generate(cal["mcfs"])
-            gener.txf_generate(cal["txfs"])
-            gener.txp_generate(cal["txfs"])
-            gener.caf_generate(cal["cafs"])
-            gener.cap_generate(cal["cafs"])
-            gener.lgf_generate(cal["lgfs"])
-            gener.pid_generate(lis)
-            gener.pic_generate(lis)
-            gener.tpcf_generate(lis)
-            gener.pcf_generate(lis)
-            gener.plf_generate(lis)
-            gener.cur_generate(lis)
+            
+            gener.generation_hub(lis, cal)
     if visual:
         try:
             import utilities.visualiser as visualiser
@@ -76,8 +66,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "-u",
         "--update_paths",
-        help="run script to update paths and store them in the json5 file",
+        help="start by running script to update paths and store them in the json5 file",
         action="store_true",
     )
     arguments = parser.parse_args()
-    main(arguments.visualise, not arguments.xgenerate, arguments.onlyparse, arguments.update_paths)
+    main(
+        arguments.visualise,
+        not arguments.xgenerate,
+        arguments.onlyparse,
+        arguments.update_paths,
+    )

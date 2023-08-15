@@ -1,3 +1,4 @@
+"""This module allows for automatic updates to the file paths specified in paths.json5"""
 import json5
 import os
 
