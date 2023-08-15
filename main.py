@@ -1,17 +1,21 @@
 """This module works as a startpoint and intersection for the creation of the MIB databases."""
 import argparse
 
-import load
-import generation.gener as gener 
-import construction.calib as calib
-import construction.packet as packet
-import construction.packet_methods as packet_methods
 
-
-def main(visual=True, generate=True, parseonly=False):
+def main(visual=True, generate=True, parseonly=False, paths=False):
     """Run this whole hellish thing."""
+    if paths:
+        import utilities.path_update as path_update
+        path_update.update()
+    
     lis = []
+    import parsing.load as load
+
     if not parseonly:
+        import construction.calib as calib
+        import construction.packet as packet
+        import construction.packet_methods as packet_methods
+
         cal = calib.calib_extract(load.TmH.comments)
         TmHead = packet.TM_header(load.TmH)
         for i in load.TmC.structures[1].elements:
@@ -21,6 +25,8 @@ def main(visual=True, generate=True, parseonly=False):
                 calib.cur_update(pack, cal)
                 lis.append(pack)
         if generate:
+            import generation.gener as gener
+
             gener.mcf_generate(cal["mcfs"])
             gener.txf_generate(cal["txfs"])
             gener.txp_generate(cal["txfs"])
@@ -35,7 +41,7 @@ def main(visual=True, generate=True, parseonly=False):
             gener.cur_generate(lis)
     if visual:
         try:
-            import visualiser
+            import utilities.visualiser as visualiser
 
             visualiser.main([load.TmH, load.TcTmH, load.TmC])
         except ModuleNotFoundError:
@@ -67,5 +73,11 @@ if __name__ == "__main__":
         help="stop after parsing the C-files (does not also generate MIB files)",
         action="store_true",
     )
+    parser.add_argument(
+        "-u",
+        "--update_paths",
+        help="run script to update paths and store them in the json5 file",
+        action="store_true",
+    )
     arguments = parser.parse_args()
-    main(arguments.visualise, not arguments.xgenerate, arguments.onlyparse)
+    main(arguments.visualise, not arguments.xgenerate, arguments.onlyparse, arguments.update_paths)

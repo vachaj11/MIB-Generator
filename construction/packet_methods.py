@@ -1,5 +1,5 @@
 """This module holds methods used for formatting parsed data into packet characteristics."""
-import load
+import parsing.load as load
 import data.longdata as longdata
 
 

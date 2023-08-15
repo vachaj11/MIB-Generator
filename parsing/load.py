@@ -1,10 +1,14 @@
 """Central location from which other modules can source data from the parsed C-files."""
 import json5
+import os
 
 import parsing.parh as parh
 import parsing.parc as parc
 
-file = open("data/paths.json5", "r")
+file_path = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), "data", "paths.json5"
+)
+file = open(file_path, "r")
 paths = json5.load(file)
 file.close()
 

@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 )
 import sys, multiprocessing
 
-import load
+import parsing.load as load
 import data.longdata as longdata
 
 policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)

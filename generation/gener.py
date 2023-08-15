@@ -1,6 +1,6 @@
 """This module serves the purpose of generating MIB databases from inputed objects and checking their validity."""
 import data.longdata as longdata
-import load
+import parsing.load as load
 
 out_path = load.out_dir
 
