@@ -34,6 +34,7 @@ class TM_packet:
         self.pcf = self.pcf_listdict()
         self.plf = self.plf_listdict()
         self.cur = self.cur_listdict()
+        self.vpd = self.vpd_listdict()
 
     def pid_dictionary(self):
         """Define elements for entry in pid table."""
@@ -52,8 +53,8 @@ class TM_packet:
             diction["PID_PI1_VAL"] = "-1"
         # diction["PID_PI2_VAL"] =
         try:
-            diction["PID_SPID"] = self.structure.comment[-1].entries["num_id"]
-            diction["PID_DESCR"] = self.structure.comment[-1].entries["desc"]
+            diction["PID_SPID"] = self.h_structure.comment[-1].entries["spid"]
+            diction["PID_DESCR"] = self.h_structure.comment[-1].entries["desc"]
         except:
             diction["PID_SPID"] = ""
             diction["PID_DESCR"] = ""
@@ -88,8 +89,8 @@ class TM_packet:
             diction["PIC_PI1_OFF"] = -1
             diction["PIC_PI1_WID"] = 0
         try:
-            diction["PIC_PI2_OFF"] = self.structure.comment[-1].entries["PI2"][0]
-            diction["PIC_PI2_WID"] = self.structure.comment[-1].entries["PI2"][1]
+            diction["PIC_PI2_OFF"] = self.h_structure.comment[-1].entries["PI2"][0]
+            diction["PIC_PI2_WID"] = self.h_structure.comment[-1].entries["PI2"][1]
         except:
             diction["PIC_PI2_OFF"] = -1
             diction["PIC_PI2_WID"] = 0
@@ -101,7 +102,7 @@ class TM_packet:
         diction = {}
         diction["TPCF_SPID"] = self.pid["PID_SPID"]
         try:
-            diction["TPCF_NAME"] = self.structure.comment[-1].entries["text_id"]
+            diction["TPCF_NAME"] = self.h_structure.comment[-1].entries["text_id"]
         except:
             print(
                 "Warn.:\tNot enough information specified for the packet: "
@@ -116,7 +117,7 @@ class TM_packet:
         entrydict = []
         for i in range(len(self.entries)):
             diction = {}
-            size = self.positions[i + 1] - self.positions[i]
+            size = int(self.positions[i + 1] - self.positions[i])
             try:
                 no = "{:X}".format(
                     int(str(self.h_structure.comment[-1].entries["base_par_index"]), 16)
@@ -144,7 +145,7 @@ class TM_packet:
             diction["PCF_CATEG"] = pm.categfromptc(diction["PCF_PTC"])
             # this uses probably a wrong specification of natur
             try:
-                diction["PCF_NATUR"] = self.entries[i].comment[-1].entries["nature"]
+                diction["PCF_NATUR"] = self.entries[i].comment[-1].entries["natur"]
             except:
                 diction["PCF_NATUR"] = "R"
             try:
@@ -198,4 +199,40 @@ class TM_packet:
                 # diction["CUR_RLCHK"] =
                 # diction["CUR_VALPAR"] =
                 entrydict.append(diction)
+        return entrydict
+
+    def vpd_listdict(self):
+        count = []
+        ind = 0
+        for i in range(len(self.var_entries)):
+            if self.entries[self.var_entries[-i - 1]].is_vpd == "count":
+                count.append(ind)
+                ind = 0
+            else:
+                count.append(0)
+                ind += 1
+        count.reverse()
+        entrydict = []
+        for i in zip(self.var_entries, count):
+            diction = {}
+            diction["VPD_TPSD"] = self.pid["PID_TPSD"]
+            diction["VPD_POS"] = i[0]
+            diction["VPD_NAME"] = self.pcf[i[0]]["PCF_NAME"]
+            diction["VPD_GRPSIZE"] = i[1]
+            # diction["VPD_FIXREP"] =
+            # diction["VPD_CHOICE"] =
+            # diction["VPD_PIDREF"] =
+            diction["VPD_DISDESC"] = self.pcf[i[0]]["PCF_DESCR"]
+            if i[1]:
+                diction["VPD_WIDTH"] = 0
+            else:
+                diction["VPD_WIDTH"] = int(
+                    (self.positions[i[0] + 1] - self.positions[i[0]]) / 8
+                )
+            # diction["VPD_JUSTIFY"] =
+            # diction["VPD_NEWLINE"] =
+            # diction["VPD_DCHAR"] =
+            # diction["VPD_FORM"] =
+            # diction["VPD_OFFSET"] =
+            entrydict.append(diction)
         return entrydict

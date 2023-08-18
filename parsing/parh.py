@@ -329,8 +329,17 @@ class struct_r(structure):
         if "{" not in cont or "}" not in cont:
             x = cont[7:]
             ind = x.find(" ")
-            form = x[:ind]
-            rest = x[ind + 1 :]
+            if ind > 0:
+                form = x[:ind]
+                rest = x[ind + 1 :]
+            else:
+                if "[" in x:
+                    indb = x.find("[")
+                    form = x[:indb]
+                    rest = x[indb:]
+                else:
+                    form = x
+                    rest = ""
         else:
             ind = cont.rfind("}")
             form = struct("struct", self.start, self.start + ind + 1, cont[: ind + 1])
@@ -466,9 +475,9 @@ class file:
                 if l.start <= ind <= l.end:
                     if l.type != "enum":  # very ugly bodge again
                         for k in l.elements:
-                            if ind - k.end >= 0 and ind - k.end <= minim:
+                            if ind - k.start >= 0 and ind - k.start <= minim:
                                 elem = k
-                                minim = ind - k.end
+                                minim = ind - k.start
                     else:
                         elem = l
                         minim = 49999
@@ -481,6 +490,7 @@ class file:
                         minim = l.start - ind
             pairs.append([i, elem])
             elem.comment.append(i)
+            i.structure = elem
         return pairs
 
 

@@ -59,7 +59,7 @@ def exclude_repetition(table, typ):
             + typ
             + ". Deleting rows: "
             + str(redundance)[1:-1]
-            + ". (This is to be expected for some tables.)"
+            + ". (This is to be expected for some tables like pic.)"
         )
     indexes = sorted(list(redundance), reverse=True)
     for i in indexes:
@@ -121,7 +121,8 @@ def generation_hub(Tm_packets, calibrations):
     pcf_generate(Tm_packets)
     plf_generate(Tm_packets)
     cur_generate(Tm_packets)
-    
+    vpd_generate(Tm_packets)
+
 
 def pid_generate(packets):
     rows = []
@@ -210,3 +211,11 @@ def cap_generate(cafs):
         for l in i.cap:
             rows.append(l)
     generate("cap", rows)
+
+
+def vpd_generate(packets):
+    rows = []
+    for i in packets:
+        for l in i.vpd:
+            rows.append(l)
+    generate("vpd", rows)

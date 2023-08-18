@@ -1,6 +1,7 @@
 """This module holds methods used for formatting parsed data into packet characteristics."""
 import parsing.load as load
 import data.longdata as longdata
+from copy import copy
 
 
 def apidnum(name):
@@ -23,8 +24,11 @@ def evalu(string):
         if string in load.enumerations.keys():
             x = load.enumerations[string]
         else:
-            x = -1
-            print("Warn.:\tWasn't able to find the numerical value of " + string)
+            try:
+                x = eval(string, load.enumerations)
+            except:
+                x = -1
+                print("Warn.:\tWasn't able to find the numerical value of " + string)
     return x
 
 
@@ -34,9 +38,12 @@ def getptcpcf(entry, size):
         typ = entry.comment[-1].entries["type"]
     except:
         typ = "-1"
-    if typ == "CUCTIME4_3":
+    if typ.startswith("CUCTIME"):
         ptc = 9
-        pfc = 18
+        pfc = longdata.time_pfc.index([int(typ[7]), int(typ[9])])
+    elif entry.array != "-1":
+        ptc = 7
+        pfc = int(size / 8)
     elif entry.type.startswith("uint"):
         ptc = 3
         pfc = longdata.uint_pfc.index(size)
@@ -87,19 +94,35 @@ def h_analysis(h_struct):
     if not (type(h_struct) is int or type(h_struct) is None):
         for i in h_struct.elements:
             if i.type not in {"enum", "struct"}:
+                # this is insanely ugly, but at least it shouldn't create any confusion
+                if i.comment and "vpd" in i.comment[-1].entries.keys():
+                    i.is_vpd = i.comment[-1].entries["vpd"]
+                else:
+                    i.is_vpd = ""
                 entries.append(i)
             elif i.type == "struct":
                 occurences = 1
+                from_struct = []
                 if evalu(i.array) > 0:
                     occurences = evalu(i.array)
+                if i.comment and "vpd" in i.comment[-1].entries.keys():
+                    occurences = 1
+                    vpd = True
+                else:
+                    vpd = False
                 for k in range(occurences):
                     if type(i.form) is str:
                         name = i.form
                         for l in load.TmH.structures + load.TcTmH.structures:
                             if l.name == name:
-                                entries = entries + h_analysis(l)
+                                from_struct = [copy(x) for x in h_analysis(l)]
                     else:
-                        entries = entries + h_analysis(i.form)
+                        from_struct = [copy(x) for x in h_analysis(i.form)]
+                if vpd:
+                    for k in from_struct:
+                        k.is_vpd = i.comment[-1].entries["vpd"]
+                entries = entries + from_struct
+
     return entries
 
 
@@ -108,13 +131,13 @@ def var_get(entries):
     var = []
     for i in range(len(entries)):
         com = entries[i].comment
-        if com and "var" in com[-1].entries.keys():
+        if entries[i].is_vpd:
             var.append(i)
     return var
 
 
 def count_size(entries):
-    """Counts bit size of the packet header and bit position of entries within it."""
+    """Counts bit size of the packet and bit position of entries within it."""
     size_bites = 0
     positions = []
     sizes = longdata.sizes

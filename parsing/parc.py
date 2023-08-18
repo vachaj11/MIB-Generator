@@ -373,6 +373,7 @@ class file:
                         minim = l.start - ind
             pairs.append([i, elem])
             elem.comment.append(i)
+            i.structure = elem
         return pairs
 
 

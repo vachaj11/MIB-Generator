@@ -1,4 +1,5 @@
 """This module puts together all classes and function that represent the calibration part of MIB databases."""
+import parsing.load as load
 
 
 def cur_update(packet, cal):
@@ -46,10 +47,10 @@ def calib_extract(comments):
     lgfs = []
     for i in comments:
         keys = i.entries.keys()
-        if "cal_def" in keys:
+        if "cal_ident" in keys:
             if "mcf" in keys:
                 mcfs.append(mcf_calib(i))
-            elif "text_cal" in keys:
+            elif bool({"text_cal", "enum"} & keys):
                 txfs.append(txf_calib(i))
             elif "lgf" in keys:
                 lgfs.append(lgf_calib(i))
@@ -63,7 +64,10 @@ class calib:
 
     def __init__(self, comment):
         self.comment = comment
-        self.name = comment.entries["cal_def"]
+        if "cal_def" in comment.entries.keys():
+            self.name = comment.entries["cal_def"]
+        else:
+            self.name = comment.entries["enum"]
 
 
 class mcf_calib(calib):
@@ -115,21 +119,33 @@ class txf_calib(calib):
 
     def __init__(self, comment):
         calib.__init__(self, comment)
+        self.enum = self.is_enum()
         self.type, self.length = self.txf_data()
         self.txf = self.txf_dictionary()
         self.txp = self.txp_listdict()
 
+    def is_enum(self):
+        """Check whether the calibration is saved in the header file as enum."""
+        if "enum" in self.comment.entries.keys():
+            return True
+        else:
+            return False
+
     def txf_data(self):
         """Get information about the nature of data calibrated."""
         try:
-            minim = self.comment.entries["text_cal"]["min"]
+            if not self.enum:
+                minim = self.comment.entries["text_cal"]["min"]
+                leng = str(len(self.comment.entries["text_cal"]["lookup"]))
+            else:
+                minim = min(self.comment.structure.entries.values())
+                leng = len(self.comment.structure.entries)
             if type(minim) is not int:
                 flav = "R"
             elif minim < 0:
                 flav = "I"
             else:
                 flav = "U"
-            leng = str(len(self.comment.entries["text_cal"]["lookup"]))
         except:
             flav = ""
             leng = ""
@@ -147,22 +163,37 @@ class txf_calib(calib):
     def txp_listdict(self):
         """Define elements for entry in txp table."""
         entrydict = []
-        for i in self.comment.entries["text_cal"]["lookup"]:
-            diction = {}
-            diction["TXP_NUMBR"] = self.txf["TXF_NUMBR"]
-            try:
-                if "val" in i.keys():
-                    diction["TXP_FROM"] = i["val"]
-                    diction["TXP_TO"] = i["val"]
-                else:
-                    diction["TXP_FROM"] = i["from"]
-                    diction["TXP_TO"] = i["to"]
-                diction["TXP_ALTXT"] = i["text"]
-            except:
-                diction["TXP_FROM"] = ""
-                diction["TXP_TO"] = ""
-                diction["TXP_ALTXT"] = ""
-            entrydict.append(diction)
+        if not self.enum:
+            for i in self.comment.entries["text_cal"]["lookup"]:
+                diction = {}
+                diction["TXP_NUMBR"] = self.txf["TXF_NUMBR"]
+                try:
+                    if "val" in i.keys():
+                        diction["TXP_FROM"] = i["val"]
+                        diction["TXP_TO"] = i["val"]
+                    else:
+                        diction["TXP_FROM"] = i["from"]
+                        diction["TXP_TO"] = i["to"]
+                    diction["TXP_ALTXT"] = i["text"]
+                except:
+                    diction["TXP_FROM"] = ""
+                    diction["TXP_TO"] = ""
+                    diction["TXP_ALTXT"] = ""
+                entrydict.append(diction)
+        else:
+            entries = list(self.comment.structure.entries.items())
+            for i in range(len(entries)):
+                diction = {}
+                diction["TXP_NUMBR"] = self.txf["TXF_NUMBR"]
+                diction["TXP_FROM"] = entries[i][1]
+                diction["TXP_TO"] = entries[i][1]
+                try:
+                    diction["TXP_ALTXT"] = self.comment.structure.comment[
+                        -self.length + i
+                    ].entries["text"]
+                except:
+                    diction["TXP_ALTXT"] = "-1"
+                entrydict.append(diction)
         return entrydict
 
 
