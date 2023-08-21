@@ -1,6 +1,5 @@
-"""This module takes care of creating a representation of packets from parsed C-files and extracting entries for MIB databases."""
-import construction.packet_methods as pm
-
+"""This module takes care of creating a representation of monitoring packets from parsed C-files and extracting entries for MIB databases."""
+import construction.TM_packet_methods as pm
 
 class TM_header:
     """class representing the TM header common to all TM-packages"""
@@ -128,7 +127,6 @@ class TM_packet:
                 ] + str(no)
             except:
                 diction["PCF_NAME"] = ""
-                diction["PCF_DESCR"] = ""
             try:
                 diction["PCF_DESCR"] = self.entries[i].comment[-1].entries["desc"]
             except:

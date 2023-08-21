@@ -1,6 +1,6 @@
+"""This module holds various methods used for parsing of the header and normal C files."""
 import json5
 import os
-
 
 def clean(stri, tokens):
     """Replace tokens with spaces."""
@@ -115,19 +115,19 @@ def preproc_parse(stri):
             log[-1].append(i)
             if status != 1:
                 print(
-                    "Warn.\tInvalid logic encountered when parsing preprocessor directives."
+                    "Warn.:\tInvalid logic encountered when parsing preprocessor directives."
                 )
             status = 2
         elif stri[i : i + 6] == "#endif":
             if status not in {1, 2}:
                 print(
-                    "Warn.\tInvalid logic encountered when parsing preprocessor directives."
+                    "Warn.:\tInvalid logic encountered when parsing preprocessor directives."
                 )
             status = status_log.pop(-1)
             log[-1].append(i)
             blocks.append(log.pop(-1))
     if status != 0:
-        print("Warn.\tInvalid logic encountered when parsing preprocessor directives.")
+        print("Warn.:\tInvalid logic encountered when parsing preprocessor directives.")
     return blocks
 
 

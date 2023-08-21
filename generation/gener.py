@@ -108,7 +108,7 @@ def generate(table_type, source):
     save_mib(mib, table_type)
 
 
-def generation_hub(Tm_packets, calibrations):
+def generation_hub(Tm_packets, Tc_packets, calibrations):
     mcf_generate(calibrations["mcfs"])
     txf_generate(calibrations["txfs"])
     txp_generate(calibrations["txfs"])
@@ -122,6 +122,8 @@ def generation_hub(Tm_packets, calibrations):
     plf_generate(Tm_packets)
     cur_generate(Tm_packets)
     vpd_generate(Tm_packets)
+    tcp_generate(Tc_packets)
+    pcpc_generate(Tc_packets)
 
 
 def pid_generate(packets):
@@ -219,3 +221,16 @@ def vpd_generate(packets):
         for l in i.vpd:
             rows.append(l)
     generate("vpd", rows)
+    
+def tcp_generate(packets):
+    rows = []
+    for i in packets:
+        rows.append(i.tcp)
+    generate("tcp", rows)
+
+def pcpc_generate(packets):
+    rows = []
+    for i in packets:
+        for l in i.pcpc:
+            rows.append(l)
+    generate("pcpc", rows)

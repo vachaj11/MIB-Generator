@@ -13,11 +13,13 @@ file.close()
 
 TmC_path = paths["TmFile"]
 TmH_path = paths["TmHeader"]
+TcH_path = paths["TcHeader"]
 TcTmH_path = paths["TcTmHeader"]
 out_dir = paths["OutDir"]
 
 try:
     TmH = par.main(TmH_path)
+    TcH = par.main(TcH_path)
     TcTmH = par.main(TcTmH_path)
     TmC = par.main(TmC_path)
 except:
@@ -48,4 +50,5 @@ def extr_values(file):
 
 enum1 = extr_values(TmH)
 enum2 = extr_values(TcTmH)
-enumerations = enum1 | enum2
+enum3 = extr_values(TcH)
+enumerations = enum1 | enum2 | enum3

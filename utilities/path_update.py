@@ -59,6 +59,21 @@ def update():
         else:
             print("Error:\tFailed to find the specified file, try again.")
         print("------")
+    valid_TcH = False
+    while not valid_TcH:
+        print("State relative or absolute path to Tc Header file.")
+        print("Currently this path is: " + str(leg_data["TcHeader"]))
+        print("(press Enter if you want to keep this value)")
+        path = input("Path: ")
+        if path == "" and os.path.isfile(leg_data["TcHeader"]):
+            data["TcHeader"] = leg_data["TcHeader"]
+            valid_TcH = True
+        elif os.path.isfile(path):
+            data["TcHeader"] = os.path.abspath(path)
+            valid_TcH = True
+        else:
+            print("Error:\tFailed to find the specified file, try again.")
+        print("------")
     valid_Out = False
     while not valid_Out:
         print("State relative or absolute path to the output directory.")

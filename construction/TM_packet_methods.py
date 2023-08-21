@@ -1,4 +1,4 @@
-"""This module holds methods used for formatting parsed data into packet characteristics."""
+"""This module holds methods used for formatting parsed data into monitoring packet characteristics."""
 import parsing.load as load
 import data.longdata as longdata
 from copy import copy

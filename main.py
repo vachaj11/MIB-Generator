@@ -9,36 +9,46 @@ def main(visual=True, generate=True, parseonly=False, paths=False):
 
         path_update.update()
 
-    lis = []
+    tm_lis = []
+    tc_lis = []
     import parsing.load as load
 
     if not parseonly:
+        #creating TM-packets
         import construction.calib as calib
-        import construction.packet as packet
-        import construction.packet_methods as packet_methods
+        import construction.TM_packet as tm_packet
+        import construction.TM_packet_methods as tm_packet_methods
 
         cal = calib.calib_extract(load.TmH.comments)
-        TmHead = packet.TM_header(load.TmH)
+        TmHead = tm_packet.TM_header(load.TmH)
         for i in load.TmC.structures[1].elements:
-            matched = packet_methods.header_search(i.entries[".type"])
+            matched = tm_packet_methods.header_search(i.entries[".type"])
             for k in matched:
-                pack = packet.TM_packet(i, k, TmHead)
+                pack = tm_packet.TM_packet(i, k, TmHead)
                 calib.cur_update(pack, cal)
-                lis.append(pack)
+                tm_lis.append(pack)
+        
+        #creating TC-packets
+        import construction.TC_packet as tc_packet
+        import construction.TC_packet_methods as tc_packet_methods
+        TcHead = tc_packet.TC_header(load.TcH)
+        packets = tc_packet_methods.packet_search(load.TcH)
+        tc_lis = [tc_packet.TC_packet(i, TcHead) for i in packets]
+        
         if generate:
             import generation.gener as gener
             
-            gener.generation_hub(lis, cal)
+            gener.generation_hub(tm_lis, tc_lis, cal)
     if visual:
         try:
             import utilities.visualiser as visualiser
 
-            visualiser.main([load.TmH, load.TcTmH, load.TmC])
+            visualiser.main([load.TmH, load.TcTmH, load.TmC, load.TcH])
         except ModuleNotFoundError:
             print(
                 "Warn.:\tPySide6 not found. Please install it in order to show the parsed files."
             )
-    return lis
+    return tm_lis+tc_lis
 
 
 if __name__ == "__main__":

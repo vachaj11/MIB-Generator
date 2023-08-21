@@ -1,5 +1,6 @@
-import parsing.parh as parh
-import parsing.parc as parc
+"""This module is a starting point for parsing of C-files and holds class which plays the role of their interpretation."""
+import parsing.par_header as parh
+import parsing.par_cfile as parc
 import parsing.par_methods as parm
 
 
