@@ -2,8 +2,7 @@
 import json5
 import os
 
-import parsing.parh as parh
-import parsing.parc as parc
+import parsing.parser_main as par
 
 file_path = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), "data", "paths.json5"
@@ -18,9 +17,9 @@ TcTmH_path = paths["TcTmHeader"]
 out_dir = paths["OutDir"]
 
 try:
-    TmH = parh.main(TmH_path)
-    TcTmH = parh.main(TcTmH_path)
-    TmC = parc.main(TmC_path)
+    TmH = par.main(TmH_path)
+    TcTmH = par.main(TcTmH_path)
+    TmC = par.main(TmC_path)
 except:
     print("Error:\tFailed to load one of the C files")
     exit()

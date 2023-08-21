@@ -1,107 +1,12 @@
 """This module serves the purpose of parsing C header files containing information about the structure of packets."""
-import json5
+import parsing.par_methods as parm
 
 types = {"uint8_t", "uint16_t", "uint32_t", "uint64_t", "char", "unsigned int"}
 
 
-def clean(stri, tokens):
-    """Replace tokens with spaces."""
-    c = stri
-    for i in tokens:
-        c = c.replace(i, " " * len(i))
-    return c
-
-
-def erase_text(stri):
-    """Erase all text inside quatation marks in the given string."""
-    mod = 0  # 0 for no quation, 1 for ' and 2 for "
-    new = stri
-    for i in range(len(stri)):
-        if stri[i] == '"' and mod != 2:
-            if mod == 0:
-                mod = 1
-            else:
-                mod = 0
-        elif stri[i] == "'" and mod != 1:
-            if mod == 0:
-                mod = 2
-            else:
-                mod = 0
-        elif mod != 0:
-            new = new[:i] + " " + new[i + 1 :]
-    return new
-
-
-def line_index(stri):
-    """Give list of indexes of line starts of the given string."""
-    starts = []
-    for i in range(len(stri)):
-        if stri[i] == "\n":
-            starts.append(i + 1)
-    return starts
-
-
-def split_comment(stri):
-    """Split the given string into a section with C comments and a section without them."""
-    mod = (
-        0  # 0 for normal content, 1 for '...', 2 for "...", 3 for /* ...*/ and 4 for //
-    )
-    comm = ""
-    cont = ""
-    start = 0
-    sections = []
-    for i in range(
-        len(stri)
-    ):  # iterates through the string and marks different sections of it
-        x = stri[i]
-        xy = stri[i : i + 2]
-        if x == '"' and mod == 2:
-            mod = 0
-        elif x == '"' and mod == 0:
-            mod = 2
-        elif x == "'" and mod == 1:
-            mod = 0
-        elif x == "'" and mod == 0:
-            mod = 1
-        elif xy == "/*" and mod == 0:
-            mod = 3
-            sections.append([start, i + 1])
-            start = i + 2
-        elif xy == "*/" and mod == 3:
-            mod = 0
-            sections.append([start, i - 1])
-            start = i
-        elif xy == "//" and mod == 0:
-            mod = 4
-            sections.append([start, i + 1])
-            start = i + 2
-        elif x == "\n" and mod == 4:
-            mod = 0
-            sections.append([start, i - 1])
-            start = i
-
-    if sections[-1][-1] != len(stri) - 1:
-        sections.append([start, len(stri) - 1])
-    switch = False  # keeps track of whether a given section is a content or a comment
-    for i in sections:
-        cut = stri[i[0] : i[1] + 1]
-        if not switch:
-            cont = cont + cut
-            # comm = comm + " " * len(cut)
-            if cut[:1] == "\n":  # horrible bodge which will come back to haunt me
-                comm = comm + cut[:1] + " " * (len(cut) - 3) + cut[1:][-2:]
-            else:
-                comm = comm + cut[:2] + " " * (len(cut) - 4) + cut[2:][-2:]
-        else:
-            cont = cont + " " * len(cut)
-            comm = comm + cut
-        switch = not switch
-    return cont, comm
-
-
 def str_parse(stri):
     """Parse the given string into blocks of "top-level" C-structures."""
-    strc = erase_text(stri)
+    strc = parm.erase_text(stri)
     depth = 0
     structures = []
     start = 0
@@ -145,7 +50,7 @@ def str_parse(stri):
 
 def str_parse_r(offset, stri):
     """Parse the given string into blocks of C-structures. But this time "second-order" strings are expected and the parsing is recursive."""
-    strc = erase_text(stri)
+    strc = parm.erase_text(stri)
     depth = 0
     structures = []
     start = 0
@@ -208,7 +113,7 @@ class enum(structure):
 
     def ele_parse(self, cont):
         """Parse enum into its syntactic/semantic components."""
-        x = clean(cont, {"enum", "//", "\n", "/*", "*/"})
+        x = parm.clean(cont, {"enum", "//", "\n", "/*", "*/"})
         x = x.replace(" ", "")
         brack = 0
         comma = []
@@ -253,7 +158,7 @@ class define(structure):
 
     def def_parse(self, cont):
         """Parse #define into its syntactic/semantic components."""
-        x = clean(cont, {"//", "\n", "/*", "*/"})
+        x = parm.clean(cont, {"//", "\n", "/*", "*/"})
         x = x[8:]
         if " " in x:
             ind = x.find(" ")
@@ -271,7 +176,7 @@ class extern(structure):
 
     def ext_parse(self, cont):
         """Parse extern into its syntactic/semantic components."""
-        x = clean(cont, {"//", "\n", "/*", "*/"})
+        x = parm.clean(cont, {"//", "\n", "/*", "*/"})
         x = x[13:]
         ind = x.find(" ")
         part_1 = x[:ind]
@@ -302,7 +207,7 @@ class struct(structure):
 
     def stc_parse(self, cont):
         """Parse struct into its syntactic/semantic components."""
-        x = clean(cont, {"//", "\n", "/*", "*/"})
+        x = parm.clean(cont, {"//", "\n", "/*", "*/"})
         x = x[7:]
         ind = x.find("{")
         head = x[:ind]
@@ -418,90 +323,3 @@ class misc_r(structure):
         else:
             byte = -1
         return rest.replace(" ", ""), byte, array
-
-
-def com_parse(comm):
-    """Parse the comments in the string into blocks corresponding to singular comments."""
-    depth = 0
-    start = 0
-    blocks = []
-    for i in range(len(comm)):
-        if comm[i : i + 3] == "/*{" and depth == 0:
-            start = i + 2
-            depth = 1
-        elif comm[i : i + 3] == "}*/" and depth == 1:
-            blocks.append(comment(start, i, comm[start : i + 1]))
-            depth = 0
-        elif comm[i : i + 2] == "//" and depth == 0:
-            depth = 2
-        elif comm[i] == "\n" and depth == 2:
-            depth = 0
-    return blocks
-
-
-class comment:
-    """class of an occurence of a comment in the file"""
-
-    def __init__(self, start, end, text):
-        self.text = text
-        self.start = start
-        self.end = end
-        try:
-            self.entries = json5.loads(text)
-        except:
-            print("Error:\tFailed loading json5 comment: " + self.text)
-
-
-class file:
-    """class resresenting the file being analysed, its structure, etc..."""
-
-    def __init__(self, stri):
-        self.text = stri
-        self.max_position = len(stri)
-        self.lines = line_index(stri)
-        self.text_o, self.text_c = split_comment(stri)
-        self.structures = str_parse(self.text_o)
-        self.comments = com_parse(self.text_c)
-        self.link = self.linker()
-
-    def linker(self):
-        """Link each comment to a corresponding C-object in the file"""
-        pairs = []
-        for i in self.comments:
-            ind = i.start
-            elem = {}
-            minim = 50000
-            for l in self.structures:
-                if l.start <= ind <= l.end:
-                    if l.type != "enum":  # very ugly bodge again
-                        for k in l.elements:
-                            if ind - k.start >= 0 and ind - k.start <= minim:
-                                elem = k
-                                minim = ind - k.start
-                    else:
-                        elem = l
-                        minim = 49999
-
-                    break
-            if minim == 50000:
-                for l in self.structures:
-                    if l.start - ind >= 0 and l.start - ind <= minim:
-                        elem = l
-                        minim = l.start - ind
-            pairs.append([i, elem])
-            elem.comment.append(i)
-            i.structure = elem
-        return pairs
-
-
-def main(name="/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h"):
-    """Run it all."""
-    try:
-        fil = open(name, "r")
-        c = fil.read()
-        fil.close()
-    except:
-        c = ""
-    x = file(c)
-    x.path = name
-    return x
