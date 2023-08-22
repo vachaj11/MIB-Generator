@@ -43,7 +43,7 @@ def main(visual=True, generate=True, parseonly=False, paths=False, config=False)
         if generate:
             import generation.gener as gener
             
-            gener.generation_hub(tm_lis, tc_lis, cal)
+            gener.generation_hub(tm_lis, tc_lis, cal, TcHead)
     if visual:
         try:
             import utilities.visualiser as visualiser

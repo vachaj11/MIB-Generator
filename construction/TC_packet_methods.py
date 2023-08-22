@@ -1,6 +1,6 @@
 """This module holds methods used for formatting parsed data into commanding packet characteristics."""
 import parsing.load as load
-from construction.TM_packet_methods import count_size, evalu
+from construction.TM_packet_methods import count_size, evalu, getptcpcf, categfromptc
 from copy import copy
 
 def packet_search(file):
