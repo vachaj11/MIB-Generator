@@ -4,7 +4,7 @@ Prerequisite python libraries are `pyjson5` and `PySide6` (optional). Install th
 ```
 pip install pyjson5 PySide6
 ``` 
-To run the scripts, specify the relevant input/output paths in "data/paths.json5"  (or run with flag `-u`) and run:
+To run the scripts, specify the relevant input/output paths in "data/paths.json5"  (or run with flag `-p`) and run:
 ```
 python3 main.py
 ```

@@ -5,13 +5,13 @@ import argparse
 def main(visual=True, generate=True, parseonly=False, paths=False, config=False):
     """Run this whole hellish thing."""
     if paths:
-        import utilities.path_update as path_update
+        import utilities.update as update
 
-        path_update.update_path()
+        update.update_path()
     if config:
-        import utilities.path_update as path_update
+        import utilities.update as update
         
-        path_update.update_config()
+        update.update_config()
         
     
     tm_lis = []

@@ -1,6 +1,7 @@
 """This module takes care of creating a representation of monitoring packets from parsed C-files and extracting entries for MIB databases."""
 import construction.TM_packet_methods as pm
 
+
 class TM_header:
     """class representing the TM header common to all TM-packages"""
 
@@ -200,32 +201,57 @@ class TM_packet:
         return entrydict
 
     def vpd_listdict(self):
+        """Define elements for entries in vpd table."""
         count = []
         ind = 0
         for i in range(len(self.var_entries)):
-            if self.entries[self.var_entries[-i - 1]].is_vpd == "count":
+            if self.var_entries[-i - 1] >= 0 and self.entries[
+                self.var_entries[-i - 1]
+            ].is_vpd == {"count"}:
                 count.append(ind)
                 ind = 0
+            elif self.var_entries[-i - 1] < 0:
+                count.append(1)
+                ind += 1
             else:
                 count.append(0)
                 ind += 1
         count.reverse()
         entrydict = []
-        for i in zip(self.var_entries, count):
+        for i in zip(self.var_entries, count, range(len(count))):
             diction = {}
             diction["VPD_TPSD"] = self.pid["PID_TPSD"]
-            diction["VPD_POS"] = i[0]
-            diction["VPD_NAME"] = self.pcf[i[0]]["PCF_NAME"]
+            diction["VPD_POS"] = i[2]
+            if i[0] >= 0:
+                diction["VPD_NAME"] = self.pcf[i[0]]["PCF_NAME"]
+                diction["VPD_FIXREP"] = 0
+                diction["VPD_DISDESC"] = self.pcf[i[0]]["PCF_DESCR"]
+            else:
+                diction["VPD_FIXREP"] = pm.evalu(self.entries[-i[0]].array)
+                name = (
+                    self.pcf[-i[0]]["PCF_NAME"][:3]
+                    + str(hash(self.pcf[-i[0]]["PCF_NAME"]))[-5:]
+                )
+                diction["VPD_NAME"] = name
+                diction["VPD_DISDESC"] = "fixed count"
+                # I'm not sure how correct this pcf entry is.
+                # It has to be here since the "purely informative" fixed-count parameter has to be in pcf.
+                diction2 = {}
+                diction2["PCF_NAME"] = name
+                diction2["PCF_PTC"] = 3
+                diction2["PCF_PFC"] = 4
+                diction2["PCF_CATEG"] = "N"
+                diction2["PCF_NATUR"] = "H"
+                diction2["PCF_DESCR"] = diction["VPD_DISDESC"]
+                self.pcf.append(diction2)
             diction["VPD_GRPSIZE"] = i[1]
-            # diction["VPD_FIXREP"] =
             # diction["VPD_CHOICE"] =
             # diction["VPD_PIDREF"] =
-            diction["VPD_DISDESC"] = self.pcf[i[0]]["PCF_DESCR"]
-            if i[1]:
+            if i[1] <= 0:
                 diction["VPD_WIDTH"] = 0
             else:
-                diction["VPD_WIDTH"] = int(
-                    (self.positions[i[0] + 1] - self.positions[i[0]]) / 8
+                diction["VPD_WIDTH"] = min(
+                    int((self.positions[i[0] + 1] - self.positions[i[0]]) / 8), 99
                 )
             # diction["VPD_JUSTIFY"] =
             # diction["VPD_NEWLINE"] =

@@ -93,12 +93,11 @@ def h_analysis(h_struct):
     entries = []
     if not (type(h_struct) is int or type(h_struct) is None):
         for i in h_struct.elements:
+            i.is_vpd = set()
             if i.type not in {"enum", "struct"}:
                 # this is insanely ugly, but at least it shouldn't create any confusion
                 if i.comment and "vpd" in i.comment[-1].entries.keys():
-                    i.is_vpd = i.comment[-1].entries["vpd"]
-                else:
-                    i.is_vpd = ""
+                    i.is_vpd.add(i.comment[-1].entries["vpd"])
                 entries.append(i)
             elif i.type == "struct":
                 occurences = 1
@@ -120,7 +119,7 @@ def h_analysis(h_struct):
                         from_struct = [copy(x) for x in h_analysis(i.form)]
                 if vpd:
                     for k in from_struct:
-                        k.is_vpd = i.comment[-1].entries["vpd"]
+                        k.is_vpd.add(i.comment[-1].entries["vpd"])
                 entries = entries + from_struct
 
     return entries
@@ -130,8 +129,9 @@ def var_get(entries):
     "Extract variable parameters from list of all parameters."
     var = []
     for i in range(len(entries)):
-        com = entries[i].comment
         if entries[i].is_vpd:
+            if "fixed" in entries[i].is_vpd:
+                var.append(-i)
             var.append(i)
     return var
 

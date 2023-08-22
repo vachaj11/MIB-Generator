@@ -23,7 +23,7 @@ def cur_update(packet, cal):
             )
             packet.cur.remove(i)
     for i in packet.pcf:
-        if i["PCF_CURTX"]:
+        if "PCF_CURTX" in i.keys() and i["PCF_CURTX"]:
             match_count = 0
             for l in calibs:
                 if i["PCF_CURTX"] == l.name:
