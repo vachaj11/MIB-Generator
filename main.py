@@ -2,13 +2,18 @@
 import argparse
 
 
-def main(visual=True, generate=True, parseonly=False, paths=False):
+def main(visual=True, generate=True, parseonly=False, paths=False, config=False):
     """Run this whole hellish thing."""
     if paths:
         import utilities.path_update as path_update
 
-        path_update.update()
-
+        path_update.update_path()
+    if config:
+        import utilities.path_update as path_update
+        
+        path_update.update_config()
+        
+    
     tm_lis = []
     tc_lis = []
     import parsing.load as load
@@ -74,10 +79,16 @@ if __name__ == "__main__":
         action="store_true",
     )
     parser.add_argument(
-        "-u",
+        "-p",
         "--update_paths",
         help="start by running script to update paths and store them in the json5 file",
         action="store_true",
+    )
+    parser.add_argument(
+        "-c",
+        "--update_config",
+        help="start by running script to update config parameters (stored in json5 file)",
+        action="store_true"
     )
     arguments = parser.parse_args()
     main(
@@ -85,4 +96,5 @@ if __name__ == "__main__":
         not arguments.xgenerate,
         arguments.onlyparse,
         arguments.update_paths,
+        arguments.update_config,
     )
