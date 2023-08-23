@@ -118,7 +118,7 @@ def generate(table_type, source):
     save_mib(mib, table_type)
 
 
-def generation_hub(Tm_packets, Tc_packets, calibrations, Tc_head):
+def generation_hub(Tm_packets, Tc_packets, calibrations, decalibrations, Tc_head):
     """Take all constructed packets/calibrations/commands and call generation scripts for each table."""
     one_generate(calibrations["mcfs"], "mcf")
     one_generate(calibrations["lgfs"], "lgf")
@@ -126,6 +126,8 @@ def generation_hub(Tm_packets, Tc_packets, calibrations, Tc_head):
     two_generate(calibrations["txfs"], "txp")
     one_generate(calibrations["cafs"], "caf")
     two_generate(calibrations["cafs"], "cap")
+    one_generate(decalibrations, "paf")
+    two_generate(decalibrations, "pas")
     one_generate(Tm_packets, "pid")
     one_generate(Tm_packets, "pic")
     one_generate(Tm_packets, "tpcf")
@@ -133,12 +135,15 @@ def generation_hub(Tm_packets, Tc_packets, calibrations, Tc_head):
     two_generate(Tm_packets, "plf")
     two_generate(Tm_packets, "cur")
     two_generate(Tm_packets, "vpd")
-    one_generate([Tc_head], "tcp")
-    two_generate([Tc_head], "pcpc")
-    two_generate([Tc_head], "pcdf")
+    # Don't generate for now.
+    # one_generate([Tc_head], "tcp")
+    # two_generate([Tc_head], "pcpc")
+    # two_generate([Tc_head], "pcdf")
     one_generate(Tc_packets, "ccf")
     two_generate(Tc_packets, "cpc")
     two_generate(Tc_packets, "cdf")
+    two_generate(Tc_packets, "prf")
+    two_generate(Tc_packets, "prv")
 
 
 def one_generate(lists, name):

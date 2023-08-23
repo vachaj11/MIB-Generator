@@ -23,7 +23,9 @@ def main(visual=True, generate=True, parseonly=False, paths=False, config=False)
         import construction.TM_packet as tm_packet
         import construction.TM_packet_methods as tm_packet_methods
 
-        cal = calib.calib_extract(load.TmH.comments)
+        cal1 = calib.calib_extract(load.TmH.comments)
+        cal2 = calib.calib_extract(load.TcTmH.comments)
+        cal = {i: cal1[i] + cal2[i] for i in cal1}
         TmHead = tm_packet.TM_header(load.TmH)
         for i in load.TmC.structures[1].elements:
             matched = tm_packet_methods.header_search(i.entries[".type"])
@@ -36,14 +38,20 @@ def main(visual=True, generate=True, parseonly=False, paths=False, config=False)
         import construction.TC_packet as tc_packet
         import construction.TC_packet_methods as tc_packet_methods
 
+        dec1 = calib.decal_extract(load.TcH.comments)
+        dec2 = calib.decal_extract(load.TcTmH.comments)
+        dec = dec1 + dec2
         TcHead = tc_packet.TC_header(tc_packet_methods.find_header(load.TcH))
         packets = tc_packet_methods.packet_search(load.TcH)
-        tc_lis = [tc_packet.TC_packet(i, TcHead) for i in packets]
+        for i in packets:
+            comm = tc_packet.TC_packet(i, TcHead)
+            calib.cpc_update(comm, dec)
+            tc_lis.append(comm)
 
         if generate:
             import generation.gener as gener
 
-            gener.generation_hub(tm_lis, tc_lis, cal, TcHead)
+            gener.generation_hub(tm_lis, tc_lis, cal, dec, TcHead)
     if visual:
         try:
             import utilities.visualiser as visualiser

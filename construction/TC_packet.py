@@ -101,6 +101,8 @@ class TC_packet:
         self.ccf = self.ccf_dictionary()
         self.cpc = self.cpc_listdict()
         self.cdf = self.cdf_listdict()
+        self.prf = self.prf_listdict()
+        self.prv = self.prv_listdict()
 
     def ccf_dictionary(self):
         """Define elements for entries in ccf table."""
@@ -188,9 +190,22 @@ class TC_packet:
                     diction["CPC_UNIT"] = self.entries[i].comment[-1].entries["unit"]
                 except:
                     diction["CPC_UNIT"] = ""
-                # diction["CPC_PRFREF"] = ""
+                if (
+                    self.entries[i].comment
+                    and {"min", "max"} & self.entries[i].comment[-1].entries.keys()
+                ):
+                    # generate random name for the range check
+                    diction["CPC_PRFREF"] = "RAN" + str(hash(diction["CPC_PNAME"]))[-7:]
+                else:
+                    diction["CPC_PRFREF"] = ""
                 # diction["CPC_CCAREF"] = ""
-                # diction["CPC_PAFREF"] = ""
+                if (
+                    self.entries[i].comment
+                    and "enum" in self.entries[i].comment[-1].entries.keys()
+                ):
+                    diction["CPC_PAFREF"] = self.entries[i].comment[-1].entries["enum"]
+                else:
+                    diction["CPC_PAFREF"] = ""
                 # diction["CPC_INTER"] = ""
                 # diction["CPC_DEFVAL"] = ""
                 # diction["CPC_CORR"] = ""
@@ -240,4 +255,45 @@ class TC_packet:
                     diction["CDF_VALUE"] = 0
             # diction["CDF_TMID"] = ""
             entrydict.append(diction)
+        return entrydict
+
+    def prf_listdict(self):
+        """Define elements for entries in prf table."""
+        entrydict = []
+        for i in range(len(self.entries)):
+            if self.parameters[i] >= 0 and self.cpc[self.parameters[i]]["CPC_PRFREF"]:
+                diction = {}
+                diction["PRF_NUMBR"] = self.cpc[self.parameters[i]]["CPC_PRFREF"]
+                # diction["PRF_DESCR"] = ""
+                # diction["PRFINTER"] = ""
+                # diction["PRF_DSPFMT"] = ""
+                # My code assumes that the bellow is decimal, but that is the default value anyways
+                # diction["PRF_RADIX"] = ""
+                diction["PRF_NRANGE"] = len(
+                    {"min", "max"} & self.entries[i].comment[-1].entries.keys()
+                )
+                diction["PRF_UNIT"] = self.cpc[self.parameters[i]]["CPC_UNIT"]
+                entrydict.append(diction)
+        return entrydict
+
+    def prv_listdict(self):
+        """Define elements for entries in prv table."""
+        entrydict = []
+        for i in range(len(self.entries)):
+            if self.parameters[i] >= 0 and self.cpc[self.parameters[i]]["CPC_PRFREF"]:
+                diction = {}
+                diction["PRV_NUMBR"] = self.cpc[self.parameters[i]]["CPC_PRFREF"]
+                try:
+                    diction["PRV_MINVAL"] = pm.evalu(
+                        self.entries[i].comment[-1].entries["min"]
+                    )
+                except:
+                    diction["PRV_MINVAL"] = ""
+                try:
+                    diction["PRV_MAXVAL"] = pm.evalu(
+                        self.entries[i].comment[-1].entries["max"]
+                    )
+                except:
+                    diction["PRV_MAXVAL"] = ""
+                entrydict.append(diction)
         return entrydict

@@ -39,6 +39,25 @@ def cur_update(packet, cal):
                 i["PCF_CURTX"] = ""
 
 
+def cpc_update(command, dec):
+    """Check whether decalibration exists for parameter which require it and if yes, change cpc entry correspondingly."""
+    for i in command.cpc:
+        if "CPC_PAFREF" in i.keys() and i["CPC_PAFREF"]:
+            match_count = 0
+            for l in dec:
+                if i["CPC_PAFREF"] == l.name:
+                    i["CPC_PAFREF"] = l.comment.entries["dec_ident"]
+                    match_count += 1
+            if match_count == 0:
+                print(
+                    "Warn.:\tWasn't able to find matching decalibration for "
+                    + i["CPC_PAFREF"]
+                    + " in command "
+                    + str(command.ccf["CCF_CNAME"])
+                )
+                i["CPC_PAFREF"] = ""
+
+
 def calib_extract(comments):
     """Extract declaration of various calibrations if they occur in the comments"""
     mcfs = []
@@ -57,6 +76,15 @@ def calib_extract(comments):
             elif "num_cal" in keys:
                 cafs.append(caf_calib(i))
     return {"mcfs": mcfs, "txfs": txfs, "cafs": cafs, "lgfs": lgfs}
+
+
+def decal_extract(comments):
+    """Extract declarations of decalibrations from comments."""
+    decal = []
+    for i in comments:
+        if "dec_ident" in i.entries.keys():
+            decal.append(decalib(i))
+    return decal
 
 
 class calib:
@@ -155,7 +183,10 @@ class txf_calib(calib):
         """Define elements for entry in txf table."""
         diction = {}
         diction["TXF_NUMBR"] = self.comment.entries["cal_ident"]
-        diction["TXF_DESCR"] = self.comment.entries["desc"]
+        try:
+            diction["TXF_DESCR"] = self.comment.entries["desc"]
+        except:
+            diction["TXF_DESCR"] = ""
         diction["TXF_RAWFMT"] = self.type
         diction["TXF_NALIAS"] = self.length
         return diction
@@ -255,5 +286,60 @@ class caf_calib(calib):
             diction["CAP_NUMBR"] = self.caf["CAF_NUMBR"]
             diction["CAP_XVALS"] = i[0]
             diction["CAP_YVALS"] = i[1]
+            entrydict.append(diction)
+        return entrydict
+
+
+class decalib(calib):
+    """class of a text decalibration"""
+
+    def __init__(self, comment):
+        calib.__init__(self, comment)
+        self.type, self.length = self.paf_data()
+        self.paf = self.paf_dictionary()
+        self.pas = self.pas_listdict()
+
+    def paf_data(self):
+        """Get information about the nature of data calibrated."""
+        try:
+            minim = min(self.comment.structure.entries.values())
+            leng = len(self.comment.structure.entries)
+            if type(minim) is not int:
+                flav = "R"
+            elif minim < 0:
+                flav = "I"
+            else:
+                flav = "U"
+        except:
+            flav = ""
+            leng = ""
+        return flav, leng
+
+    def paf_dictionary(self):
+        """Define elements for entry in paf table."""
+        diction = {}
+        diction["PAF_NUMBR"] = self.comment.entries["dec_ident"]
+        try:
+            diction["PAF_DESCR"] = self.comment.entries["desc"]
+        except:
+            diction["PAF_DESCR"] = ""
+        diction["PAF_RAWFMT"] = self.type
+        diction["PAF_NALIAS"] = self.length
+        return diction
+
+    def pas_listdict(self):
+        """Define elements for entry in pas table."""
+        entrydict = []
+        entries = list(self.comment.structure.entries.items())
+        for i in range(len(entries)):
+            diction = {}
+            diction["PAS_NUMBR"] = self.paf["PAF_NUMBR"]
+            diction["PAS_ALVAL"] = entries[i][1]
+            try:
+                diction["PAS_ALTXT"] = self.comment.structure.comment[
+                    -self.length + i
+                ].entries["text"]
+            except:
+                diction["PAS_ALTXT"] = "-1"
             entrydict.append(diction)
         return entrydict
