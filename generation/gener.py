@@ -37,6 +37,16 @@ def check(value, typ):
     return True
 
 
+def delete_empty(table):
+    """Delete empty entries in arrays to be made tables, so they trigger appropriate warnings."""
+    for i in range(len(table)):
+        dic = {}
+        for l in table[i]:
+            if table[i][l] not in {"", None}:
+                dic[l] = table[i][l]
+        table[i] = dic
+
+
 def exclude_repetition(table, typ):
     """Check whether there is any repetition in columns where entries should be unique and if so, delete additional rows."""
     constraints = longdata.unique_entries[typ]
@@ -109,144 +119,42 @@ def generate(table_type, source):
 
 
 def generation_hub(Tm_packets, Tc_packets, calibrations, Tc_head):
-    mcf_generate(calibrations["mcfs"])
-    txf_generate(calibrations["txfs"])
-    txp_generate(calibrations["txfs"])
-    caf_generate(calibrations["cafs"])
-    cap_generate(calibrations["cafs"])
-    lgf_generate(calibrations["lgfs"])
-    pid_generate(Tm_packets)
-    pic_generate(Tm_packets)
-    tpcf_generate(Tm_packets)
-    pcf_generate(Tm_packets)
-    plf_generate(Tm_packets)
-    cur_generate(Tm_packets)
-    vpd_generate(Tm_packets)
-    tcp_generate([Tc_head])
-    pcpc_generate([Tc_head])
-    ccf_generate(Tc_packets)
-    cpc_generate(Tc_packets)
-    
+    """Take all constructed packets/calibrations/commands and call generation scripts for each table."""
+    one_generate(calibrations["mcfs"], "mcf")
+    one_generate(calibrations["lgfs"], "lgf")
+    one_generate(calibrations["txfs"], "txf")
+    two_generate(calibrations["txfs"], "txp")
+    one_generate(calibrations["cafs"], "caf")
+    two_generate(calibrations["cafs"], "cap")
+    one_generate(Tm_packets, "pid")
+    one_generate(Tm_packets, "pic")
+    one_generate(Tm_packets, "tpcf")
+    two_generate(Tm_packets, "pcf")
+    two_generate(Tm_packets, "plf")
+    two_generate(Tm_packets, "cur")
+    two_generate(Tm_packets, "vpd")
+    one_generate([Tc_head], "tcp")
+    two_generate([Tc_head], "pcpc")
+    two_generate([Tc_head], "pcdf")
+    one_generate(Tc_packets, "ccf")
+    two_generate(Tc_packets, "cpc")
+    two_generate(Tc_packets, "cdf")
 
 
-def pid_generate(packets):
+def one_generate(lists, name):
+    """Transform the given 1D object into universal generation array."""
     rows = []
-    for i in packets:
-        rows.append(i.pid)
-    generate("pid", rows)
+    for i in lists:
+        rows.append(vars(i)[name])
+    delete_empty(rows)
+    generate(name, rows)
 
 
-def pic_generate(packets):
+def two_generate(lists, name):
+    """Transform the given 2D object into universal generation array."""
     rows = []
-    for i in packets:
-        rows.append(i.pic)
-    generate("pic", rows)
-
-
-def tpcf_generate(packets):
-    rows = []
-    for i in packets:
-        rows.append(i.tpcf)
-    generate("tpcf", rows)
-
-
-def pcf_generate(packets):
-    rows = []
-    for i in packets:
-        for l in i.pcf:
+    for i in lists:
+        for l in vars(i)[name]:
             rows.append(l)
-    generate("pcf", rows)
-
-
-def plf_generate(packets):
-    rows = []
-    for i in packets:
-        for l in i.plf:
-            rows.append(l)
-    generate("plf", rows)
-
-
-def cur_generate(packets):
-    rows = []
-    for i in packets:
-        for l in i.cur:
-            rows.append(l)
-    generate("cur", rows)
-
-
-def mcf_generate(mcfs):
-    rows = []
-    for i in mcfs:
-        rows.append(i.mcf)
-    generate("mcf", rows)
-
-
-def txf_generate(txfs):
-    rows = []
-    for i in txfs:
-        rows.append(i.txf)
-    generate("txf", rows)
-
-
-def txp_generate(txfs):
-    rows = []
-    for i in txfs:
-        for l in i.txp:
-            rows.append(l)
-    generate("txp", rows)
-
-
-def lgf_generate(lgfs):
-    rows = []
-    for i in lgfs:
-        rows.append(i.lgf)
-    generate("lgf", rows)
-
-
-def caf_generate(cafs):
-    rows = []
-    for i in cafs:
-        rows.append(i.caf)
-    generate("caf", rows)
-
-
-def cap_generate(cafs):
-    rows = []
-    for i in cafs:
-        for l in i.cap:
-            rows.append(l)
-    generate("cap", rows)
-
-
-def vpd_generate(packets):
-    rows = []
-    for i in packets:
-        for l in i.vpd:
-            rows.append(l)
-    generate("vpd", rows)
-    
-def tcp_generate(packets):
-    rows = []
-    for i in packets:
-        rows.append(i.tcp)
-    generate("tcp", rows)
-
-def pcpc_generate(packets):
-    rows = []
-    for i in packets:
-        for l in i.pcpc:
-            rows.append(l)
-    generate("pcpc", rows)
-    
-def ccf_generate(packets):
-    rows = []
-    for i in packets:
-        rows.append(i.ccf)
-    generate("ccf", rows)
-    
-def cpc_generate(packets):
-    rows = []
-    for i in packets:
-        for l in i.cpc:
-            rows.append(l)
-    generate("cpc", rows)
+    delete_empty(rows)
+    generate(name, rows)

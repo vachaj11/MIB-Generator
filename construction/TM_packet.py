@@ -54,14 +54,12 @@ class TM_packet:
         # diction["PID_PI2_VAL"] =
         try:
             diction["PID_SPID"] = self.h_structure.comment[-1].entries["spid"]
-            diction["PID_DESCR"] = self.h_structure.comment[-1].entries["desc"]
         except:
             diction["PID_SPID"] = ""
+        try:
+            diction["PID_DESCR"] = self.h_structure.comment[-1].entries["desc"]
+        except:
             diction["PID_DESCR"] = ""
-            print(
-                "Warn.:\tNot enough information specified for the packet: "
-                + self.structure.entries[".type"]
-            )
         # diction["PID_UNIT"] =
         if self.var_entries:
             diction["PID_TPSD"] = diction["PID_SPID"]
@@ -104,11 +102,7 @@ class TM_packet:
         try:
             diction["TPCF_NAME"] = self.h_structure.comment[-1].entries["text_id"]
         except:
-            print(
-                "Warn.:\tNot enough information specified for the packet: "
-                + self.structure.entries[".type"]
-                + "."
-            )
+            diction["TPCF_NAME"] = ""
         # diction["TPCF_SIZE"] =
         return diction
 
