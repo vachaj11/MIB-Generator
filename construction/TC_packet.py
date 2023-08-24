@@ -103,6 +103,7 @@ class TC_packet:
         self.cdf = self.cdf_listdict()
         self.prf = self.prf_listdict()
         self.prv = self.prv_listdict()
+        self.cvp = self.cvp_listdict()
 
     def ccf_dictionary(self):
         """Define elements for entries in ccf table."""
@@ -288,12 +289,28 @@ class TC_packet:
                         self.entries[i].comment[-1].entries["min"]
                     )
                 except:
-                    diction["PRV_MINVAL"] = ""
+                    diction["PRV_MINVAL"] = 0
                 try:
                     diction["PRV_MAXVAL"] = pm.evalu(
                         self.entries[i].comment[-1].entries["max"]
                     )
+                    if diction["PRV_MAXVAL"] == -1:
+                        diction["PRV_MAXVAL"] = diction["PRV_MINVAL"]
                 except:
                     diction["PRV_MAXVAL"] = ""
                 entrydict.append(diction)
         return entrydict
+        
+        
+    def cvp_listdict(self):
+        if self.h_structure.comment and "cvs" in self.h_structure.comment[-1].entries.keys():
+            entrydict = []
+            for i in self.h_structure.comment[-1].entries["cvs"]:
+                diction = {}
+                diction["CVP_TASK"] = self.ccf["CCF_CNAME"]
+                diction["CVP_TYPE"] = "C"
+                diction["CVP_CVSID"] = i
+                entrydict.append(diction)
+            return entrydict
+        else:
+            return None

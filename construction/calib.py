@@ -1,4 +1,4 @@
-"""This module puts together all classes and function that represent the calibration part of MIB databases."""
+"""This module puts together all classes and function that represent the calibration and verification parts of MIB databases."""
 import parsing.load as load
 
 
@@ -29,6 +29,8 @@ def cur_update(packet, cal):
                 if i["PCF_CURTX"] == l.name:
                     i["PCF_CURTX"] = l.comment.entries["cal_ident"]
                     match_count += 1
+                    if "txf" in l.__dir__():
+                        i["PCF_CATEG"] = "S"
             if match_count == 0:
                 print(
                     "Warn.:\tWasn't able to find matching calibration for "
@@ -343,3 +345,69 @@ class decalib(calib):
                 diction["PAS_ALTXT"] = "-1"
             entrydict.append(diction)
         return entrydict
+        
+        
+def verif_extract(comments):
+    """Extract declarations of verifications from comments."""
+    verif = []
+    for i in comments:
+        if "cvs_def" in i.entries.keys():
+            verif.append(verification(i))
+    return verif
+    
+
+def cvs_update(command, verifs):
+    if command.cvp is None:
+        entrydict = []
+        for i in verifs:
+            diction = {}
+            diction["CVP_TASK"] = command.ccf["CCF_CNAME"]
+            diction["CVP_TYPE"] = "C"
+            diction["CVP_CVSID"] = i.cvs["CVS_ID"]
+            entrydict.append(diction)
+        command.cvp =  entrydict
+    else:
+        lis = []
+        for i in verifs:
+            lis.append(i.cvs["CVS_ID"])
+        maxi = len(command.cvp)
+        for i in range(maxi):
+            if command.cvp[maxi-1-i]["CVP_CVSID"] not in lis:
+                print(
+                    "Warn.:\tWasn't able to find the required verification "
+                    + str(command.cvp[maxi-1-i]["CVP_CVSID"])
+                    + " for command "
+                    + str(command.ccf["CCF_CNAME"])
+                )
+                command.cvp.pop(maxi-i-1)
+            
+
+class verification:
+    """class of command verification"""
+    def __init__(self,comment):
+        self.comment = comment
+        self.cvs = self.cvs_dictionary()
+        
+    def cvs_dictionary(self):
+        """Define elements for entry in cvs table."""
+        diction = {}
+        diction["CVS_ID"] = self.comment.entries["cvs_def"]
+        try:
+            diction["CVS_TYPE"] = self.comment.entries["cvs_type"]
+        except:
+            diction["CVS_TYPE"] = ""
+        if "cve" in self.comment.entries.keys():
+            diction["CVS_SOURCE"] = "V"
+        else:
+            diction["CVS_SOURCE"] = "R"
+        try:
+            diction["CVS_START"] = self.comment.entries["cvs_start"]
+        except:
+            diction["CVS_START"] = 0
+        try:
+            diction["CVS_INTERVAL"] = self.comment.entries["cvs_interval"]
+        except:
+            diction["CVS_INTERVAL"] = ""
+        # diction["CVS_SPID"] = ""
+        # diction["CVS_UNCERTAINTY"] = ""
+        return diction

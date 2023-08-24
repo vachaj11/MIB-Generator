@@ -5,7 +5,15 @@ import parsing.par_methods as parm
 
 
 class file:
-    """class resresenting the file being analysed, its structure, etc..."""
+    """
+    class resresenting the file being analysed, its structure, etc...
+    
+    Parameters:
+        stri: string
+            a string of the file text to be parsed
+        header: boolean
+            parameter denoting whether file is a header or normal C file
+    """
 
     def __init__(self, stri, header):
         self.text = stri
@@ -21,7 +29,13 @@ class file:
         self.link = self.linker()
 
     def linker(self):
-        """Link each comment to a corresponding C-object in the file"""
+        """
+        Link each comment to a corresponding C-object in the file
+        
+        Returns:
+            pairs: list
+                pairs of comments and their corresponding objects
+        """
         pairs = []
         for i in self.comments:
             ind = i.start
@@ -51,7 +65,13 @@ class file:
 
 
 def main(name="/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h"):
-    """Run it all."""
+    """
+    Created a parsed Python representation from the given file.
+    
+    Parameters: 
+        name: string
+            Path to the file 
+    """
     try:
         fil = open(name, "r")
         c = fil.read()

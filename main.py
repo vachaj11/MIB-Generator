@@ -41,17 +41,21 @@ def main(visual=True, generate=True, parseonly=False, paths=False, config=False)
         dec1 = calib.decal_extract(load.TcH.comments)
         dec2 = calib.decal_extract(load.TcTmH.comments)
         dec = dec1 + dec2
+        ver1 = calib.verif_extract(load.TcH.comments)
+        ver2 = calib.verif_extract(load.TcTmH.comments)
+        ver = ver1+ver2
         TcHead = tc_packet.TC_header(tc_packet_methods.find_header(load.TcH))
         packets = tc_packet_methods.packet_search(load.TcH)
         for i in packets:
             comm = tc_packet.TC_packet(i, TcHead)
             calib.cpc_update(comm, dec)
+            calib.cvs_update(comm, ver)
             tc_lis.append(comm)
 
         if generate:
             import generation.gener as gener
 
-            gener.generation_hub(tm_lis, tc_lis, cal, dec, TcHead)
+            gener.generation_hub(tm_lis, tc_lis, cal, dec, ver, TcHead)
     if visual:
         try:
             import utilities.visualiser as visualiser

@@ -2,6 +2,7 @@
 import json5
 import os
 
+
 def clean(stri, tokens):
     """Replace tokens with spaces."""
     c = stri

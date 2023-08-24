@@ -57,7 +57,10 @@ def getptcpcf(entry, size):
 
 
 def categfromptc(ptc):
-    """Get category from ptc value of the entry."""
+    """
+    Get category from ptc value of the entry.
+    This is automatically changed later if the parameter is subject to textual calibration.
+    """
     if ptc in {2, 3, 6, 7, 9, 10}:
         categ = "N"
     elif ptc == 8:
@@ -77,8 +80,9 @@ def header_search(typ):
                 uni.update(l.entries)
             if "pack_type" in uni.keys() and uni["pack_type"] == typ:
                 hstruct.append(i)
-    if typ in load.enumerations.keys() and not hstruct:
-        hstruct.append(load.enumerations[typ])
+    # legacy approach
+    #if typ in load.enumerations.keys() and not hstruct:
+    #    hstruct.append(load.enumerations[typ])
     if not hstruct:
         print(
             "Warn.:\tWasn't able to establish the link of packet "
