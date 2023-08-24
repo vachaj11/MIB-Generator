@@ -1,0 +1,21 @@
+analysis.generation package
+===========================
+
+Submodules
+----------
+
+analysis.generation.gener module
+--------------------------------
+
+.. automodule:: analysis.generation.gener
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: analysis.generation
+   :members:
+   :undoc-members:
+   :show-inheritance:

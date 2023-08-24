@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analysis.construction package &mdash; MIB Generator 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MIB Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">analysis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MIB Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">analysis.construction package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/analysis.construction.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="analysis-construction-package">
+<h1>analysis.construction package<a class="headerlink" href="#analysis-construction-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="analysis-construction-tc-packet-module">
+<h2>analysis.construction.TC_packet module<a class="headerlink" href="#analysis-construction-tc-packet-module" title="Link to this heading"></a></h2>
+<p id="module-analysis.construction.TC_packet">This module takes care of creating a representation of commanding packets from parsed C-files and extracting entries for MIB databases.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_header">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.TC_packet.</span></span><span class="sig-name descname"><span class="pre">TC_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_header" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class representing the TC header common to all TC-packages</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_header.pcdf_listdict">
+<span class="sig-name descname"><span class="pre">pcdf_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_header.pcdf_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_header.pcdf_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in pcpc table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_header.pcpc_listdict">
+<span class="sig-name descname"><span class="pre">pcpc_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_header.pcpc_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_header.pcpc_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in pcpc table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_header.tcp_dictionary">
+<span class="sig-name descname"><span class="pre">tcp_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_header.tcp_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_header.tcp_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in tcp table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_packet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.TC_packet.</span></span><span class="sig-name descname"><span class="pre">TC_packet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_packet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_packet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class representing each TC packet type and its properties</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_packet.ccf_dictionary">
+<span class="sig-name descname"><span class="pre">ccf_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_packet.ccf_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_packet.ccf_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in ccf table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_packet.cdf_listdict">
+<span class="sig-name descname"><span class="pre">cdf_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_packet.cdf_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_packet.cdf_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in cdf table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_packet.cpc_listdict">
+<span class="sig-name descname"><span class="pre">cpc_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_packet.cpc_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_packet.cpc_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in cpc table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_packet.cvp_listdict">
+<span class="sig-name descname"><span class="pre">cvp_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_packet.cvp_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_packet.cvp_listdict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_packet.prf_listdict">
+<span class="sig-name descname"><span class="pre">prf_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_packet.prf_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_packet.prf_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in prf table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet.TC_packet.prv_listdict">
+<span class="sig-name descname"><span class="pre">prv_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet.html#TC_packet.prv_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet.TC_packet.prv_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in prv table.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="analysis-construction-tc-packet-methods-module">
+<h2>analysis.construction.TC_packet_methods module<a class="headerlink" href="#analysis-construction-tc-packet-methods-module" title="Link to this heading"></a></h2>
+<p id="module-analysis.construction.TC_packet_methods">This module holds methods used for formatting parsed data into commanding packet characteristics.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet_methods.find_header">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TC_packet_methods.</span></span><span class="sig-name descname"><span class="pre">find_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet_methods.html#find_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet_methods.find_header" title="Link to this definition"></a></dt>
+<dd><p>Find the main Tc header in the file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet_methods.get_gr_sizes">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TC_packet_methods.</span></span><span class="sig-name descname"><span class="pre">get_gr_sizes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet_methods.html#get_gr_sizes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet_methods.get_gr_sizes" title="Link to this definition"></a></dt>
+<dd><p>Get sizes of (repeting) groups of command entries.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet_methods.h_analysis">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TC_packet_methods.</span></span><span class="sig-name descname"><span class="pre">h_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_struct</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet_methods.html#h_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet_methods.h_analysis" title="Link to this definition"></a></dt>
+<dd><p>Make a list of all individual (all structs unpacked) entries in the header of the packet.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet_methods.packet_search">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TC_packet_methods.</span></span><span class="sig-name descname"><span class="pre">packet_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet_methods.html#packet_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet_methods.packet_search" title="Link to this definition"></a></dt>
+<dd><p>Extract individual TC-packages from TC-header file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TC_packet_methods.param_list">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TC_packet_methods.</span></span><span class="sig-name descname"><span class="pre">param_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TC_packet_methods.html#param_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TC_packet_methods.param_list" title="Link to this definition"></a></dt>
+<dd><p>Get list of parameters in command entries and their positions in the cpc table.</p>
+</dd></dl>
+
+</section>
+<section id="analysis-construction-tm-packet-module">
+<h2>analysis.construction.TM_packet module<a class="headerlink" href="#analysis-construction-tm-packet-module" title="Link to this heading"></a></h2>
+<p id="module-analysis.construction.TM_packet">This module takes care of creating a representation of monitoring packets from parsed C-files and extracting entries for MIB databases.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_header">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet.</span></span><span class="sig-name descname"><span class="pre">TM_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_header" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class representing the TM header common to all TM-packages</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_header.find_header">
+<span class="sig-name descname"><span class="pre">find_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_header.find_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_header.find_header" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_packet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet.</span></span><span class="sig-name descname"><span class="pre">TM_packet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_packet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_packet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class representing each TM packet type and its properties</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_packet.cur_listdict">
+<span class="sig-name descname"><span class="pre">cur_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_packet.cur_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_packet.cur_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in cur table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_packet.pcf_listdict">
+<span class="sig-name descname"><span class="pre">pcf_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_packet.pcf_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_packet.pcf_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in pcf table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_packet.pic_dictionary">
+<span class="sig-name descname"><span class="pre">pic_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_packet.pic_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_packet.pic_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in pic table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_packet.pid_dictionary">
+<span class="sig-name descname"><span class="pre">pid_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_packet.pid_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_packet.pid_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in pid table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_packet.plf_listdict">
+<span class="sig-name descname"><span class="pre">plf_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_packet.plf_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_packet.plf_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in plf table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_packet.tpcf_dictionary">
+<span class="sig-name descname"><span class="pre">tpcf_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_packet.tpcf_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_packet.tpcf_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in tpcf table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet.TM_packet.vpd_listdict">
+<span class="sig-name descname"><span class="pre">vpd_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet.html#TM_packet.vpd_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet.TM_packet.vpd_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entries in vpd table.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="analysis-construction-tm-packet-methods-module">
+<h2>analysis.construction.TM_packet_methods module<a class="headerlink" href="#analysis-construction-tm-packet-methods-module" title="Link to this heading"></a></h2>
+<p id="module-analysis.construction.TM_packet_methods">This module holds methods used for formatting parsed data into monitoring packet characteristics.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet_methods.apidnum">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet_methods.</span></span><span class="sig-name descname"><span class="pre">apidnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet_methods.html#apidnum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet_methods.apidnum" title="Link to this definition"></a></dt>
+<dd><p>Find the value of apid from evaluation of references, etc.
+I’m not following the direct logic of C here, because there seems to be some missing link.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet_methods.categfromptc">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet_methods.</span></span><span class="sig-name descname"><span class="pre">categfromptc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ptc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet_methods.html#categfromptc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet_methods.categfromptc" title="Link to this definition"></a></dt>
+<dd><p>Get category from ptc value of the entry.
+This is automatically changed later if the parameter is subject to textual calibration.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet_methods.count_size">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet_methods.</span></span><span class="sig-name descname"><span class="pre">count_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet_methods.html#count_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet_methods.count_size" title="Link to this definition"></a></dt>
+<dd><p>Counts bit size of the packet and bit position of entries within it.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet_methods.evalu">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet_methods.</span></span><span class="sig-name descname"><span class="pre">evalu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet_methods.html#evalu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet_methods.evalu" title="Link to this definition"></a></dt>
+<dd><p>Try evaluating the given expression using all known substitutions, macros, etc.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet_methods.getptcpcf">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet_methods.</span></span><span class="sig-name descname"><span class="pre">getptcpcf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet_methods.html#getptcpcf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet_methods.getptcpcf" title="Link to this definition"></a></dt>
+<dd><p>Get ptc and pcf values from the size and nature of the given entry.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet_methods.h_analysis">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet_methods.</span></span><span class="sig-name descname"><span class="pre">h_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_struct</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet_methods.html#h_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet_methods.h_analysis" title="Link to this definition"></a></dt>
+<dd><p>Make a list of all individual (all structs unpacked) entries in the header of the packet.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet_methods.header_search">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet_methods.</span></span><span class="sig-name descname"><span class="pre">header_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet_methods.html#header_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet_methods.header_search" title="Link to this definition"></a></dt>
+<dd><p>Search for corresponding header structures of the packet based on information in the comments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet_methods.pi_sid">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet_methods.</span></span><span class="sig-name descname"><span class="pre">pi_sid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet_methods.html#pi_sid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet_methods.pi_sid" title="Link to this definition"></a></dt>
+<dd><p>Extract position of additional identification field from packet entries.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.TM_packet_methods.var_get">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.TM_packet_methods.</span></span><span class="sig-name descname"><span class="pre">var_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/TM_packet_methods.html#var_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.TM_packet_methods.var_get" title="Link to this definition"></a></dt>
+<dd><p>Extract variable parameters from list of all parameters.</p>
+</dd></dl>
+
+</section>
+<section id="analysis-construction-calib-module">
+<h2>analysis.construction.calib module<a class="headerlink" href="#analysis-construction-calib-module" title="Link to this heading"></a></h2>
+<p id="module-analysis.construction.calib">This module puts together all classes and function that represent the calibration and verification parts of MIB databases.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.calib.caf_calib">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">caf_calib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#caf_calib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.caf_calib" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.construction.calib.calib" title="analysis.construction.calib.calib"><code class="xref py py-class docutils literal notranslate"><span class="pre">calib</span></code></a></p>
+<p>class of a caf calibration</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.caf_calib.caf_data">
+<span class="sig-name descname"><span class="pre">caf_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#caf_calib.caf_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.caf_calib.caf_data" title="Link to this definition"></a></dt>
+<dd><p>Get information about the nature of data calibrated.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.caf_calib.caf_dictionary">
+<span class="sig-name descname"><span class="pre">caf_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#caf_calib.caf_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.caf_calib.caf_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in caf table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.caf_calib.cap_listdict">
+<span class="sig-name descname"><span class="pre">cap_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#caf_calib.cap_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.caf_calib.cap_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in cap table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.calib.calib">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">calib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#calib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.calib" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>general class of calibration</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.calib.calib_extract">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">calib_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comments</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#calib_extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.calib_extract" title="Link to this definition"></a></dt>
+<dd><p>Extract declaration of various calibrations if they occur in the comments</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.calib.cpc_update">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">cpc_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#cpc_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.cpc_update" title="Link to this definition"></a></dt>
+<dd><p>Check whether decalibration exists for parameter which require it and if yes, change cpc entry correspondingly.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.calib.cur_update">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">cur_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">packet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#cur_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.cur_update" title="Link to this definition"></a></dt>
+<dd><p>Check whether calibration exists for parameters which require it and if yes, change cur entries correspondingly</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.calib.cvs_update">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">cvs_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verifs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#cvs_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.cvs_update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.calib.decal_extract">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">decal_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comments</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#decal_extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.decal_extract" title="Link to this definition"></a></dt>
+<dd><p>Extract declarations of decalibrations from comments.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.calib.decalib">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">decalib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#decalib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.decalib" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.construction.calib.calib" title="analysis.construction.calib.calib"><code class="xref py py-class docutils literal notranslate"><span class="pre">calib</span></code></a></p>
+<p>class of a text decalibration</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.decalib.paf_data">
+<span class="sig-name descname"><span class="pre">paf_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#decalib.paf_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.decalib.paf_data" title="Link to this definition"></a></dt>
+<dd><p>Get information about the nature of data calibrated.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.decalib.paf_dictionary">
+<span class="sig-name descname"><span class="pre">paf_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#decalib.paf_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.decalib.paf_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in paf table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.decalib.pas_listdict">
+<span class="sig-name descname"><span class="pre">pas_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#decalib.pas_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.decalib.pas_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in pas table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.calib.lgf_calib">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">lgf_calib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#lgf_calib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.lgf_calib" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.construction.calib.calib" title="analysis.construction.calib.calib"><code class="xref py py-class docutils literal notranslate"><span class="pre">calib</span></code></a></p>
+<p>class of a lgf calibration</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.lgf_calib.lgf_dictionary">
+<span class="sig-name descname"><span class="pre">lgf_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#lgf_calib.lgf_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.lgf_calib.lgf_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in lgf table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.calib.mcf_calib">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">mcf_calib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#mcf_calib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.mcf_calib" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.construction.calib.calib" title="analysis.construction.calib.calib"><code class="xref py py-class docutils literal notranslate"><span class="pre">calib</span></code></a></p>
+<p>class of a mcf calibration</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.mcf_calib.mcf_dictionary">
+<span class="sig-name descname"><span class="pre">mcf_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#mcf_calib.mcf_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.mcf_calib.mcf_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in mcf table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.calib.txf_calib">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">txf_calib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#txf_calib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.txf_calib" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.construction.calib.calib" title="analysis.construction.calib.calib"><code class="xref py py-class docutils literal notranslate"><span class="pre">calib</span></code></a></p>
+<p>class of a txf calibration</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.txf_calib.is_enum">
+<span class="sig-name descname"><span class="pre">is_enum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#txf_calib.is_enum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.txf_calib.is_enum" title="Link to this definition"></a></dt>
+<dd><p>Check whether the calibration is saved in the header file as enum.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.txf_calib.txf_data">
+<span class="sig-name descname"><span class="pre">txf_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#txf_calib.txf_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.txf_calib.txf_data" title="Link to this definition"></a></dt>
+<dd><p>Get information about the nature of data calibrated.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.txf_calib.txf_dictionary">
+<span class="sig-name descname"><span class="pre">txf_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#txf_calib.txf_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.txf_calib.txf_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in txf table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.txf_calib.txp_listdict">
+<span class="sig-name descname"><span class="pre">txp_listdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#txf_calib.txp_listdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.txf_calib.txp_listdict" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in txp table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.construction.calib.verif_extract">
+<span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">verif_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comments</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#verif_extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.verif_extract" title="Link to this definition"></a></dt>
+<dd><p>Extract declarations of verifications from comments.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="analysis.construction.calib.verification">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">analysis.construction.calib.</span></span><span class="sig-name descname"><span class="pre">verification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#verification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.verification" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class of command verification</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="analysis.construction.calib.verification.cvs_dictionary">
+<span class="sig-name descname"><span class="pre">cvs_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/construction/calib.html#verification.cvs_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#analysis.construction.calib.verification.cvs_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Define elements for entry in cvs table.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<span class="target" id="module-analysis.construction"></span></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Josef Vácha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

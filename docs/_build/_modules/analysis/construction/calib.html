@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analysis.construction.calib &mdash; MIB Generator 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=2709fde1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            MIB Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">analysis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MIB Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">analysis.construction.calib</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for analysis.construction.calib</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module puts together all classes and function that represent the calibration and verification parts of MIB databases.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">parsing.load</span> <span class="k">as</span> <span class="nn">load</span>
+
+
+<div class="viewcode-block" id="cur_update">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.cur_update">[docs]</a>
+<span class="k">def</span> <span class="nf">cur_update</span><span class="p">(</span><span class="n">packet</span><span class="p">,</span> <span class="n">cal</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check whether calibration exists for parameters which require it and if yes, change cur entries correspondingly&quot;&quot;&quot;</span>
+    <span class="n">calibs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cal</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">cal</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">calibs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">packet</span><span class="o">.</span><span class="n">cur</span><span class="p">:</span>
+        <span class="n">match_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;CUR_SELECT&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">l</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">i</span><span class="p">[</span><span class="s2">&quot;CUR_SELECT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cal_ident&quot;</span><span class="p">]</span>
+                <span class="n">match_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">match_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Warn.:</span><span class="se">\t</span><span class="s2">Wasn&#39;t able to find matching calibration for &quot;</span>
+                <span class="o">+</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;CUR_PNAME&quot;</span><span class="p">]</span>
+                <span class="o">+</span> <span class="s2">&quot; in packet &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">pid</span><span class="p">[</span><span class="s2">&quot;PID_SPID&quot;</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="n">packet</span><span class="o">.</span><span class="n">cur</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">packet</span><span class="o">.</span><span class="n">pcf</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;PCF_CURTX&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;PCF_CURTX&quot;</span><span class="p">]:</span>
+            <span class="n">match_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;PCF_CURTX&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">l</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="n">i</span><span class="p">[</span><span class="s2">&quot;PCF_CURTX&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cal_ident&quot;</span><span class="p">]</span>
+                    <span class="n">match_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="s2">&quot;txf&quot;</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="fm">__dir__</span><span class="p">():</span>
+                        <span class="n">i</span><span class="p">[</span><span class="s2">&quot;PCF_CATEG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;S&quot;</span>
+            <span class="k">if</span> <span class="n">match_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Warn.:</span><span class="se">\t</span><span class="s2">Wasn&#39;t able to find matching calibration for &quot;</span>
+                    <span class="o">+</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;PCF_CURTX&quot;</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot; in packet &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">pid</span><span class="p">[</span><span class="s2">&quot;PID_SPID&quot;</span><span class="p">])</span>
+                <span class="p">)</span>
+                <span class="n">i</span><span class="p">[</span><span class="s2">&quot;PCF_CURTX&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="cpc_update">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.cpc_update">[docs]</a>
+<span class="k">def</span> <span class="nf">cpc_update</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check whether decalibration exists for parameter which require it and if yes, change cpc entry correspondingly.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">command</span><span class="o">.</span><span class="n">cpc</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;CPC_PAFREF&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;CPC_PAFREF&quot;</span><span class="p">]:</span>
+            <span class="n">match_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">dec</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;CPC_PAFREF&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">l</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="n">i</span><span class="p">[</span><span class="s2">&quot;CPC_PAFREF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;dec_ident&quot;</span><span class="p">]</span>
+                    <span class="n">match_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">match_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Warn.:</span><span class="se">\t</span><span class="s2">Wasn&#39;t able to find matching decalibration for &quot;</span>
+                    <span class="o">+</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;CPC_PAFREF&quot;</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot; in command &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">ccf</span><span class="p">[</span><span class="s2">&quot;CCF_CNAME&quot;</span><span class="p">])</span>
+                <span class="p">)</span>
+                <span class="n">i</span><span class="p">[</span><span class="s2">&quot;CPC_PAFREF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="calib_extract">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.calib_extract">[docs]</a>
+<span class="k">def</span> <span class="nf">calib_extract</span><span class="p">(</span><span class="n">comments</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract declaration of various calibrations if they occur in the comments&quot;&quot;&quot;</span>
+    <span class="n">mcfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">txfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cafs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lgfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">comments</span><span class="p">:</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;cal_ident&quot;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;mcf&quot;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">mcfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mcf_calib</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">bool</span><span class="p">({</span><span class="s2">&quot;text_cal&quot;</span><span class="p">,</span> <span class="s2">&quot;enum&quot;</span><span class="p">}</span> <span class="o">&amp;</span> <span class="n">keys</span><span class="p">):</span>
+                <span class="n">txfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">txf_calib</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="s2">&quot;lgf&quot;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">lgfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lgf_calib</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="s2">&quot;num_cal&quot;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">cafs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">caf_calib</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;mcfs&quot;</span><span class="p">:</span> <span class="n">mcfs</span><span class="p">,</span> <span class="s2">&quot;txfs&quot;</span><span class="p">:</span> <span class="n">txfs</span><span class="p">,</span> <span class="s2">&quot;cafs&quot;</span><span class="p">:</span> <span class="n">cafs</span><span class="p">,</span> <span class="s2">&quot;lgfs&quot;</span><span class="p">:</span> <span class="n">lgfs</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="decal_extract">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.decal_extract">[docs]</a>
+<span class="k">def</span> <span class="nf">decal_extract</span><span class="p">(</span><span class="n">comments</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract declarations of decalibrations from comments.&quot;&quot;&quot;</span>
+    <span class="n">decal</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">comments</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;dec_ident&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">decal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">decalib</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">decal</span></div>
+
+
+
+<div class="viewcode-block" id="calib">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.calib">[docs]</a>
+<span class="k">class</span> <span class="nc">calib</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;general class of calibration&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">comment</span>
+        <span class="k">if</span> <span class="s2">&quot;cal_def&quot;</span> <span class="ow">in</span> <span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cal_def&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;enum&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="mcf_calib">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.mcf_calib">[docs]</a>
+<span class="k">class</span> <span class="nc">mcf_calib</span><span class="p">(</span><span class="n">calib</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class of a mcf calibration&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="n">calib</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mcf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mcf_dictionary</span><span class="p">()</span>
+
+<div class="viewcode-block" id="mcf_calib.mcf_dictionary">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.mcf_calib.mcf_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">mcf_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in mcf table.&quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;MCF_IDENT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cal_ident&quot;</span><span class="p">]</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;MCF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;MCF_POL&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;mcf&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;a&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;MCF_POL&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="lgf_calib">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.lgf_calib">[docs]</a>
+<span class="k">class</span> <span class="nc">lgf_calib</span><span class="p">(</span><span class="n">calib</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class of a lgf calibration&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="n">calib</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lgf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lgf_dictionary</span><span class="p">()</span>
+
+<div class="viewcode-block" id="lgf_calib.lgf_dictionary">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.lgf_calib.lgf_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">lgf_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in lgf table.&quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;LGF_IDENT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cal_ident&quot;</span><span class="p">]</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;LGF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;LGF_POL&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;lgf&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;a&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;LGF_POL&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="txf_calib">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.txf_calib">[docs]</a>
+<span class="k">class</span> <span class="nc">txf_calib</span><span class="p">(</span><span class="n">calib</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class of a txf calibration&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="n">calib</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_enum</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txf_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txf_dictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txp_listdict</span><span class="p">()</span>
+
+<div class="viewcode-block" id="txf_calib.is_enum">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.txf_calib.is_enum">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether the calibration is saved in the header file as enum.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;enum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="txf_calib.txf_data">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.txf_calib.txf_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">txf_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get information about the nature of data calibrated.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enum</span><span class="p">:</span>
+                <span class="n">minim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;text_cal&quot;</span><span class="p">][</span><span class="s2">&quot;min&quot;</span><span class="p">]</span>
+                <span class="n">leng</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;text_cal&quot;</span><span class="p">][</span><span class="s2">&quot;lookup&quot;</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">minim</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="n">leng</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">minim</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="n">flav</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
+            <span class="k">elif</span> <span class="n">minim</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">flav</span> <span class="o">=</span> <span class="s2">&quot;I&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flav</span> <span class="o">=</span> <span class="s2">&quot;U&quot;</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">flav</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">leng</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">flav</span><span class="p">,</span> <span class="n">leng</span></div>
+
+
+<div class="viewcode-block" id="txf_calib.txf_dictionary">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.txf_calib.txf_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">txf_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in txf table.&quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXF_NUMBR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cal_ident&quot;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXF_RAWFMT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXF_NALIAS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+
+
+<div class="viewcode-block" id="txf_calib.txp_listdict">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.txf_calib.txp_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">txp_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in txp table.&quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enum</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;text_cal&quot;</span><span class="p">][</span><span class="s2">&quot;lookup&quot;</span><span class="p">]:</span>
+                <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_NUMBR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txf</span><span class="p">[</span><span class="s2">&quot;TXF_NUMBR&quot;</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;val&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_FROM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;val&quot;</span><span class="p">]</span>
+                        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_TO&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;val&quot;</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_FROM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;from&quot;</span><span class="p">]</span>
+                        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_TO&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;to&quot;</span><span class="p">]</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_ALTXT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_FROM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_TO&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_ALTXT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">entries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)):</span>
+                <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_NUMBR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">txf</span><span class="p">[</span><span class="s2">&quot;TXF_NUMBR&quot;</span><span class="p">]</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_FROM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_TO&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_ALTXT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span>
+                        <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">+</span> <span class="n">i</span>
+                    <span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TXP_ALTXT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-1&quot;</span>
+                <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="caf_calib">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.caf_calib">[docs]</a>
+<span class="k">class</span> <span class="nc">caf_calib</span><span class="p">(</span><span class="n">calib</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class of a caf calibration&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="n">calib</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caf_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caf_dictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cap_listdict</span><span class="p">()</span>
+
+<div class="viewcode-block" id="caf_calib.caf_data">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.caf_calib.caf_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">caf_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get information about the nature of data calibrated.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;num_cal&quot;</span><span class="p">]</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">eng</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                <span class="n">raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">eng</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="n">flav_r</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
+            <span class="k">elif</span> <span class="nb">min</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">flav_r</span> <span class="o">=</span> <span class="s2">&quot;I&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flav_r</span> <span class="o">=</span> <span class="s2">&quot;U&quot;</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">eng</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="n">flav_e</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
+            <span class="k">elif</span> <span class="nb">min</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">flav_e</span> <span class="o">=</span> <span class="s2">&quot;I&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flav_e</span> <span class="o">=</span> <span class="s2">&quot;U&quot;</span>
+            <span class="n">leng</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;num_cal&quot;</span><span class="p">]))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">flav_r</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">flav_e</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">leng</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">flav_r</span><span class="p">,</span> <span class="n">flav_e</span><span class="p">],</span> <span class="n">leng</span></div>
+
+
+<div class="viewcode-block" id="caf_calib.caf_dictionary">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.caf_calib.caf_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">caf_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in caf table.&quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CAF_NUMBR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cal_ident&quot;</span><span class="p">]</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CAF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CAF_ENGFMT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CAF_RAWFMT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># diction[&quot;CAF_RADIX&quot;] =</span>
+        <span class="c1"># diction[&quot;CAF_UNIT&quot;] =</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CAF_NCURVE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="c1"># diction[&quot;CAF_INTER&quot;] =</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+
+
+<div class="viewcode-block" id="caf_calib.cap_listdict">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.caf_calib.cap_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">cap_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in cap table.&quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;num_cal&quot;</span><span class="p">]:</span>
+            <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CAP_NUMBR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caf</span><span class="p">[</span><span class="s2">&quot;CAF_NUMBR&quot;</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CAP_XVALS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CAP_YVALS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="decalib">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.decalib">[docs]</a>
+<span class="k">class</span> <span class="nc">decalib</span><span class="p">(</span><span class="n">calib</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class of a text decalibration&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="n">calib</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paf_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paf_dictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pas_listdict</span><span class="p">()</span>
+
+<div class="viewcode-block" id="decalib.paf_data">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.decalib.paf_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">paf_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get information about the nature of data calibrated.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">minim</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="n">leng</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">minim</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="n">flav</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
+            <span class="k">elif</span> <span class="n">minim</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">flav</span> <span class="o">=</span> <span class="s2">&quot;I&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flav</span> <span class="o">=</span> <span class="s2">&quot;U&quot;</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">flav</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">leng</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">flav</span><span class="p">,</span> <span class="n">leng</span></div>
+
+
+<div class="viewcode-block" id="decalib.paf_dictionary">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.decalib.paf_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">paf_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in paf table.&quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PAF_NUMBR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;dec_ident&quot;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PAF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PAF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PAF_RAWFMT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PAF_NALIAS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+
+
+<div class="viewcode-block" id="decalib.pas_listdict">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.decalib.pas_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">pas_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in pas table.&quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PAS_NUMBR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paf</span><span class="p">[</span><span class="s2">&quot;PAF_NUMBR&quot;</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PAS_ALVAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PAS_ALTXT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span>
+                    <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">+</span> <span class="n">i</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PAS_ALTXT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-1&quot;</span>
+            <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+</div>
+
+        
+        
+<div class="viewcode-block" id="verif_extract">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.verif_extract">[docs]</a>
+<span class="k">def</span> <span class="nf">verif_extract</span><span class="p">(</span><span class="n">comments</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract declarations of verifications from comments.&quot;&quot;&quot;</span>
+    <span class="n">verif</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">comments</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;cvs_def&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">verif</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">verification</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">verif</span></div>
+
+    
+
+<div class="viewcode-block" id="cvs_update">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.cvs_update">[docs]</a>
+<span class="k">def</span> <span class="nf">cvs_update</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">verifs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">command</span><span class="o">.</span><span class="n">cvp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">verifs</span><span class="p">:</span>
+            <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVP_TASK&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">ccf</span><span class="p">[</span><span class="s2">&quot;CCF_CNAME&quot;</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVP_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVP_CVSID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">cvs</span><span class="p">[</span><span class="s2">&quot;CVS_ID&quot;</span><span class="p">]</span>
+            <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">cvp</span> <span class="o">=</span>  <span class="n">entrydict</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lis</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">verifs</span><span class="p">:</span>
+            <span class="n">lis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">cvs</span><span class="p">[</span><span class="s2">&quot;CVS_ID&quot;</span><span class="p">])</span>
+        <span class="n">maxi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">cvp</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxi</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">command</span><span class="o">.</span><span class="n">cvp</span><span class="p">[</span><span class="n">maxi</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;CVP_CVSID&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lis</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Warn.:</span><span class="se">\t</span><span class="s2">Wasn&#39;t able to find the required verification &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">cvp</span><span class="p">[</span><span class="n">maxi</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;CVP_CVSID&quot;</span><span class="p">])</span>
+                    <span class="o">+</span> <span class="s2">&quot; for command &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">ccf</span><span class="p">[</span><span class="s2">&quot;CCF_CNAME&quot;</span><span class="p">])</span>
+                <span class="p">)</span>
+                <span class="n">command</span><span class="o">.</span><span class="n">cvp</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">maxi</span><span class="o">-</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
+
+            
+
+<div class="viewcode-block" id="verification">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.verification">[docs]</a>
+<span class="k">class</span> <span class="nc">verification</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class of command verification&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">comment</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">comment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cvs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cvs_dictionary</span><span class="p">()</span>
+        
+<div class="viewcode-block" id="verification.cvs_dictionary">
+<a class="viewcode-back" href="../../../analysis.construction.html#analysis.construction.calib.verification.cvs_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">cvs_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in cvs table.&quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVS_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cvs_def&quot;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVS_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cvs_type&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVS_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;cve&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVS_SOURCE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;V&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVS_SOURCE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVS_START&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cvs_start&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVS_START&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVS_INTERVAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cvs_interval&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVS_INTERVAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># diction[&quot;CVS_SPID&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CVS_UNCERTAINTY&quot;] = &quot;&quot;</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Josef Vácha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+analysis.utilities package
+==========================
+
+Submodules
+----------
+
+analysis.utilities.data\_gen module
+-----------------------------------
+
+.. automodule:: analysis.utilities.data_gen
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+analysis.utilities.update module
+--------------------------------
+
+.. automodule:: analysis.utilities.update
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+analysis.utilities.visualiser module
+------------------------------------
+
+.. automodule:: analysis.utilities.visualiser
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: analysis.utilities
+   :members:
+   :undoc-members:
+   :show-inheritance:

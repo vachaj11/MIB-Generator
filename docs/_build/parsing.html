@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>parsing package &mdash; MIB Generator 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="utilities package" href="utilities.html" />
+    <link rel="prev" title="main module" href="main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MIB Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">analysis</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="construction.html">construction package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">data package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generation.html">generation package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">parsing package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing-load-module">parsing.load module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.load.extr_values"><code class="docutils literal notranslate"><span class="pre">extr_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing-par-cfile-module">parsing.par_cfile module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance"><code class="docutils literal notranslate"><span class="pre">instance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance_og"><code class="docutils literal notranslate"><span class="pre">instance_og</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.misc_r"><code class="docutils literal notranslate"><span class="pre">misc_r</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.miscal"><code class="docutils literal notranslate"><span class="pre">miscal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.str_parse"><code class="docutils literal notranslate"><span class="pre">str_parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.struct"><code class="docutils literal notranslate"><span class="pre">struct</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.struct_r"><code class="docutils literal notranslate"><span class="pre">struct_r</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing-par-header-module">parsing.par_header module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.define"><code class="docutils literal notranslate"><span class="pre">define</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum"><code class="docutils literal notranslate"><span class="pre">enum</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum_r"><code class="docutils literal notranslate"><span class="pre">enum_r</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.extern"><code class="docutils literal notranslate"><span class="pre">extern</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.misc_r"><code class="docutils literal notranslate"><span class="pre">misc_r</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.str_parse"><code class="docutils literal notranslate"><span class="pre">str_parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.str_parse_r"><code class="docutils literal notranslate"><span class="pre">str_parse_r()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct"><code class="docutils literal notranslate"><span class="pre">struct</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct_r"><code class="docutils literal notranslate"><span class="pre">struct_r</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.structure"><code class="docutils literal notranslate"><span class="pre">structure</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing-par-methods-module">parsing.par_methods module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.clean"><code class="docutils literal notranslate"><span class="pre">clean()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.com_parse"><code class="docutils literal notranslate"><span class="pre">com_parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.comment"><code class="docutils literal notranslate"><span class="pre">comment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.erase_text"><code class="docutils literal notranslate"><span class="pre">erase_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.line_index"><code class="docutils literal notranslate"><span class="pre">line_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.preproc_eval"><code class="docutils literal notranslate"><span class="pre">preproc_eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.preproc_filter"><code class="docutils literal notranslate"><span class="pre">preproc_filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.preproc_parse"><code class="docutils literal notranslate"><span class="pre">preproc_parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.split_comment"><code class="docutils literal notranslate"><span class="pre">split_comment()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing-parser-main-module">parsing.parser_main module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file"><code class="docutils literal notranslate"><span class="pre">file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html">utilities package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MIB Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">analysis</a></li>
+      <li class="breadcrumb-item active">parsing package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/parsing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="parsing-package">
+<h1>parsing package<a class="headerlink" href="#parsing-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="parsing-load-module">
+<h2>parsing.load module<a class="headerlink" href="#parsing-load-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.load">Central location from which other modules can source data from the parsed C-files.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.load.extr_values">
+<span class="sig-prename descclassname"><span class="pre">parsing.load.</span></span><span class="sig-name descname"><span class="pre">extr_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/load.html#extr_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.load.extr_values" title="Link to this definition"></a></dt>
+<dd><p>Search for constants, enum correspondences and other global values in the headers.</p>
+</dd></dl>
+
+</section>
+<section id="parsing-par-cfile-module">
+<h2>parsing.par_cfile module<a class="headerlink" href="#parsing-par-cfile-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.par_cfile">This module serves the purpose of parsing C files containing basic information about the various packet to be included in the MIB database.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.instance" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance_og</span></code></a></p>
+<p>class of first order C structures/object</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance.str_parse">
+<span class="sig-name descname"><span class="pre">str_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#instance.str_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.instance.str_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse some general information about the object</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance_og">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">instance_og</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#instance_og"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.instance_og" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class of general C structures/object</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.misc_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">misc_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#misc_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.misc_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance_og</span></code></a></p>
+<p>class of a singular instance of a constant (within array)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.misc_r.mis_parse">
+<span class="sig-name descname"><span class="pre">mis_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#misc_r.mis_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.misc_r.mis_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the information about the constant</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.miscal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">miscal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#miscal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.miscal" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance</span></code></a></p>
+<p>class of an instance of an array of constants</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.miscal.add_parse">
+<span class="sig-name descname"><span class="pre">add_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#miscal.add_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.miscal.add_parse" title="Link to this definition"></a></dt>
+<dd><p>Correct information about the object’s name and type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.miscal.reposition">
+<span class="sig-name descname"><span class="pre">reposition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#miscal.reposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.miscal.reposition" title="Link to this definition"></a></dt>
+<dd><p>Use classic ordering if no specific position of each element of a structure is declared</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_cfile.str_parse">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">str_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#str_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.str_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the given string into blocks of “top-level” C-structures.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#struct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.struct" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance</span></code></a></p>
+<p>class of an instance of an array of structs</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct.add_parse">
+<span class="sig-name descname"><span class="pre">add_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#struct.add_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.struct.add_parse" title="Link to this definition"></a></dt>
+<dd><p>Correct information about the object’s name and type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct.reposition">
+<span class="sig-name descname"><span class="pre">reposition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#struct.reposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.struct.reposition" title="Link to this definition"></a></dt>
+<dd><p>Use classic ordering if no specific position of each element of a structure is declared</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">struct_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#struct_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.struct_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance_og</span></code></a></p>
+<p>class of a singular instance of struct (within array)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct_r.srr_parse">
+<span class="sig-name descname"><span class="pre">srr_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#struct_r.srr_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.struct_r.srr_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the struct into its entries.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="parsing-par-header-module">
+<h2>parsing.par_header module<a class="headerlink" href="#parsing-par-header-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.par_header">This module serves the purpose of parsing C header files containing information about the structure of packets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.define">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">define</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#define"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.define" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>class of #define makro</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.define.def_parse">
+<span class="sig-name descname"><span class="pre">def_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#define.def_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.define.def_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse #define into its syntactic/semantic components.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.enum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#enum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.enum" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>class of enum structure</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.enum.ele_parse">
+<span class="sig-name descname"><span class="pre">ele_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#enum.ele_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.enum.ele_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse enum into its syntactic/semantic components.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.enum_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">enum_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#enum_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.enum_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>class of a reference to an enum</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.enum_r.enr_parse">
+<span class="sig-name descname"><span class="pre">enr_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#enum_r.enr_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.enum_r.enr_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the reference to its syntactic/semantic components.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.extern">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">extern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#extern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.extern" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>class of external declaration of a constant</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.extern.ext_parse">
+<span class="sig-name descname"><span class="pre">ext_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#extern.ext_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.extern.ext_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse extern into its syntactic/semantic components.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.misc_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">misc_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#misc_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.misc_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>class of a declaration of a constant</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.misc_r.mir_parse">
+<span class="sig-name descname"><span class="pre">mir_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#misc_r.mir_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.misc_r.mir_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the declaration into its syntactic/semantic components.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_header.str_parse">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">str_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#str_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.str_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the given string into blocks of “top-level” C-structures.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_header.str_parse_r">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">str_parse_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#str_parse_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.str_parse_r" title="Link to this definition"></a></dt>
+<dd><p>Parse the given string into blocks of C-structures. But this time “second-order” strings are expected and the parsing is recursive.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.struct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#struct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.struct" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>class of declaration of a C structure</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.struct.stc_parse">
+<span class="sig-name descname"><span class="pre">stc_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#struct.stc_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.struct.stc_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse struct into its syntactic/semantic components.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.struct_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">struct_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#struct_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.struct_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>class of a reference to a C structure</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.struct_r.str_parse">
+<span class="sig-name descname"><span class="pre">str_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#struct_r.str_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.struct_r.str_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the reference to its syntactic/semantic components.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.structure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.structure" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class of first order header structures/object</p>
+</dd></dl>
+
+</section>
+<section id="parsing-par-methods-module">
+<h2>parsing.par_methods module<a class="headerlink" href="#parsing-par-methods-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.par_methods">This module holds various methods used for parsing of the header and normal C files.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.clean">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.clean" title="Link to this definition"></a></dt>
+<dd><p>Replace tokens with spaces.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.com_parse">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">com_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#com_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.com_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the comments in the string into blocks corresponding to singular comments.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_methods.comment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#comment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.comment" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class of an occurence of a comment in the file</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.erase_text">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">erase_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#erase_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.erase_text" title="Link to this definition"></a></dt>
+<dd><p>Erase all text inside quatation marks in the given string.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.line_index">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">line_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#line_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.line_index" title="Link to this definition"></a></dt>
+<dd><p>Give list of indexes of line starts of the given string.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.preproc_eval">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">preproc_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variab</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#preproc_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.preproc_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate whether a pre-processing condition holds.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.preproc_filter">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">preproc_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#preproc_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.preproc_filter" title="Link to this definition"></a></dt>
+<dd><p>Filter out what parts of the C-code should be further considered based on preprocessor directives.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.preproc_parse">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">preproc_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#preproc_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.preproc_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse C-preprocessor conditional syntax into logic blocks.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.split_comment">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">split_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#split_comment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.split_comment" title="Link to this definition"></a></dt>
+<dd><p>Split the given string into a section with C comments and a section without them.</p>
+</dd></dl>
+
+</section>
+<section id="parsing-parser-main-module">
+<h2>parsing.parser_main module<a class="headerlink" href="#parsing-parser-main-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.parser_main">This module is a starting point for parsing of C-files and holds class which plays the role of their interpretation.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.parser_main.file">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.parser_main.</span></span><span class="sig-name descname"><span class="pre">file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/parser_main.html#file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.parser_main.file" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class resresenting the file being analysed, its structure, etc…</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><dl class="simple">
+<dt>stri: string</dt><dd><p>a string of the file text to be parsed</p>
+</dd>
+<dt>header: boolean</dt><dd><p>parameter denoting whether file is a header or normal C file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.parser_main.file.linker">
+<span class="sig-name descname"><span class="pre">linker</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/parser_main.html#file.linker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.parser_main.file.linker" title="Link to this definition"></a></dt>
+<dd><p>Link each comment to a corresponding C-object in the file</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>pairs: list</dt><dd><p>pairs of comments and their corresponding objects</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.parser_main.main">
+<span class="sig-prename descclassname"><span class="pre">parsing.parser_main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/parser_main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.parser_main.main" title="Link to this definition"></a></dt>
+<dd><p>Created a parsed Python representation from the given file.</p>
+<dl class="simple">
+<dt>Parameters: </dt><dd><dl class="simple">
+<dt>name: string</dt><dd><p>Path to the file</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<p id="module-parsing">These modules serve the purpose of parsing the inputted C/header files into python structures, that can be then easily accessed at the construction stage of the process.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="main.html" class="btn btn-neutral float-left" title="main module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utilities.html" class="btn btn-neutral float-right" title="utilities package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Josef Vácha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

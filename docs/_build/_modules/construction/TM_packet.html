@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>construction.TM_packet &mdash; MIB Generator 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MIB Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">analysis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MIB Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">construction.TM_packet</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for construction.TM_packet</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module takes care of creating a representation of monitoring packets from parsed C-files and extracting entries for MIB databases.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">construction.TM_packet_methods</span> <span class="k">as</span> <span class="nn">pm</span>
+
+
+<div class="viewcode-block" id="TM_header">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_header">[docs]</a>
+<span class="k">class</span> <span class="nc">TM_header</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class representing the TM header common to all TM-packages&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_header</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">h_analysis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">count_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TM_header.find_header">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_header.find_header">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span>
+            <span class="n">methods</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="fm">__dir__</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">methods</span> <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;TmHead&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">i</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warn.:</span><span class="se">\t</span><span class="s2">Wasn&#39;t able to find the common Tm header.&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TM_packet">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_packet">[docs]</a>
+<span class="k">class</span> <span class="nc">TM_packet</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class representing each TM packet type and its properties&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">,</span> <span class="n">h_structure</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">structure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">header</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span> <span class="o">=</span> <span class="n">h_structure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">h_analysis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_entries</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">var_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">count_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid_dictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pic_dictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tpcf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpcf_dictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pcf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcf_listdict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plf_listdict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur_listdict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vpd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vpd_listdict</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TM_packet.pid_dictionary">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_packet.pid_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">pid_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in pid table.&quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">evalu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;.serviceType&quot;</span><span class="p">])</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_STYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">evalu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;.serviceSubType&quot;</span><span class="p">])</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_APID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">apidnum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;.apid&quot;</span><span class="p">])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sid</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">i</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;const_value&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">elements</span>
+                <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;sid&quot;</span>
+            <span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_PI1_VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">evalu</span><span class="p">(</span><span class="n">sid</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_PI1_VAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-1&quot;</span>
+        <span class="c1"># diction[&quot;PID_PI2_VAL&quot;] =</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_SPID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;spid&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_SPID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># diction[&quot;PID_UNIT&quot;] =</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_entries</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_TPSD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_SPID&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_TPSC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-1&quot;</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_DFHSIZE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">size</span>
+        <span class="c1"># diction[&quot;PID_TIME&quot;] =</span>
+        <span class="c1"># diction[&quot;INTER&quot;] =</span>
+        <span class="c1"># diction[&quot;PID_VALID&quot;] =</span>
+        <span class="c1"># diction[&quot;PID_CHECK&quot;] =</span>
+        <span class="c1"># diction[&quot;PID_EVENT&quot;] =</span>
+        <span class="c1"># diction[&quot;PID_EVID&quot;] =</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+
+
+<div class="viewcode-block" id="TM_packet.pic_dictionary">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_packet.pic_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">pic_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in pic table.&quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">[</span><span class="s2">&quot;PID_TYPE&quot;</span><span class="p">]</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_STYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">[</span><span class="s2">&quot;PID_STYPE&quot;</span><span class="p">]</span>
+        <span class="n">offset</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">pi_sid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_PI1_OFF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_PI1_WID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_PI1_OFF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_PI1_WID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_PI2_OFF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;PI2&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_PI2_WID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;PI2&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_PI2_OFF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PIC_PI2_WID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PID_APID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">[</span><span class="s2">&quot;PID_APID&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+
+
+<div class="viewcode-block" id="TM_packet.tpcf_dictionary">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_packet.tpcf_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">tpcf_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in tpcf table.&quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TPCF_SPID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">[</span><span class="s2">&quot;PID_SPID&quot;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TPCF_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;text_id&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TPCF_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># diction[&quot;TPCF_SIZE&quot;] =</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+
+
+<div class="viewcode-block" id="TM_packet.pcf_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_packet.pcf_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">pcf_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in pcf table.&quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">no</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:X}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;base_par_index&quot;</span><span class="p">]),</span> <span class="mi">16</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="n">i</span>
+                <span class="p">)</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span>
+                    <span class="s2">&quot;prefix&quot;</span>
+                <span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">no</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="c1"># diction[&quot;PCF_PID&quot;] =</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_UNIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_UNIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_PTC&quot;</span><span class="p">],</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_PFC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">getptcpcf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">size</span><span class="p">)</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_WIDTH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">size</span>
+            <span class="c1"># diction[&quot;PCF_VALID&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_RELATED&quot;] =</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_CATEG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">categfromptc</span><span class="p">(</span><span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_PTC&quot;</span><span class="p">])</span>
+            <span class="c1"># this uses probably a wrong specification of natur</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_NATUR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;natur&quot;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_NATUR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_CURTX&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cal&quot;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCF_CURTX&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="c1"># diction[&quot;PCF_INTER&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_USCON&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_DECIM&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_PARVAL&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_SUBSYS&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_VALPAR&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_SPTYPE&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_CORR&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_OBTID&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_DARC&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_ENDIAN&quot;] =</span>
+            <span class="c1"># diction[&quot;PCF_DESCR2&quot;] =</span>
+            <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+
+
+<div class="viewcode-block" id="TM_packet.plf_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_packet.plf_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">plf_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in plf table.&quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="mi">8</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PLF_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcf</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;PCF_NAME&quot;</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PLF_SPID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">[</span><span class="s2">&quot;PID_SPID&quot;</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PLF_OFFBY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PLF_OFFBI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PLF_OFFBY&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">8</span>
+            <span class="c1"># diction[&quot;PLF_NBOCC&quot;] = abs(pm.evalu(self.entries[i].array))</span>
+            <span class="c1"># diction[&quot;PLF_LGOCC&quot;] =</span>
+            <span class="c1"># diction[&quot;PLF_TIME&quot;] =</span>
+            <span class="c1"># diction[&quot;PLF_TDOCC&quot;] =</span>
+            <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+
+
+<div class="viewcode-block" id="TM_packet.cur_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_packet.cur_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">cur_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in cur table.&quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+            <span class="c1"># this will have to be modified when I get how multiple calibrations will look in comments</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">comment</span> <span class="ow">and</span> <span class="s2">&quot;cals&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CUR_PNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcf</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="s2">&quot;PCF_NAME&quot;</span><span class="p">]</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CUR_SELECT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cal&quot;</span><span class="p">]</span>
+                <span class="c1"># diction[&quot;CUR_POS&quot;] =</span>
+                <span class="c1"># diction[&quot;CUR_RLCHK&quot;] =</span>
+                <span class="c1"># diction[&quot;CUR_VALPAR&quot;] =</span>
+                <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+
+
+<div class="viewcode-block" id="TM_packet.vpd_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TM_packet.TM_packet.vpd_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">vpd_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in vpd table.&quot;&quot;&quot;</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">var_entries</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_entries</span><span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">var_entries</span><span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">is_vpd</span> <span class="o">==</span> <span class="p">{</span><span class="s2">&quot;count&quot;</span><span class="p">}:</span>
+                <span class="n">count</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+                <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_entries</span><span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">count</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">count</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">count</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">var_entries</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">count</span><span class="p">))):</span>
+            <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_TPSD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">[</span><span class="s2">&quot;PID_TPSD&quot;</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_POS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcf</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;PCF_NAME&quot;</span><span class="p">]</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_FIXREP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_DISDESC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcf</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;PCF_DESCR&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_FIXREP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">evalu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="o">-</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pcf</span><span class="p">[</span><span class="o">-</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;PCF_NAME&quot;</span><span class="p">][:</span><span class="mi">3</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pcf</span><span class="p">[</span><span class="o">-</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;PCF_NAME&quot;</span><span class="p">]))[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span>
+                <span class="p">)</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_DISDESC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fixed count&quot;</span>
+                <span class="c1"># I&#39;m not sure how correct this pcf entry is.</span>
+                <span class="c1"># It has to be here since the &quot;purely informative&quot; fixed-count parameter has to be in pcf.</span>
+                <span class="n">diction2</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">diction2</span><span class="p">[</span><span class="s2">&quot;PCF_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+                <span class="n">diction2</span><span class="p">[</span><span class="s2">&quot;PCF_PTC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+                <span class="n">diction2</span><span class="p">[</span><span class="s2">&quot;PCF_PFC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+                <span class="n">diction2</span><span class="p">[</span><span class="s2">&quot;PCF_CATEG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;N&quot;</span>
+                <span class="n">diction2</span><span class="p">[</span><span class="s2">&quot;PCF_NATUR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;H&quot;</span>
+                <span class="n">diction2</span><span class="p">[</span><span class="s2">&quot;PCF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_DISDESC&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pcf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction2</span><span class="p">)</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_GRPSIZE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># diction[&quot;VPD_CHOICE&quot;] =</span>
+            <span class="c1"># diction[&quot;VPD_PIDREF&quot;] =</span>
+            <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_WIDTH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;VPD_WIDTH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                    <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="o">/</span> <span class="mi">8</span><span class="p">),</span> <span class="mi">99</span>
+                <span class="p">)</span>
+            <span class="c1"># diction[&quot;VPD_JUSTIFY&quot;] =</span>
+            <span class="c1"># diction[&quot;VPD_NEWLINE&quot;] =</span>
+            <span class="c1"># diction[&quot;VPD_DCHAR&quot;] =</span>
+            <span class="c1"># diction[&quot;VPD_FORM&quot;] =</span>
+            <span class="c1"># diction[&quot;VPD_OFFSET&quot;] =</span>
+            <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Josef Vácha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analysis &mdash; MIB Generator 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="construction package" href="construction.html" />
+    <link rel="prev" title="Welcome to MIB Generator’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MIB Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="construction.html">construction package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">data package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generation.html">generation package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parsing.html">parsing package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html">utilities package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MIB Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">analysis</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="analysis">
+<h1>analysis<a class="headerlink" href="#analysis" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="construction.html">construction package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="construction.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="construction.html#construction-tc-packet-module">construction.TC_packet module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TC_packet.TC_header"><code class="docutils literal notranslate"><span class="pre">TC_header</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TC_packet.TC_header.pcdf_listdict"><code class="docutils literal notranslate"><span class="pre">TC_header.pcdf_listdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TC_packet.TC_header.pcpc_listdict"><code class="docutils literal notranslate"><span class="pre">TC_header.pcpc_listdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TC_packet.TC_header.tcp_dictionary"><code class="docutils literal notranslate"><span class="pre">TC_header.tcp_dictionary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TC_packet.TC_packet"><code class="docutils literal notranslate"><span class="pre">TC_packet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TC_packet.TC_packet.ccf_dictionary"><code class="docutils literal notranslate"><span class="pre">TC_packet.ccf_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TC_packet.TC_packet.cdf_listdict"><code class="docutils literal notranslate"><span class="pre">TC_packet.cdf_listdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TC_packet.TC_packet.cpc_listdict"><code class="docutils literal notranslate"><span class="pre">TC_packet.cpc_listdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TC_packet.TC_packet.cvp_listdict"><code class="docutils literal notranslate"><span class="pre">TC_packet.cvp_listdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TC_packet.TC_packet.prf_listdict"><code class="docutils literal notranslate"><span class="pre">TC_packet.prf_listdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TC_packet.TC_packet.prv_listdict"><code class="docutils literal notranslate"><span class="pre">TC_packet.prv_listdict()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="construction.html#construction-tc-packet-methods-module">construction.TC_packet_methods module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TC_packet_methods.find_header"><code class="docutils literal notranslate"><span class="pre">find_header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TC_packet_methods.get_gr_sizes"><code class="docutils literal notranslate"><span class="pre">get_gr_sizes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TC_packet_methods.h_analysis"><code class="docutils literal notranslate"><span class="pre">h_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TC_packet_methods.packet_search"><code class="docutils literal notranslate"><span class="pre">packet_search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TC_packet_methods.param_list"><code class="docutils literal notranslate"><span class="pre">param_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="construction.html#construction-tm-packet-module">construction.TM_packet module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet.TM_header"><code class="docutils literal notranslate"><span class="pre">TM_header</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TM_packet.TM_header.find_header"><code class="docutils literal notranslate"><span class="pre">TM_header.find_header()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet.TM_packet"><code class="docutils literal notranslate"><span class="pre">TM_packet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TM_packet.TM_packet.cur_listdict"><code class="docutils literal notranslate"><span class="pre">TM_packet.cur_listdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TM_packet.TM_packet.pcf_listdict"><code class="docutils literal notranslate"><span class="pre">TM_packet.pcf_listdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TM_packet.TM_packet.pic_dictionary"><code class="docutils literal notranslate"><span class="pre">TM_packet.pic_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TM_packet.TM_packet.pid_dictionary"><code class="docutils literal notranslate"><span class="pre">TM_packet.pid_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TM_packet.TM_packet.plf_listdict"><code class="docutils literal notranslate"><span class="pre">TM_packet.plf_listdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TM_packet.TM_packet.tpcf_dictionary"><code class="docutils literal notranslate"><span class="pre">TM_packet.tpcf_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.TM_packet.TM_packet.vpd_listdict"><code class="docutils literal notranslate"><span class="pre">TM_packet.vpd_listdict()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="construction.html#construction-tm-packet-methods-module">construction.TM_packet_methods module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet_methods.apidnum"><code class="docutils literal notranslate"><span class="pre">apidnum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet_methods.categfromptc"><code class="docutils literal notranslate"><span class="pre">categfromptc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet_methods.count_size"><code class="docutils literal notranslate"><span class="pre">count_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet_methods.evalu"><code class="docutils literal notranslate"><span class="pre">evalu()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet_methods.getptcpcf"><code class="docutils literal notranslate"><span class="pre">getptcpcf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet_methods.h_analysis"><code class="docutils literal notranslate"><span class="pre">h_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet_methods.header_search"><code class="docutils literal notranslate"><span class="pre">header_search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet_methods.pi_sid"><code class="docutils literal notranslate"><span class="pre">pi_sid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.TM_packet_methods.var_get"><code class="docutils literal notranslate"><span class="pre">var_get()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="construction.html#construction-calib-module">construction.calib module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.caf_calib"><code class="docutils literal notranslate"><span class="pre">caf_calib</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.caf_calib.caf_data"><code class="docutils literal notranslate"><span class="pre">caf_calib.caf_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.caf_calib.caf_dictionary"><code class="docutils literal notranslate"><span class="pre">caf_calib.caf_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.caf_calib.cap_listdict"><code class="docutils literal notranslate"><span class="pre">caf_calib.cap_listdict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.calib"><code class="docutils literal notranslate"><span class="pre">calib</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.calib_extract"><code class="docutils literal notranslate"><span class="pre">calib_extract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.cpc_update"><code class="docutils literal notranslate"><span class="pre">cpc_update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.cur_update"><code class="docutils literal notranslate"><span class="pre">cur_update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.cvs_update"><code class="docutils literal notranslate"><span class="pre">cvs_update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.decal_extract"><code class="docutils literal notranslate"><span class="pre">decal_extract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.decalib"><code class="docutils literal notranslate"><span class="pre">decalib</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.decalib.paf_data"><code class="docutils literal notranslate"><span class="pre">decalib.paf_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.decalib.paf_dictionary"><code class="docutils literal notranslate"><span class="pre">decalib.paf_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.decalib.pas_listdict"><code class="docutils literal notranslate"><span class="pre">decalib.pas_listdict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.lgf_calib"><code class="docutils literal notranslate"><span class="pre">lgf_calib</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.lgf_calib.lgf_dictionary"><code class="docutils literal notranslate"><span class="pre">lgf_calib.lgf_dictionary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.mcf_calib"><code class="docutils literal notranslate"><span class="pre">mcf_calib</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.mcf_calib.mcf_dictionary"><code class="docutils literal notranslate"><span class="pre">mcf_calib.mcf_dictionary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.txf_calib"><code class="docutils literal notranslate"><span class="pre">txf_calib</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.txf_calib.is_enum"><code class="docutils literal notranslate"><span class="pre">txf_calib.is_enum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.txf_calib.txf_data"><code class="docutils literal notranslate"><span class="pre">txf_calib.txf_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.txf_calib.txf_dictionary"><code class="docutils literal notranslate"><span class="pre">txf_calib.txf_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.txf_calib.txp_listdict"><code class="docutils literal notranslate"><span class="pre">txf_calib.txp_listdict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.verif_extract"><code class="docutils literal notranslate"><span class="pre">verif_extract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="construction.html#construction.calib.verification"><code class="docutils literal notranslate"><span class="pre">verification</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="construction.html#construction.calib.verification.cvs_dictionary"><code class="docutils literal notranslate"><span class="pre">verification.cvs_dictionary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="construction.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">data package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#data-longdata-module">data.longdata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="generation.html">generation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="generation.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generation.html#generation-gener-module">generation.gener module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generation.html#generation.gener.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generation.html#generation.gener.delete_empty"><code class="docutils literal notranslate"><span class="pre">delete_empty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generation.html#generation.gener.exclude_repetition"><code class="docutils literal notranslate"><span class="pre">exclude_repetition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generation.html#generation.gener.generate"><code class="docutils literal notranslate"><span class="pre">generate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generation.html#generation.gener.generation_hub"><code class="docutils literal notranslate"><span class="pre">generation_hub()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generation.html#generation.gener.list_to_mib"><code class="docutils literal notranslate"><span class="pre">list_to_mib()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generation.html#generation.gener.one_generate"><code class="docutils literal notranslate"><span class="pre">one_generate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generation.html#generation.gener.save_mib"><code class="docutils literal notranslate"><span class="pre">save_mib()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="generation.html#generation.gener.two_generate"><code class="docutils literal notranslate"><span class="pre">two_generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="generation.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="main.html">main module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="main.html#main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">parsing package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="parsing.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parsing.html#parsing-load-module">parsing.load module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.load.extr_values"><code class="docutils literal notranslate"><span class="pre">extr_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="parsing.html#parsing-par-cfile-module">parsing.par_cfile module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_cfile.instance"><code class="docutils literal notranslate"><span class="pre">instance</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_cfile.instance.str_parse"><code class="docutils literal notranslate"><span class="pre">instance.str_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_cfile.instance_og"><code class="docutils literal notranslate"><span class="pre">instance_og</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_cfile.misc_r"><code class="docutils literal notranslate"><span class="pre">misc_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_cfile.misc_r.mis_parse"><code class="docutils literal notranslate"><span class="pre">misc_r.mis_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_cfile.miscal"><code class="docutils literal notranslate"><span class="pre">miscal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_cfile.miscal.add_parse"><code class="docutils literal notranslate"><span class="pre">miscal.add_parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_cfile.miscal.reposition"><code class="docutils literal notranslate"><span class="pre">miscal.reposition()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_cfile.str_parse"><code class="docutils literal notranslate"><span class="pre">str_parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_cfile.struct"><code class="docutils literal notranslate"><span class="pre">struct</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_cfile.struct.add_parse"><code class="docutils literal notranslate"><span class="pre">struct.add_parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_cfile.struct.reposition"><code class="docutils literal notranslate"><span class="pre">struct.reposition()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_cfile.struct_r"><code class="docutils literal notranslate"><span class="pre">struct_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_cfile.struct_r.srr_parse"><code class="docutils literal notranslate"><span class="pre">struct_r.srr_parse()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="parsing.html#parsing-par-header-module">parsing.par_header module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.define"><code class="docutils literal notranslate"><span class="pre">define</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_header.define.def_parse"><code class="docutils literal notranslate"><span class="pre">define.def_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.enum"><code class="docutils literal notranslate"><span class="pre">enum</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_header.enum.ele_parse"><code class="docutils literal notranslate"><span class="pre">enum.ele_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.enum_r"><code class="docutils literal notranslate"><span class="pre">enum_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_header.enum_r.enr_parse"><code class="docutils literal notranslate"><span class="pre">enum_r.enr_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.extern"><code class="docutils literal notranslate"><span class="pre">extern</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_header.extern.ext_parse"><code class="docutils literal notranslate"><span class="pre">extern.ext_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.misc_r"><code class="docutils literal notranslate"><span class="pre">misc_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_header.misc_r.mir_parse"><code class="docutils literal notranslate"><span class="pre">misc_r.mir_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.str_parse"><code class="docutils literal notranslate"><span class="pre">str_parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.str_parse_r"><code class="docutils literal notranslate"><span class="pre">str_parse_r()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.struct"><code class="docutils literal notranslate"><span class="pre">struct</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_header.struct.stc_parse"><code class="docutils literal notranslate"><span class="pre">struct.stc_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.struct_r"><code class="docutils literal notranslate"><span class="pre">struct_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.par_header.struct_r.str_parse"><code class="docutils literal notranslate"><span class="pre">struct_r.str_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_header.structure"><code class="docutils literal notranslate"><span class="pre">structure</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="parsing.html#parsing-par-methods-module">parsing.par_methods module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_methods.clean"><code class="docutils literal notranslate"><span class="pre">clean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_methods.com_parse"><code class="docutils literal notranslate"><span class="pre">com_parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_methods.comment"><code class="docutils literal notranslate"><span class="pre">comment</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_methods.erase_text"><code class="docutils literal notranslate"><span class="pre">erase_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_methods.line_index"><code class="docutils literal notranslate"><span class="pre">line_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_methods.preproc_eval"><code class="docutils literal notranslate"><span class="pre">preproc_eval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_methods.preproc_filter"><code class="docutils literal notranslate"><span class="pre">preproc_filter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_methods.preproc_parse"><code class="docutils literal notranslate"><span class="pre">preproc_parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.par_methods.split_comment"><code class="docutils literal notranslate"><span class="pre">split_comment()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="parsing.html#parsing-parser-main-module">parsing.parser_main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.parser_main.file"><code class="docutils literal notranslate"><span class="pre">file</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="parsing.html#parsing.parser_main.file.linker"><code class="docutils literal notranslate"><span class="pre">file.linker()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="parsing.html#parsing.parser_main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="parsing.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">utilities package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#utilities-data-gen-module">utilities.data_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.data_gen.gen_data"><code class="docutils literal notranslate"><span class="pre">gen_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#utilities-update-module">utilities.update module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.update.update_config"><code class="docutils literal notranslate"><span class="pre">update_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.update.update_path"><code class="docutils literal notranslate"><span class="pre">update_path()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#utilities-visualiser-module">utilities.visualiser module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.visualiser.CommentWindow"><code class="docutils literal notranslate"><span class="pre">CommentWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="utilities.html#utilities.visualiser.CommentWindow.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">CommentWindow.staticMetaObject</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="utilities.html#utilities.visualiser.CommentWindow.view_text"><code class="docutils literal notranslate"><span class="pre">CommentWindow.view_text()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.visualiser.MainWindow"><code class="docutils literal notranslate"><span class="pre">MainWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="utilities.html#utilities.visualiser.MainWindow.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">MainWindow.staticMetaObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.visualiser.TextWindow"><code class="docutils literal notranslate"><span class="pre">TextWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="utilities.html#utilities.visualiser.TextWindow.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">TextWindow.staticMetaObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.visualiser.Ui_MainWindow"><code class="docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="utilities.html#utilities.visualiser.Ui_MainWindow.inter"><code class="docutils literal notranslate"><span class="pre">Ui_MainWindow.inter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="utilities.html#utilities.visualiser.Ui_MainWindow.setupUi"><code class="docutils literal notranslate"><span class="pre">Ui_MainWindow.setupUi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="utilities.html#utilities.visualiser.Ui_MainWindow.view_comments"><code class="docutils literal notranslate"><span class="pre">Ui_MainWindow.view_comments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="utilities.html#utilities.visualiser.Ui_MainWindow.view_text"><code class="docutils literal notranslate"><span class="pre">Ui_MainWindow.view_text()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.visualiser.getdata"><code class="docutils literal notranslate"><span class="pre">getdata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.visualiser.intable"><code class="docutils literal notranslate"><span class="pre">intable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.visualiser.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilities.html#utilities.visualiser.runt"><code class="docutils literal notranslate"><span class="pre">runt()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to MIB Generator’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="construction.html" class="btn btn-neutral float-right" title="construction package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Josef Vácha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
