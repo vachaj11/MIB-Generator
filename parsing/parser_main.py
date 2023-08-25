@@ -1,18 +1,42 @@
-"""This module is a starting point for parsing of C-files and holds class which plays the role of their interpretation."""
+"""The main parsing module.
+
+This module is a starting point for parsing of C-files and holds class which plays the role of their interpretation.
+"""
+
 import parsing.par_header as parh
 import parsing.par_cfile as parc
 import parsing.par_methods as parm
 
 
 class file:
-    """
-    class resresenting the file being analysed, its structure, etc...
+    """Class representing the file being analysed and its internal structure in an easily Python-accessible format.
     
-    Parameters:
-        stri: string
-            a string of the file text to be parsed
-        header: boolean
-            parameter denoting whether file is a header or normal C file
+    During creation this class goes through multiple steps of parsing/interpretation using methods in :obj:`parsing.par_header`, :obj:`parsing.par_cfile`:
+    and :obj:`parsing.par_methods`. The steps are as follows:
+    
+    1. Get general information about the file (length, line indexes)
+    2. Separate text in comment and the code (while keeping the absolute positions in the file).
+    3. Process any C-preprocessor logic that's in the code.
+    4. Parse the resulting code into Python representations of the corresponding C-objects.
+    5. Parse the comments into intepretable sections (written in json5) and interpret their content.
+    6. Create links between the found C-objects and interterpretable comments
+    
+    Args:
+        stri (str): The content of the file to be parsed/analysed.
+        header (bool): Parameter denoting whether file is a header or normal C file.
+    
+    Attributes:
+        text (str): Text of the file.
+        max_position (int): Length of the file.
+        lines (list): List of positions of line starts.
+        text_o (str): File text with only code (without comments).
+        text_c (str): File text with only comments (without code).
+        text_f (str): File (with code) after sorting out the pre-processor logic.
+        structures (list): List of Python representations of C-objects found in the file.
+            
+            The Python representations are child classes of either :obj:`parsing.par_cfile.instance_og` or :obj:`parsing.par_header.structure`
+        comments (list): List of found interpretable comments which are represented using :obj:`parsing.par_methods.comment`
+        link (list): List of pairs of comments and the Python representation of C-objects they belong to.
     """
 
     def __init__(self, stri, header):
@@ -29,12 +53,14 @@ class file:
         self.link = self.linker()
 
     def linker(self):
-        """
-        Link each comment to a corresponding C-object in the file
+        """Link each comment to a corresponding C-object in the file
+        
+        Goes one by one through comments and searches for their corresponding structure.
+        For the closes found match, creates link from the comment to the structure and from the structure to the comment 
+        (by generating attributes for their respectives classes) and returns them in a list of pairs.
         
         Returns:
-            pairs: list
-                pairs of comments and their corresponding objects
+            list of pairs: Pairs of comments and their corresponding structures.
         """
         pairs = []
         for i in self.comments:
@@ -64,14 +90,18 @@ class file:
         return pairs
 
 
-def main(name="/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h"):
-    """
-    Created a parsed Python representation from the given file.
+def main(name ="/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h"):
+    """Create a parsed python representation of a file.
     
-    Parameters: 
-        name: string
-            Path to the file 
+    Opens file, depending on its ending chooses correct parser and lets it run.
+    
+    Args:
+        name (str): Path to file.
+    
+    Returns:
+        file: File object
     """
+    
     try:
         fil = open(name, "r")
         c = fil.read()

@@ -69,7 +69,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for parsing.parser_main</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;This module is a starting point for parsing of C-files and holds class which plays the role of their interpretation.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;The main parsing module.</span>
+
+<span class="sd">This module is a starting point for parsing of C-files and holds class which plays the role of their interpretation.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">parsing.par_header</span> <span class="k">as</span> <span class="nn">parh</span>
 <span class="kn">import</span> <span class="nn">parsing.par_cfile</span> <span class="k">as</span> <span class="nn">parc</span>
 <span class="kn">import</span> <span class="nn">parsing.par_methods</span> <span class="k">as</span> <span class="nn">parm</span>
@@ -78,14 +82,34 @@
 <div class="viewcode-block" id="file">
 <a class="viewcode-back" href="../../parsing.html#parsing.parser_main.file">[docs]</a>
 <span class="k">class</span> <span class="nc">file</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    class resresenting the file being analysed, its structure, etc...</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing the file being analysed and its internal structure in an easily Python-accessible format.</span>
 <span class="sd">    </span>
-<span class="sd">    Parameters:</span>
-<span class="sd">        stri: string</span>
-<span class="sd">            a string of the file text to be parsed</span>
-<span class="sd">        header: boolean</span>
-<span class="sd">            parameter denoting whether file is a header or normal C file</span>
+<span class="sd">    During creation this class goes through multiple steps of parsing/interpretation using methods in :obj:`parsing.par_header`, :obj:`parsing.par_cfile`:</span>
+<span class="sd">    and :obj:`parsing.par_methods`. The steps are as follows:</span>
+<span class="sd">    </span>
+<span class="sd">    1. Get general information about the file (length, line indexes)</span>
+<span class="sd">    2. Separate text in comment and the code (while keeping the absolute positions in the file).</span>
+<span class="sd">    3. Process any C-preprocessor logic that&#39;s in the code.</span>
+<span class="sd">    4. Parse the resulting code into Python representations of the corresponding C-objects.</span>
+<span class="sd">    5. Parse the comments into intepretable sections (written in json5) and interpret their content.</span>
+<span class="sd">    6. Create links between the found C-objects and interterpretable comments</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        stri (str): The content of the file to be parsed/analysed.</span>
+<span class="sd">        header (bool): Parameter denoting whether file is a header or normal C file.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        text (str): Text of the file.</span>
+<span class="sd">        max_position (int): Length of the file.</span>
+<span class="sd">        lines (list): List of positions of line starts.</span>
+<span class="sd">        text_o (str): File text with only code (without comments).</span>
+<span class="sd">        text_c (str): File text with only comments (without code).</span>
+<span class="sd">        text_f (str): File (with code) after sorting out the pre-processor logic.</span>
+<span class="sd">        structures (list): List of Python representations of C-objects found in the file.</span>
+<span class="sd">            </span>
+<span class="sd">            The Python representations are child classes of either :obj:`parsing.par_cfile.instance_og` or :obj:`parsing.par_header.structure`</span>
+<span class="sd">        comments (list): List of found interpretable comments which are represented using :obj:`parsing.par_methods.comment`</span>
+<span class="sd">        link (list): List of pairs of comments and the Python representation of C-objects they belong to.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stri</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
@@ -104,12 +128,14 @@
 <div class="viewcode-block" id="file.linker">
 <a class="viewcode-back" href="../../parsing.html#parsing.parser_main.file.linker">[docs]</a>
     <span class="k">def</span> <span class="nf">linker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Link each comment to a corresponding C-object in the file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Link each comment to a corresponding C-object in the file</span>
+<span class="sd">        </span>
+<span class="sd">        Goes one by one through comments and searches for their corresponding structure.</span>
+<span class="sd">        For the closes found match, creates link from the comment to the structure and from the structure to the comment </span>
+<span class="sd">        (by generating attributes for their respectives classes) and returns them in a list of pairs.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns:</span>
-<span class="sd">            pairs: list</span>
-<span class="sd">                pairs of comments and their corresponding objects</span>
+<span class="sd">            list of pairs: Pairs of comments and their corresponding structures.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">:</span>
@@ -143,14 +169,18 @@
 
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../parsing.html#parsing.parser_main.main">[docs]</a>
-<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Created a parsed Python representation from the given file.</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span><span class="s2">&quot;/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a parsed python representation of a file.</span>
 <span class="sd">    </span>
-<span class="sd">    Parameters: </span>
-<span class="sd">        name: string</span>
-<span class="sd">            Path to the file </span>
+<span class="sd">    Opens file, depending on its ending chooses correct parser and lets it run.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        name (str): Path to file.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        file: File object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">try</span><span class="p">:</span>
         <span class="n">fil</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">fil</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
