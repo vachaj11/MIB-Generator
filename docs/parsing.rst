@@ -1,6 +1,11 @@
 parsing package
 ===============
 
+.. automodule:: parsing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -40,14 +45,6 @@ parsing.parser\_main module
 ---------------------------
 
 .. automodule:: parsing.parser_main
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: parsing
    :members:
    :undoc-members:
    :show-inheritance:

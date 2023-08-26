@@ -15,7 +15,7 @@ def str_parse(stri):
     
     By going iteratively through the string and recognising the features of standard C-syntax, this function
     first marks the positions of all C-objects (including ``#define`` macro declaration) and then creates an
-    appropriate object of them, which then at its initialisation further parses the inner structure of these
+    appropriate Python representation-object of them, which then at its initialisation further parses the inner structure of these
     objects. After going through the whole string, this function then returns all found C-objects in a list.
     
     Args:

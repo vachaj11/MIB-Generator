@@ -1,6 +1,11 @@
 construction package
 ====================
 
+.. automodule:: construction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -40,14 +45,6 @@ construction.calib module
 -------------------------
 
 .. automodule:: construction.calib
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: construction
    :members:
    :undoc-members:
    :show-inheritance:

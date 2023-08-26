@@ -1,6 +1,11 @@
 utilities package
 =================
 
+.. automodule:: utilities
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -24,14 +29,6 @@ utilities.visualiser module
 ---------------------------
 
 .. automodule:: utilities.visualiser
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: utilities
    :members:
    :undoc-members:
    :show-inheritance:
