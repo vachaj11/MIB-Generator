@@ -1,9 +1,31 @@
-"""This module takes care of creating a representation of monitoring packets from parsed C-files and extracting entries for MIB databases."""
+"""Module holding Python representations of TM packets, TM header and the corresponding MIB tables.
+
+This module takes care of creating a representation of monitoring packets from parsed sections of C-files and extracting 
+entries for MIB databases. These classes represent the monitoring packets only in the sense that they hold in a structured
+form any possible information that could be found relating to that packet including the entries in various MIB tables that
+correspond to it.
+"""
 import construction.TM_packet_methods as pm
 
 
 class TM_header:
-    """class representing the TM header common to all TM-packages"""
+    """Class representing the TM header common to all TM-packets.
+
+    This class holds information about the TM header which is common to all TM packets. It is first found in the parsed
+    C-code using the :obj:`find_header` method and then using methods from :obj:`TM_packet_methods` its entries are recognised
+    and analysed:
+
+    Args:
+        file (parsing.parser_main.file): A parsed representation of the file in which the header is to be found.
+
+    Attributes:
+        structure (parsing.par_header.struct): The structure found in the header file (in its Python representation)
+            which describes the common TM header.
+        entries (list): List of entries found inside the TM header. Each is an instance of :obj:`parsing.par_header.misc_r`.
+        size (int): Size of the whole TM header in bytes.
+        positions (list): List of starting positions of entries in the TM header. Each entry is an integer representing an
+            offset from the header start.
+    """
 
     def __init__(self, file):
         self.structure = self.find_header(file)
@@ -11,6 +33,16 @@ class TM_header:
         self.size, self.positions = pm.count_size(self.entries)
 
     def find_header(self, file):
+        """Find structure which describes the TM header.
+
+        Based on its name, find a structure which corresponds to the TM header. Otherwise return a warning.
+
+        Args:
+            file (:obj:`parsing.parser_main.file`): File (in Python representation) which is searched for the header.
+
+        Returns:
+            :obj:`parsing.par_header.struct`: The structure identifies as the header.
+        """
         for i in file.structures:
             methods = i.__dir__()
             if "name" in methods and i.name == "TmHead":
@@ -19,7 +51,40 @@ class TM_header:
 
 
 class TM_packet:
-    """class representing each TM packet type and its properties"""
+    """Class representing a TM packet type and its various properties.
+
+    This class is an abstract representation of a TM packet with all of its properties, entries and corresponding MIB tables.
+    It is created from passed structures found in the :obj:`parsing.load.TmH` and :obj:`parsing.load.TmC` (Python representations
+    of the two files describing telemetry packets) and subsequently using included methods analysed into the entries in various
+    telemetry-side MIB tables.
+
+    Args:
+        structure (parsing.par_cfile.struct): An object corresponding to a description of this packet found in the
+            :obj:`parsing.load.TmC` file (i.e. the telemetry ``.c`` file).
+        h_structure (parsing.par_header.struct): An object corresponding to a description of this packet found in the
+            :obj:`parsing.load.TmH` file (i.e. the telemetry ``.h`` file).
+        header (TM_header): The header structure included in the packet.
+
+    Attributes:
+        structure (parsing.par_cfile.struct): An object corresponding to a description of this packet found in the
+            :obj:`parsing.load.TmC` file (i.e. the telemetry ``.c`` file).
+        h_structure (parsing.par_header.struct): An object corresponding to a description of this packet found in the
+            :obj:`parsing.load.TmH` file (i.e. the telemetry ``.h`` file).
+        header (TM_header): The header structure included in the packet.
+        entries (list): List of entries found inside the TM packet. Each is an instance of :obj:`parsing.par_header.misc_r`.
+        var_entries (list): List of entries which are subject to variable packet definition. For every such entry, the index
+            of this entry (w.r.t. :attr:`entries`) is added to this list (or its negated value in case it is a fixed repetition).
+        size (int): Size of the packet (joint size of all its entries) in bytes.
+        positions (list): List of starting positions of entries in the TM packet. Each entry is an integer representing an
+            offset from the header start.
+        pid (dict): Dictionary corresponding to one line in MIB pid table.
+        pic (dict): Dictionary corresponding to one line in MIB pic table.
+        tpcf (dict): Dictionary corresponding to one line in MIB tpcf table.
+        pcf (list): List of dictionaries each one corresponding to one line in MIB pcf table.
+        plf (list): List of dictionaries each one corresponding to one line in MIB plf table.
+        cur (list): List of dictionaries each one corresponding to one line in MIB cur table.
+        vpd (list): List of dictionaries each one corresponding to one line in MIB vpd table.
+    """
 
     def __init__(self, structure, h_structure, header):
         self.structure = structure
@@ -37,7 +102,15 @@ class TM_packet:
         self.vpd = self.vpd_listdict()
 
     def pid_dictionary(self):
-        """Define elements for entry in pid table."""
+        """Define elements for entry in pid table.
+
+        Creates a dictionary where each key-value pair corresponds to an entry in one column of the pid table (with the key being
+        the name of the column and value the entry to be filled in). The entries here are extracted mostly from information in
+        the telemetry ``.c`` file or the comment preceding the structure in the ``.h`` file.
+
+        Returns:
+            dict: Dictionary which is one line in the MIB table. Assigned to :attr:`pid`.
+        """
         diction = {}
         diction["PID_TYPE"] = pm.evalu(self.structure.entries[".serviceType"])
         diction["PID_STYPE"] = pm.evalu(self.structure.entries[".serviceSubType"])
@@ -65,6 +138,7 @@ class TM_packet:
             diction["PID_TPSD"] = diction["PID_SPID"]
         else:
             diction["PID_TPSC"] = "-1"
+        # I'm not very sure this is actually what DFHSIZE is supposed to be.
         diction["PID_DFHSIZE"] = self.header.size
         # diction["PID_TIME"] =
         # diction["INTER"] =
@@ -75,7 +149,20 @@ class TM_packet:
         return diction
 
     def pic_dictionary(self):
-        """Define elements for entry in pic table."""
+        """Define elements for entry in pic table.
+
+        Creates a dictionary where each key-value pair corresponds to an entry in one column of the pic table (with the key being
+        the name of the column and value the entry to be filled in). Here most of the work is done at the search of the ``sid`` entry
+        of the packet (which is done using :obj:`construction.TM_packet_methods.pi_sid` method) and extracting information about additional packet
+        identifiers from it.
+
+        Because of how these tables are created. I can't initially respect the requirement that there should be only one unique
+        entry in the ``"PIC_TYPE"`` and ``"PIC_STYPE"`` columns. Because of this, there has to be a pruning method applied later at the generation
+        step which deletes such repeating entries.
+
+        Returns:
+            dict: Dictionary which is one line in the MIB table. Assigned to :attr:`pic`.
+        """
         diction = {}
         diction["PIC_TYPE"] = self.pid["PID_TYPE"]
         diction["PIC_STYPE"] = self.pid["PID_STYPE"]
@@ -96,7 +183,15 @@ class TM_packet:
         return diction
 
     def tpcf_dictionary(self):
-        """Define elements for entry in tpcf table."""
+        """Define elements for entry in tpcf table.
+
+        Creates a dictionary where each key-value pair corresponds to an entry in one column of the tpcf table (with the key being
+        the name of the column and value the entry to be filled in). Here only text id of the packet is extracted from the
+        comment preceding the packet structure in the header file.
+
+        Returns:
+            dict: Dictionary which is one line in the MIB table. Assigned to :attr:`tpcf`.
+        """
         diction = {}
         diction["TPCF_SPID"] = self.pid["PID_SPID"]
         try:
@@ -107,7 +202,16 @@ class TM_packet:
         return diction
 
     def pcf_listdict(self):
-        """Define elements for entries in pcf table."""
+        """Define elements for entries in pcf table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the pcf table (with
+        the key being the name of the column and value the entry to be filled in). Here one "MIB row" is created for each entry/parameter
+        in :attr:`entries` and for each row most of the information is taken from the comment attached to the line at which the C-object
+        describing the entry is found in the original C-files.
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`pcf`.
+        """
         entrydict = []
         for i in range(len(self.entries)):
             diction = {}
@@ -161,7 +265,16 @@ class TM_packet:
         return entrydict
 
     def plf_listdict(self):
-        """Define elements for entries in plf table."""
+        """Define elements for entries in plf table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the plf table (with
+        the key being the name of the column and value the entry to be filled in). Here the information in :attr:`positions` are
+        employed in order to calculates the offsets of each parameter (corresponding to an element in :attr:`entries`) from the start
+        of the packet and its width in bites.
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`plf`.
+        """
         entrydict = []
         positions = [x + self.header.size * 8 for x in self.positions]
         for i in range(len(self.entries)):
@@ -179,7 +292,17 @@ class TM_packet:
         return entrydict
 
     def cur_listdict(self):
-        """Define elements for entries in cur table."""
+        """Define elements for entries in cur table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the cur table (with
+        the key being the name of the column and value the entry to be filled in). Here for each parameters it is looked up whether
+        any calibrations is required (if it is defined in the corresponding comment), and if so the appropriate entry is created.
+
+        As of now, this supports only a single calibration assigned to each parameter.
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`cur`.
+        """
         entrydict = []
         for l in range(len(self.entries)):
             i = self.entries[l]
@@ -195,7 +318,19 @@ class TM_packet:
         return entrydict
 
     def vpd_listdict(self):
-        """Define elements for entries in vpd table."""
+        """Define elements for entries in vpd table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the vpd table (with
+        the key being the name of the column and value the entry to be filled in). As the first step here, the group sizes for each
+        repetition of parameters are calculated using the information in :attr:`var_entries`. Then, based on these information, for
+        each of entries identified as repeting/counters in :attr:`var_entries`, a row in the vpd table is created.
+
+        A weird subcase are fixed repetitions. Here since there has to be some counter for them to be included in the vpd table, an
+        additional "virtual" entry is added to the pcf table which represents this counter but isn't included in any packet.
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`vpd`.
+        """
         count = []
         ind = 0
         for i in range(len(self.var_entries)):

@@ -345,8 +345,8 @@ class decalib(calib):
                 diction["PAS_ALTXT"] = "-1"
             entrydict.append(diction)
         return entrydict
-        
-        
+
+
 def verif_extract(comments):
     """Extract declarations of verifications from comments."""
     verif = []
@@ -354,7 +354,7 @@ def verif_extract(comments):
         if "cvs_def" in i.entries.keys():
             verif.append(verification(i))
     return verif
-    
+
 
 def cvs_update(command, verifs):
     if command.cvp is None:
@@ -365,29 +365,30 @@ def cvs_update(command, verifs):
             diction["CVP_TYPE"] = "C"
             diction["CVP_CVSID"] = i.cvs["CVS_ID"]
             entrydict.append(diction)
-        command.cvp =  entrydict
+        command.cvp = entrydict
     else:
         lis = []
         for i in verifs:
             lis.append(i.cvs["CVS_ID"])
         maxi = len(command.cvp)
         for i in range(maxi):
-            if command.cvp[maxi-1-i]["CVP_CVSID"] not in lis:
+            if command.cvp[maxi - 1 - i]["CVP_CVSID"] not in lis:
                 print(
                     "Warn.:\tWasn't able to find the required verification "
-                    + str(command.cvp[maxi-1-i]["CVP_CVSID"])
+                    + str(command.cvp[maxi - 1 - i]["CVP_CVSID"])
                     + " for command "
                     + str(command.ccf["CCF_CNAME"])
                 )
-                command.cvp.pop(maxi-i-1)
-            
+                command.cvp.pop(maxi - i - 1)
+
 
 class verification:
     """class of command verification"""
-    def __init__(self,comment):
+
+    def __init__(self, comment):
         self.comment = comment
         self.cvs = self.cvs_dictionary()
-        
+
     def cvs_dictionary(self):
         """Define elements for entry in cvs table."""
         diction = {}

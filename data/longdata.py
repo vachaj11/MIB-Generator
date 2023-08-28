@@ -1,4 +1,28 @@
-"""This module serves the purpose of storing various data that would otherwise cluster the code elsewhere."""
+"""Here various data that would otherwise cluster the code elsewhere are stored.
+
+This module includes mostly information about the structures of the MIB tables and characteristics
+that are specified for each entry in them. For each MIB table, there is an module-wide attribute
+here that through a list of dictionaries specifies, what the names and characteristics (type, length, whether
+mandatory) entries in each column of this table should have. All of these lists are then joined in one
+dictionary :obj:`tables_format` from which any characteristics of MIB tables can be extracted.
+
+Attributes:
+    
+    pid (list): List of dictionaries each entry of which corresponds to information about an entry in one
+        column in the pid table. Lists like this are stored in this module for every MIB table.
+    sizes (dict): A lookup dictionary which links every number constant type with its bite-size.
+    tables_format (dict): A dictionary created from list like :obj:`pid` above specified for each MIB tables.
+        Allows for easy access to these information.
+    unique_entries (dict): A dictionary which for each MIB table (specified by its name) states what colums or
+        groups of columns should hole unique/non-repeating entries (e.g. there should be only one entry in pid
+        column "PID_TYPE" for a packet of given type.).
+    uint_pfc (list): List that states what pfc type (given by the order in the list) should be linked to a 
+        integer constant of a given C-type.
+    time_pfc (list): List that states what pfc type (given by the order in the list) should be linked to a 
+        time-describing constant of a given allocation of bites for fine/course time.
+    translation (dict): A lookup dictionary stating what descriptions should be given to each attribute of the
+        Python representations of C-objects in order to make the entries more human-readable in the GUI visualisation.
+"""
 pid = [
     {"name": "PID_TYPE", "type": ["n", 3], "mandatory": True},
     {"name": "PID_STYPE", "type": ["n", 3], "mandatory": True},

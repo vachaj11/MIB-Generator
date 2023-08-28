@@ -1,10 +1,36 @@
-"""This module takes care of creating a representation of commanding packets from parsed C-files and extracting entries for MIB databases."""
+"""Module holding Python representations of TC packets, TC header and the corresponding MIB tables.
+
+This module takes care of creating a representation of TC commands from parsed sections of C-files and extracting 
+entries for MIB databases. These classes represent the TC commands only in the sense that they hold in a structured
+form any possible information that could be found relating to that command including the entries in various MIB tables that
+correspond to it.
+"""
 import parsing.load as load
 import construction.TC_packet_methods as pm
 
 
 class TC_header:
-    """class representing the TC header common to all TC-packages"""
+    """Class representing the TC header common to all TC-packets.
+
+    This class is an abstract representation of a TC packet header with all of its properties, entries and corresponding MIB tables.
+    It is created from passed :obj:`parsing.par_header.struct` object and and subsequently analysed using included methods into
+    the entries in various TC-side MIB tables.
+
+    Args:
+        structure (parsing.par_cfile.struct):  An object corresponding to a description of this packet-header found in the
+            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).
+
+    Attributes:
+        structure (parsing.par_cfile.struct): An object corresponding to a description of this packet found in the
+            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).
+        entries (list): List of entries found inside the TC-header. Each is an instance of :obj:`parsing.par_header.misc_r`.
+        size (int): Size of the packet header (joint size of all its entries) in bytes.
+        positions (list): List of starting positions of entries in the TC-header packet. Each entry is an integer representing an
+            offset from the header start.
+        tcp (dict): Dictionary corresponding to one line in MIB tcp table.
+        pcpc (list): List of dictionaries each one corresponding to one line in MIB pcpc table.
+        pcdf (list): List of dictionaries each one corresponding to one line in MIB pcdf table.
+    """
 
     def __init__(self, structure):
         self.structure = structure
@@ -16,7 +42,15 @@ class TC_header:
         self.pcdf = self.pcdf_listdict()
 
     def tcp_dictionary(self):
-        """Define elements for entries in tcp table."""
+        """Define elements for entry in tcp table.
+
+        Creates a dictionary where each key-value pair corresponds to an entry in one column of the tcp table (with the key being
+        the name of the column and value the entry to be filled in). Here the values are extracted from the comment preceding the
+        TC-header definitions.
+
+        Returns:
+            dict: Dictionary which is one line in the MIB table. Assigned to :attr:`tcp`.
+        """
         diction = {}
         try:
             diction["TCP_ID"] = self.structure.comment[-1].entries["text_id"]
@@ -29,7 +63,16 @@ class TC_header:
         return diction
 
     def pcpc_listdict(self):
-        """Define elements for entries in pcpc table."""
+        """Define elements for entries in pcpc table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the pcpc table (with
+        the key being the name of the column and value the entry to be filled in). Here for each parameter in the header, one row
+        (i.e. one entry in the list) is created, entries in which are extracted from comments around the given parameter, calculated
+        from type/general information, etc...
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`pcpc`.
+        """
         entrydict = []
         for i in range(len(self.entries)):
             if self.parameters[i] >= 0:
@@ -59,7 +102,15 @@ class TC_header:
         return entrydict
 
     def pcdf_listdict(self):
-        """Define elements for entries in pcpc table."""
+        """Define elements for entries in pcdf table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the pcdf table (with
+        the key being the name of the column and value the entry to be filled in). Here for each parameter in the header, one row
+        (i.e. one entry in the list) is created, entries in which are mostly deduced from the parameter's name or position/width.
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`pcdf`.
+        """
         entrydict = []
         for i in range(len(self.entries)):
             diction = {}
@@ -89,7 +140,40 @@ class TC_header:
 
 
 class TC_packet:
-    """class representing each TC packet type and its properties"""
+    """Class representing a TC-packet/command and its various properties.
+
+    This class is an abstract representation of a TC command with all of its properties, entries and corresponding MIB tables.
+    It is created from passed :obj:`parsing.par_header.struct` and :obj:`TC_header` objects and and subsequently analysed using
+    included methods into the entries in various TC-side MIB tables.
+
+    Args:
+        h_structure (parsing.par_header.struct):  An object corresponding to a description of this command found in the
+            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).
+        header (TC_header): A TC-header included at the start of the packet in which the command in question is send.
+
+    Attributes:
+        h_structure (parsing.par_header.struct):  An object corresponding to a description of this command found in the
+            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).
+        header (TC_header): A TC-header included at the start of the packet in which the command in question is send.
+        h_entries (list): List of entries that relate to the header found inside the command definition. Each is an instance of
+            :obj:`parsing.par_header.misc_r`.
+        entries (list): List of entries that do not relate to the headerfound inside the command definition. Each is an instance
+            of :obj:`parsing.par_header.misc_r`.
+        size (int): Size of the command definition (joint size of all parameters in :attr:`entries`) in bytes.
+        positions (list): List of starting positions of :attr:`entries` in the command definition. Each entry is an integer representing an
+            offset from the start.
+        h_size (int): Size of the command definition (joint size of all parameters in :attr:`h_entries`) in bytes.
+        h_positions (list): List of starting positions of :attr:`h_entries` in the command definition. Each entry is an integer representing an
+            offset from the start.
+        parameters (list): List of indexes of all parameters in :attr:`entries` (i.e. those that aren't fixed areas). If entry is a parameter,
+            the corresponding field in this list has its index value, otherwise it is assigned -1.
+        ccf (dict): Dictionary corresponding to one line in MIB ccf table.
+        cpc (list): List of dictionaries each one corresponding to one line in MIB cpc table.
+        cdf (list): List of dictionaries each one corresponding to one line in MIB cdf table.
+        prf (list): List of dictionaries each one corresponding to one line in MIB prf table.
+        prv (list): List of dictionaries each one corresponding to one line in MIB prv table.
+        cvp (list): List of dictionaries each one corresponding to one line in MIB cvp table.
+    """
 
     def __init__(self, h_structure, header):
         self.h_structure = h_structure
@@ -106,7 +190,15 @@ class TC_packet:
         self.cvp = self.cvp_listdict()
 
     def ccf_dictionary(self):
-        """Define elements for entries in ccf table."""
+        """Define elements for entry in ccf table.
+
+        Creates a dictionary where each key-value pair corresponds to an entry in one column of the ccf table (with the key being
+        the name of the column and value the entry to be filled in). Here the values are mostly general information extracted
+        from the comment in from of the command definition in the C-header file and such.
+
+        Returns:
+            dict: Dictionary which is one line in the MIB table. Assigned to :attr:`ccf`.
+        """
         diction = {}
         try:
             diction["CCF_CNAME"] = self.h_structure.comment[-1].entries["text_id"]
@@ -145,7 +237,23 @@ class TC_packet:
         return diction
 
     def cpc_listdict(self):
-        """Define elements for entries in cpc table."""
+        """Define elements for entries in cpc table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the pcpc table (with
+        the key being the name of the column and value the entry to be filled in). Here for each parameter in the header, one row
+        (i.e. one entry in the list) is created, entries in which are extracted from comments around the given parameter, calculated
+        from type/general information, etc... It should be mentioned that not all entries in :attr:`etnries` are parameters since they
+        can be also fixed areas. Hence first, before the dictionary is created, a check is run for this.
+
+        Unusual case here is the range check ``"CPC_PRFREF"``. Normal here would be to directly associate it to some externally defined
+        calibration, but since that would be quite convoluted and ineffective for such simple task, it was decided to generate a random
+        placeholder name (rather than predefined one) to be put into the ``"CPC_PRFREF"`` entry and then generate the range check tables
+        as an attribute of this command class :attr:`prf` and :attr:`prv` (rather then as an external object as is the case with all
+        other calibrations).
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`cpc`.
+        """
         entrydict = []
         for i in range(len(self.entries)):
             if self.parameters[i] >= 0:
@@ -195,7 +303,7 @@ class TC_packet:
                     self.entries[i].comment
                     and {"min", "max"} & self.entries[i].comment[-1].entries.keys()
                 ):
-                    # generate random name for the range check
+                    # generate pseudo-random name for the range check
                     diction["CPC_PRFREF"] = "RAN" + str(hash(diction["CPC_PNAME"]))[-7:]
                 else:
                     diction["CPC_PRFREF"] = ""
@@ -217,7 +325,15 @@ class TC_packet:
         return entrydict
 
     def cdf_listdict(self):
-        """Define elements for entries in cdf table."""
+        """Define elements for entries in cdf table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the cdf table (with
+        the key being the name of the column and value the entry to be filled in). Here for each parameter in the header, one row
+        (i.e. one entry in the list) is created, entries in which are mostly deduced from the parameter's name or position/width.
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`cdf`.
+        """
         entrydict = []
         gr_size = pm.get_gr_sizes(self.entries)
         for i in range(len(self.entries)):
@@ -259,7 +375,18 @@ class TC_packet:
         return entrydict
 
     def prf_listdict(self):
-        """Define elements for entries in prf table."""
+        """Define elements for entries in prf table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the prf table (with
+        the key being the name of the column and value the entry to be filled in). Here it is first checked whether the given
+        parameter has a range associated to it and if so appropriate entries for name of the parameter and ad-hoc calibration
+        are generated.
+
+        For a reason why this table is here see :obj:`cpc_listdict`.
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`prf`.
+        """
         entrydict = []
         for i in range(len(self.entries)):
             if self.parameters[i] >= 0 and self.cpc[self.parameters[i]]["CPC_PRFREF"]:
@@ -278,7 +405,17 @@ class TC_packet:
         return entrydict
 
     def prv_listdict(self):
-        """Define elements for entries in prv table."""
+        """Define elements for entries in prv table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the prv table (with
+        the key being the name of the column and value the entry to be filled in). Here it is first checked whether the given
+        parameter has a range associated to it and if so, the entries for the corresponding ad-hoc calibration are created.
+
+        For a reason why this table is here see :obj:`cpc_listdict`.
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`prv`.
+        """
         entrydict = []
         for i in range(len(self.entries)):
             if self.parameters[i] >= 0 and self.cpc[self.parameters[i]]["CPC_PRFREF"]:
@@ -300,10 +437,24 @@ class TC_packet:
                     diction["PRV_MAXVAL"] = ""
                 entrydict.append(diction)
         return entrydict
-        
-        
+
     def cvp_listdict(self):
-        if self.h_structure.comment and "cvs" in self.h_structure.comment[-1].entries.keys():
+        """Define elements for entries in cvp table.
+
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the cvp table (with
+        the key being the name of the column and value the entry to be filled in). First checks whether there are verifications associated
+        to the given command and if so, creates an entry row to each one of them.
+
+        There are default values for verification which are applied automatically later for each command if no verification are specified here
+        (in which case the value of :attr:`cvp` will be ``None`` for now).
+
+        Returns:
+            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`cvp`.
+        """
+        if (
+            self.h_structure.comment
+            and "cvs" in self.h_structure.comment[-1].entries.keys()
+        ):
             entrydict = []
             for i in self.h_structure.comment[-1].entries["cvs"]:
                 diction = {}

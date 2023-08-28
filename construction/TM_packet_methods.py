@@ -1,4 +1,8 @@
-"""This module holds methods used for formatting parsed data into monitoring packet characteristics."""
+"""Methods for creation of telemetry MIB tables and internal representation of TM packets in general.
+
+This module holds methods that help with formatting of parsed data into monitoring packet characteristics. They are usually
+concerned with value evaluation, bite counting, type identification etc. I.e. mostly kind of housekeeping jobs.
+"""
 import parsing.load as load
 import data.longdata as longdata
 from copy import copy
@@ -6,7 +10,17 @@ from copy import copy
 
 def apidnum(name):
     """Find the value of apid from evaluation of references, etc.
-    I'm not following the direct logic of C here, because there seems to be some missing link.
+
+    This method is probably unnecessarily complicated because I tried to follow a logic of C here, which seemed to have a
+    missing link anyways. But what it does is simply looking up the value of apid based on its name. This value is stored
+    in an array in the ``.c`` telemetry file and hence isn't included in the standard :obj:`parsing.load.enumerations` and
+    hence has to be evaluated this more complicated way.
+
+    Args:
+        name (str): Name of the apid reference.
+
+    Returns:
+        int: Value of the apid reference.
     """
     num = load.enumerations[name]
     lis = next((x for x in load.TmC.structures if x.name == "apidNum"), None)
@@ -17,7 +31,19 @@ def apidnum(name):
 
 
 def evalu(string):
-    """Try evaluating the given expression using all known substitutions, macros, etc."""
+    """Evaluate the given expression using all known substitutions, macros, etc.
+
+    This methods tries to evaluate the passed expression using various methods. First it tries a simple integer conversion,
+    then it tries to evaluate it using the dictionary :obj:`parsing.load.enumerations` which stores all the possible substitutions
+    found across the code. Then even if this doesn't work (e.g. the string contains algebraic expressions), tries to use Python's
+    ``eval()`` function. If even this fails, it evaluates the expression as ``-1``.
+
+    Args:
+        string (str): A string which is to be evaluated.
+
+    Returns:
+        int: The evaluated value or ``-1`` if the evaluation failed.
+    """
     try:
         x = int(string)
     except:
@@ -33,7 +59,21 @@ def evalu(string):
 
 
 def getptcpcf(entry, size):
-    """Get ptc and pcf values from the size and nature of the given entry."""
+    """Get ptc and pfc values from the size and nature of the given entry.
+
+    From data type (in C) of the entry and information in its comments, tries to deduce what SCOS data type given by the ptc|pcf combination it
+    should be assigned. Uses data from :obj:`data.longdata.time_pfc` and :obj:`data.longdata.uint_pfc`.
+
+    Args:
+        entry (parsing.par_header.misc_r): The entry who's value is to be evaluated.
+        size (int): Bite-size of the entry.
+
+    Returns:
+        tuple: A tuple consisting of:
+
+            * *int* - Value of ptc of the parameter.
+            * *int* - Value of pfc of the parameter.
+    """
     try:
         typ = entry.comment[-1].entries["type"]
     except:
@@ -57,9 +97,17 @@ def getptcpcf(entry, size):
 
 
 def categfromptc(ptc):
-    """
-    Get category from ptc value of the entry.
+    """Get category from ptc value of the entry.
+
+    Extracts the value of category entry in pcf table from the parameter's ptc type.
+
     This is automatically changed later if the parameter is subject to textual calibration.
+
+    Args:
+        ptc (int) - A ptc value of the parameter.
+
+    Returns:
+        str: The letter identifying the category.
     """
     if ptc in {2, 3, 6, 7, 9, 10}:
         categ = "N"
@@ -71,7 +119,19 @@ def categfromptc(ptc):
 
 
 def header_search(typ):
-    """Search for corresponding header structures of the packet based on information in the comments."""
+    """Search for corresponding header structures of the packet based on information in the comments.
+
+    Given the name of the packet as it appears in the TM ``.c`` file, this method searches among structures
+    in :obj:`parsing.load.TmH` (the TM ``.h`` file) for a corresponding packet/packets description (list of parameters, etc).
+    More packet definitions can correspond to a single type (they then differ in additional packet identifiers) and hence
+    more than one such structures can be found sometimes.
+
+    Args:
+        typ (str): The "type" entry of the packet definition in the ``.c`` TM file.
+
+    Returns:
+        list: A list of structures which are packet descriptions for the given packet "type".
+    """
     hstruct = []
     for i in load.TmH.structures:
         if i.type == "struct" and i.comment:
@@ -81,7 +141,7 @@ def header_search(typ):
             if "pack_type" in uni.keys() and uni["pack_type"] == typ:
                 hstruct.append(i)
     # legacy approach
-    #if typ in load.enumerations.keys() and not hstruct:
+    # if typ in load.enumerations.keys() and not hstruct:
     #    hstruct.append(load.enumerations[typ])
     if not hstruct:
         print(
@@ -93,7 +153,22 @@ def header_search(typ):
 
 
 def h_analysis(h_struct):
-    """Make a list of all individual (all structs unpacked) entries in the header of the packet."""
+    """Make a list of all individual (all structs unpacked) entries in the packet.
+
+    This method goes iteratively through all entries/packet parameters inside the given structure. If it finds a normal entry,
+    it adds it to the list, if it finds a ``struct`` or reference to one, it expands it by recursively calling itself and adds
+    all elements in the expansion to the list.
+
+    This method is also a precursor to the construction of the vpd tables, since it add to every entry it encounters an attribute
+    :attr:`is_vpd`, which identifies whether the given parameter/set of parameters is subject to variable packet definition or
+    not. I also identifies fixed vpd repetitions from the arrays of the parameters and marks them as such.
+
+    Args:
+        h_struct (parsing.par_header.struct): The packet structure from which the parameters are to be expanded.
+
+    Returns:
+        list: List of parameters found inside the structure. Each is of type :obj:`parsing.par_header.misc_r`.
+    """
     entries = []
     if not (type(h_struct) is int or type(h_struct) is None):
         for i in h_struct.elements:
@@ -130,7 +205,18 @@ def h_analysis(h_struct):
 
 
 def var_get(entries):
-    "Extract variable parameters from list of all parameters."
+    """Extract variable parameters from list of all parameters.
+
+    This method goes through all entries in the given list and marks position of the entries which are subject to
+    variable packet definition. If it encounters a case of a fixed repetition, it marks its negation (index of) position
+    instead.
+
+    Args:
+        entries (list): List of parameters to be searched for vpd. Each of type :obj:`parsing.par_header.misc_r`.
+
+    Returns:
+        list: List of indices (or their negations in case of fixed repetitions) at which vpd parameters were found.
+    """
     var = []
     for i in range(len(entries)):
         if entries[i].is_vpd:
@@ -141,7 +227,20 @@ def var_get(entries):
 
 
 def count_size(entries):
-    """Counts bit size of the packet and bit position of entries within it."""
+    """Counts bit size of the packet and bit position of entries within it.
+
+    Goes through the given list of parameters, for each one evaluates its bite-size and from it counts the total byte-size
+    of the whole list and bite-positions of start of each parameter within it.
+
+    Args:
+        entries (list): List of parameters who's length is to be determined. Each of type :obj:`parsing.par_header.misc_r`.
+
+    Returns:
+        tuple: A tuple consisting of:
+
+            * *int* - Byte-length of the list of parameters.
+            * *list* - List o offset positions (in bites) of the parameters from the list start.
+    """
     size_bites = 0
     positions = []
     sizes = longdata.sizes
@@ -161,7 +260,23 @@ def count_size(entries):
 
 
 def pi_sid(entries, positions):
-    "Extract position of additional identification field from packet entries."
+    """Extract position of additional identification field from packet entries.
+
+    This method looks the presence/position of the first additional identification field (which is assumed to be
+    named ``"sid"``) in the packet, and if it finds it, calculates its width (in bites) and offset position (in bytes) from
+    the start of the packet.
+
+    Args:
+        entries (list): List of entries (of type :obj:`parsing.par_header.misc_r`) among which the additional identification field
+            is searched for.
+        positions (list): List of position (bite-offests from the start of the packet) of the parameters in the packet.
+
+    Returns:
+        tuple: A tuple consisting of:
+
+            * *int* - Start position (in bytes from the start of the packet) of the additional identification field.
+            * *int* - Bite-width of the additional identification field.
+    """
     start = None
     width = 0
     for i in range(len(entries)):
