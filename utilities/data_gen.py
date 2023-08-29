@@ -1,12 +1,19 @@
-"""This is just a quick script to help me automatise translating the table information into Python."""
+"""This is just a quick script that helped me automate translating the information about structure and characteristics
+of MIB tables into Python (now stored in :obj:`data.longdata`).
+"""
 a = '    {"name": "'
 b = '", "type": ["'
 c = '"], '
 c = '", '
 d = '], "mandatory": '
 e = "},\n"
-file = "tmp/out.txt"
+file = "out.txt"
+
+
 def gen_data():
+    """This method is an endless loop that asks the user to input various information which are then formatted into a string
+    which is a literal representation of a Python dictionary and this string is then appended to a text file ``out.txt``.
+    """
     while True:
         A = ""
         x = input("name: ")

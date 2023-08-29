@@ -1,10 +1,21 @@
-"""This module allows for automatic updates to the file paths specified in paths.json5"""
+"""Various CLI scripts that update various files that configure the generation process.
+
+This module holds methods that allow the user to easily modify various files that affects the behaviour of the main Python
+script. They can be called by simply importing and calling them or through appropriate flags build into the main CLI of the 
+MIB generator.  
+"""
 import json5
 import os
 
 
 def update_path():
-    """Run a series of queries asking user to specify valid paths to input files."""
+    """Run a series of queries asking user to specify valid paths to input files.
+
+    This method allows the user to specify paths to the 4 input files and 1 output directory that the MIB generator requires.
+    The previously stored values are shown to the user and he can leave them be or choose to modify them stating the location of
+    the target files either in terms of absolute or relative path. The inputted location is then checked and if it exists, then
+    the path is saved (in absolute form). Only existence is checked, not that the file is valid for the given purpose.
+    """
     file_path = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), "data", "paths.json5"
     )
@@ -96,7 +107,12 @@ def update_path():
 
 
 def update_config():
-    """Run a series of queries asking user to specify configuration parameters."""
+    """Run a series of queries asking user to specify configuration parameters.
+
+    This method allows the user to specify various configuration parameters. First, the already saved parameters are loaded
+    and the user is asked whether he wants to keep the current value, change it or delete the parameter altogether. Then,
+    the user is given the option to create a new parameter. The only valid accepted of parameters are boolean or a string.
+    """
     file_path = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
     )
