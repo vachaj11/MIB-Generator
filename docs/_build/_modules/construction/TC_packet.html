@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>construction.TC_packet &mdash; MIB Generator 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MIB Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../change.html">I need to change…</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules and packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../main.html">main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">parsing package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../construction.html">construction package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generation.html">generation package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data.html">data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MIB Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">construction.TC_packet</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for construction.TC_packet</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module holding Python representations of TC packets, TC header and the corresponding MIB tables.</span>
+
+<span class="sd">This module takes care of creating a representation of TC commands from parsed sections of C-files and extracting </span>
+<span class="sd">entries for MIB databases. These classes represent the TC commands only in the sense that they hold in a structured</span>
+<span class="sd">form any possible information that could be found relating to that command including the entries in various MIB tables that</span>
+<span class="sd">correspond to it.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">parsing.load</span> <span class="k">as</span> <span class="nn">load</span>
+<span class="kn">import</span> <span class="nn">construction.TC_packet_methods</span> <span class="k">as</span> <span class="nn">pm</span>
+
+
+<div class="viewcode-block" id="TC_header">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_header">[docs]</a>
+<span class="k">class</span> <span class="nc">TC_header</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing the TC header common to all TC-packets.</span>
+
+<span class="sd">    This class is an abstract representation of a TC packet header with all of its properties, entries and corresponding MIB tables.</span>
+<span class="sd">    It is created from passed :obj:`parsing.par_header.struct` object and and subsequently analysed using included methods into</span>
+<span class="sd">    the entries in various TC-side MIB tables.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        structure (parsing.par_cfile.struct):  An object corresponding to a description of this packet-header found in the</span>
+<span class="sd">            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        structure (parsing.par_cfile.struct): An object corresponding to a description of this packet found in the</span>
+<span class="sd">            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).</span>
+<span class="sd">        entries (list): List of entries found inside the TC-header. Each is an instance of :obj:`parsing.par_header.misc_r`.</span>
+<span class="sd">        size (int): Size of the packet header (joint size of all its entries) in bytes.</span>
+<span class="sd">        positions (list): List of starting positions of entries in the TC-header packet. Each entry is an integer representing an</span>
+<span class="sd">            offset from the header start.</span>
+<span class="sd">        tcp (dict): Dictionary corresponding to one line in MIB tcp table.</span>
+<span class="sd">        pcpc (list): List of dictionaries each one corresponding to one line in MIB pcpc table.</span>
+<span class="sd">        pcdf (list): List of dictionaries each one corresponding to one line in MIB pcdf table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">structure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">h_analysis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">count_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">param_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tcp_dictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pcpc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcpc_listdict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pcdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcdf_listdict</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TC_header.tcp_dictionary">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_header.tcp_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">tcp_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in tcp table.</span>
+
+<span class="sd">        Creates a dictionary where each key-value pair corresponds to an entry in one column of the tcp table (with the key being</span>
+<span class="sd">        the name of the column and value the entry to be filled in). Here the values are extracted from the comment preceding the</span>
+<span class="sd">        TC-header definitions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Dictionary which is one line in the MIB table. Assigned to :attr:`tcp`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TCP_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;text_id&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TCP_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TCP_DESC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;TCP_DESC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+
+
+<div class="viewcode-block" id="TC_header.pcpc_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_header.pcpc_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">pcpc_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in pcpc table.</span>
+
+<span class="sd">        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the pcpc table (with</span>
+<span class="sd">        the key being the name of the column and value the entry to be filled in). Here for each parameter in the header, one row</span>
+<span class="sd">        (i.e. one entry in the list) is created, entries in which are extracted from comments around the given parameter, calculated</span>
+<span class="sd">        from type/general information, etc...</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`pcpc`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">no</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:X}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="nb">int</span><span class="p">(</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;base_par_index&quot;</span><span class="p">]),</span>
+                            <span class="mi">16</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="o">+</span> <span class="n">i</span>
+                    <span class="p">)</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCPC_PNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span>
+                        <span class="s2">&quot;prefix&quot;</span>
+                    <span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">no</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCPC_PNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCPC_DESC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCPC_DESC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">type</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;unit&quot;</span><span class="p">,</span> <span class="s2">&quot;unsi&quot;</span><span class="p">}:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCPC_CODE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;U&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCPC_CODE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;I&quot;</span>
+                <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+
+
+<div class="viewcode-block" id="TC_header.pcdf_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_header.pcdf_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">pcdf_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in pcdf table.</span>
+
+<span class="sd">        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the pcdf table (with</span>
+<span class="sd">        the key being the name of the column and value the entry to be filled in). Here for each parameter in the header, one row</span>
+<span class="sd">        (i.e. one entry in the list) is created, entries in which are mostly deduced from the parameter&#39;s name or position/width.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`pcdf`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_TCNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tcp</span><span class="p">[</span><span class="s2">&quot;TCP_ID&quot;</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_DESC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcpc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s2">&quot;PCPC_DESC&quot;</span><span class="p">]</span>
+            <span class="k">match</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="k">case</span> <span class="s2">&quot;apid&quot;</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+                <span class="k">case</span> <span class="s2">&quot;serviceType&quot;</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;T&quot;</span>
+                <span class="k">case</span> <span class="s2">&quot;subType&quot;</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;S&quot;</span>
+                <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;F&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;P&quot;</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_LEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_BIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_TYPE&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;F&quot;</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PCDF_PNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcpc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s2">&quot;PCPC_PNAME&quot;</span><span class="p">]</span>
+            <span class="c1"># There should definitely be some default values here.</span>
+            <span class="c1"># diction[&quot;PCDF_VALUE&quot;] = &quot;&quot;</span>
+            <span class="c1"># diction[&quot;PCDF_RADIX&quot;] = &quot;&quot;</span>
+            <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TC_packet">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_packet">[docs]</a>
+<span class="k">class</span> <span class="nc">TC_packet</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing a TC-packet/command and its various properties.</span>
+
+<span class="sd">    This class is an abstract representation of a TC command with all of its properties, entries and corresponding MIB tables.</span>
+<span class="sd">    It is created from passed :obj:`parsing.par_header.struct` and :obj:`TC_header` objects and and subsequently analysed using</span>
+<span class="sd">    included methods into the entries in various TC-side MIB tables.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        h_structure (parsing.par_header.struct):  An object corresponding to a description of this command found in the</span>
+<span class="sd">            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).</span>
+<span class="sd">        header (TC_header): A TC-header included at the start of the packet in which the command in question is send.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        h_structure (parsing.par_header.struct):  An object corresponding to a description of this command found in the</span>
+<span class="sd">            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).</span>
+<span class="sd">        header (TC_header): A TC-header included at the start of the packet in which the command in question is send.</span>
+<span class="sd">        h_entries (list): List of entries that relate to the header found inside the command definition. Each is an instance of</span>
+<span class="sd">            :obj:`parsing.par_header.misc_r`.</span>
+<span class="sd">        entries (list): List of entries that do not relate to the headerfound inside the command definition. Each is an instance</span>
+<span class="sd">            of :obj:`parsing.par_header.misc_r`.</span>
+<span class="sd">        size (int): Size of the command definition (joint size of all parameters in :attr:`entries`) in bytes.</span>
+<span class="sd">        positions (list): List of starting positions of :attr:`entries` in the command definition. Each entry is an integer representing an</span>
+<span class="sd">            offset from the start.</span>
+<span class="sd">        h_size (int): Size of the command definition (joint size of all parameters in :attr:`h_entries`) in bytes.</span>
+<span class="sd">        h_positions (list): List of starting positions of :attr:`h_entries` in the command definition. Each entry is an integer representing an</span>
+<span class="sd">            offset from the start.</span>
+<span class="sd">        parameters (list): List of indexes of all parameters in :attr:`entries` (i.e. those that aren&#39;t fixed areas). If entry is a parameter,</span>
+<span class="sd">            the corresponding field in this list has its index value, otherwise it is assigned -1.</span>
+<span class="sd">        ccf (dict): Dictionary corresponding to one line in MIB ccf table.</span>
+<span class="sd">        cpc (list): List of dictionaries each one corresponding to one line in MIB cpc table.</span>
+<span class="sd">        cdf (list): List of dictionaries each one corresponding to one line in MIB cdf table.</span>
+<span class="sd">        prf (list): List of dictionaries each one corresponding to one line in MIB prf table.</span>
+<span class="sd">        prv (list): List of dictionaries each one corresponding to one line in MIB prv table.</span>
+<span class="sd">        cvp (list): List of dictionaries each one corresponding to one line in MIB cvp table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_structure</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span> <span class="o">=</span> <span class="n">h_structure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">header</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_entries</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">h_analysis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">count_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_position</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">count_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_entries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">param_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ccf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ccf_dictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpc_listdict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdf_listdict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prf_listdict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prv_listdict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cvp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cvp_listdict</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TC_packet.ccf_dictionary">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_packet.ccf_dictionary">[docs]</a>
+    <span class="k">def</span> <span class="nf">ccf_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entry in ccf table.</span>
+
+<span class="sd">        Creates a dictionary where each key-value pair corresponds to an entry in one column of the ccf table (with the key being</span>
+<span class="sd">        the name of the column and value the entry to be filled in). Here the values are mostly general information extracted</span>
+<span class="sd">        from the comment in from of the command definition in the C-header file and such.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Dictionary which is one line in the MIB table. Assigned to :attr:`ccf`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_CNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;text_id&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_CNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_DESCR2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_DESCR2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_CTYPE&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_CRITICAL&quot;] = &quot;&quot;</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_PKTID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">tcp</span><span class="p">[</span><span class="s2">&quot;TCP_ID&quot;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;service&quot;</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_STYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;sub&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_STYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_APID&quot;] = &quot;&quot;</span>
+        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CCF_NPARS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+        <span class="c1"># diction[&quot;CCF_PLAN&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_EXEC&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_ILSCOPE&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_ILSTAGE&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_SUBSYS&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_HIPRI&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_MAPID&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_DEFSET&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_RAPID&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_ACK&quot;] = &quot;&quot;</span>
+        <span class="c1"># diction[&quot;CCF_SUBSCHEDID&quot;] = &quot;&quot;</span>
+        <span class="k">return</span> <span class="n">diction</span></div>
+
+
+<div class="viewcode-block" id="TC_packet.cpc_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_packet.cpc_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">cpc_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in cpc table.</span>
+
+<span class="sd">        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the pcpc table (with</span>
+<span class="sd">        the key being the name of the column and value the entry to be filled in). Here for each parameter in the header, one row</span>
+<span class="sd">        (i.e. one entry in the list) is created, entries in which are extracted from comments around the given parameter, calculated</span>
+<span class="sd">        from type/general information, etc... It should be mentioned that not all entries in :attr:`etnries` are parameters since they</span>
+<span class="sd">        can be also fixed areas. Hence first, before the dictionary is created, a check is run for this.</span>
+
+<span class="sd">        Unusual case here is the range check ``&quot;CPC_PRFREF&quot;``. Normal here would be to directly associate it to some externally defined</span>
+<span class="sd">        calibration, but since that would be quite convoluted and ineffective for such simple task, it was decided to generate a random</span>
+<span class="sd">        placeholder name (rather than predefined one) to be put into the ``&quot;CPC_PRFREF&quot;`` entry and then generate the range check tables</span>
+<span class="sd">        as an attribute of this command class :attr:`prf` and :attr:`prv` (rather then as an external object as is the case with all</span>
+<span class="sd">        other calibrations).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`cpc`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">no</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:X}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="nb">int</span><span class="p">(</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;base_par_index&quot;</span><span class="p">]),</span>
+                            <span class="mi">16</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="o">+</span> <span class="n">i</span>
+                    <span class="p">)</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span>
+                        <span class="s2">&quot;prefix&quot;</span>
+                    <span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">no</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PTC&quot;</span><span class="p">],</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PFC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">getptcpcf</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">size</span>
+                <span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">{</span><span class="s2">&quot;cal&quot;</span><span class="p">,</span> <span class="s2">&quot;enum&quot;</span><span class="p">}</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_CATEG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;T&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_CATEG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_CATEG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_CATEG&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_DISPFMT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+                <span class="k">elif</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PTC&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_DISPFMT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;T&quot;</span>
+                <span class="k">elif</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PTC&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_DISPFMT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_DISPFMT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;U&quot;</span>
+                <span class="c1"># diction[&quot;CPC_RADIX&quot;] = &quot;&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_UNIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_UNIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span>
+                    <span class="ow">and</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">}</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="p">):</span>
+                    <span class="c1"># generate pseudo-random name for the range check</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PRFREF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RAN&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hash</span><span class="p">(</span><span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PNAME&quot;</span><span class="p">]))[</span><span class="o">-</span><span class="mi">7</span><span class="p">:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PRFREF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="c1"># diction[&quot;CPC_CCAREF&quot;] = &quot;&quot;</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span>
+                    <span class="ow">and</span> <span class="s2">&quot;enum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="p">):</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PAFREF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;enum&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CPC_PAFREF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="c1"># diction[&quot;CPC_INTER&quot;] = &quot;&quot;</span>
+                <span class="c1"># diction[&quot;CPC_DEFVAL&quot;] = &quot;&quot;</span>
+                <span class="c1"># diction[&quot;CPC_CORR&quot;] = &quot;&quot;</span>
+                <span class="c1"># diction[&quot;CPC_OBTID&quot;] = &quot;&quot;</span>
+                <span class="c1"># diction[&quot;CPC_DESCR2&quot;] = &quot;&quot;</span>
+                <span class="c1"># diction[&quot;CPC_ENDIAN&quot;] = &quot;&quot;</span>
+                <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+
+
+<div class="viewcode-block" id="TC_packet.cdf_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_packet.cdf_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">cdf_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in cdf table.</span>
+
+<span class="sd">        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the cdf table (with</span>
+<span class="sd">        the key being the name of the column and value the entry to be filled in). Here for each parameter in the header, one row</span>
+<span class="sd">        (i.e. one entry in the list) is created, entries in which are mostly deduced from the parameter&#39;s name or position/width.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`cdf`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">gr_size</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">get_gr_sizes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_CNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ccf</span><span class="p">[</span><span class="s2">&quot;CCF_CNAME&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_ELTYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_ELTYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_DESCR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_ELLEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">size</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_BIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_GRPSIZE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gr_size</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_ELTYPE&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">}:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_PNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s2">&quot;CPC_PNAME&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_PNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="c1"># diction[&quot;CDF_INTER&quot;] = &quot;&quot;</span>
+            <span class="k">if</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_ELTYPE&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_VALUE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">evalu</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_VALUE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_VALUE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">evalu</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CDF_VALUE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># diction[&quot;CDF_TMID&quot;] = &quot;&quot;</span>
+            <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+
+
+<div class="viewcode-block" id="TC_packet.prf_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_packet.prf_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">prf_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in prf table.</span>
+
+<span class="sd">        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the prf table (with</span>
+<span class="sd">        the key being the name of the column and value the entry to be filled in). Here it is first checked whether the given</span>
+<span class="sd">        parameter has a range associated to it and if so appropriate entries for name of the parameter and ad-hoc calibration</span>
+<span class="sd">        are generated.</span>
+
+<span class="sd">        For a reason why this table is here see :obj:`cpc_listdict`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`prf`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s2">&quot;CPC_PRFREF&quot;</span><span class="p">]:</span>
+                <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRF_NUMBR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s2">&quot;CPC_PRFREF&quot;</span><span class="p">]</span>
+                <span class="c1"># diction[&quot;PRF_DESCR&quot;] = &quot;&quot;</span>
+                <span class="c1"># diction[&quot;PRFINTER&quot;] = &quot;&quot;</span>
+                <span class="c1"># diction[&quot;PRF_DSPFMT&quot;] = &quot;&quot;</span>
+                <span class="c1"># My code assumes that the bellow is decimal, but that is the default value anyways</span>
+                <span class="c1"># diction[&quot;PRF_RADIX&quot;] = &quot;&quot;</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRF_NRANGE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">}</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="p">)</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRF_UNIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s2">&quot;CPC_UNIT&quot;</span><span class="p">]</span>
+                <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+
+
+<div class="viewcode-block" id="TC_packet.prv_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_packet.prv_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">prv_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in prv table.</span>
+
+<span class="sd">        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the prv table (with</span>
+<span class="sd">        the key being the name of the column and value the entry to be filled in). Here it is first checked whether the given</span>
+<span class="sd">        parameter has a range associated to it and if so, the entries for the corresponding ad-hoc calibration are created.</span>
+
+<span class="sd">        For a reason why this table is here see :obj:`cpc_listdict`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`prv`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s2">&quot;CPC_PRFREF&quot;</span><span class="p">]:</span>
+                <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRV_NUMBR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s2">&quot;CPC_PRFREF&quot;</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRV_MINVAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">evalu</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRV_MINVAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRV_MAXVAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">evalu</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRV_MAXVAL&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRV_MAXVAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRV_MINVAL&quot;</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;PRV_MAXVAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entrydict</span></div>
+
+
+<div class="viewcode-block" id="TC_packet.cvp_listdict">
+<a class="viewcode-back" href="../../construction.html#construction.TC_packet.TC_packet.cvp_listdict">[docs]</a>
+    <span class="k">def</span> <span class="nf">cvp_listdict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define elements for entries in cvp table.</span>
+
+<span class="sd">        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the cvp table (with</span>
+<span class="sd">        the key being the name of the column and value the entry to be filled in). First checks whether there are verifications associated</span>
+<span class="sd">        to the given command and if so, creates an entry row to each one of them.</span>
+
+<span class="sd">        There are default values for verification which are applied automatically later for each command if no verification are specified here</span>
+<span class="sd">        (in which case the value of :attr:`cvp` will be ``None`` for now).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`cvp`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span>
+            <span class="ow">and</span> <span class="s2">&quot;cvs&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="n">entrydict</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_structure</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="s2">&quot;cvs&quot;</span><span class="p">]:</span>
+                <span class="n">diction</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVP_TASK&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ccf</span><span class="p">[</span><span class="s2">&quot;CCF_CNAME&quot;</span><span class="p">]</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVP_TYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span>
+                <span class="n">diction</span><span class="p">[</span><span class="s2">&quot;CVP_CVSID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">entrydict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diction</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">entrydict</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Josef Vácha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

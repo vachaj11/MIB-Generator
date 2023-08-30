@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>parsing.par_header &mdash; MIB Generator 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MIB Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../change.html">I need to change…</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules and packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../main.html">main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">parsing package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../construction.html">construction package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generation.html">generation package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data.html">data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MIB Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">parsing.par_header</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for parsing.par_header</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Parsing and structural interpretation module for C-header files. </span>
+
+<span class="sd">This module holds functions and classes serving the purpose of parsing C-header files containing information </span>
+<span class="sd">about the structure of packets and commands. The parsing in general happens mostly by recognising (a subset of)</span>
+<span class="sd">standard C-syntax and the system of Python representations of C-objects tries to include all possible information</span>
+<span class="sd">present in the C-header file, which makes it perhaps a bit too convoluted.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">parsing.par_methods</span> <span class="k">as</span> <span class="nn">parm</span>
+
+<span class="n">types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;uint8_t&quot;</span><span class="p">,</span> <span class="s2">&quot;uint16_t&quot;</span><span class="p">,</span> <span class="s2">&quot;uint32_t&quot;</span><span class="p">,</span> <span class="s2">&quot;uint64_t&quot;</span><span class="p">,</span> <span class="s2">&quot;char&quot;</span><span class="p">,</span> <span class="s2">&quot;unsigned int&quot;</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="str_parse">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.str_parse">[docs]</a>
+<span class="k">def</span> <span class="nf">str_parse</span><span class="p">(</span><span class="n">stri</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the given string into blocks of &quot;top-level&quot; C-structures.</span>
+<span class="sd">    </span>
+<span class="sd">    By going iteratively through the string and recognising the features of standard C-syntax, this function</span>
+<span class="sd">    first marks the positions of all C-objects (including ``#define`` macro declaration) and then creates an</span>
+<span class="sd">    appropriate Python representation-object of them, which then at its initialisation further parses the inner structure of these</span>
+<span class="sd">    objects. After going through the whole string, this function then returns all found C-objects in a list.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        stri (str): A string to be parsed/analysed into the C-objects.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        list: List of Python representations of found C-objects, each represented by an object of child-class</span>
+<span class="sd">        of :obj:`structure`</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">strc</span> <span class="o">=</span> <span class="n">parm</span><span class="o">.</span><span class="n">erase_text</span><span class="p">(</span><span class="n">stri</span><span class="p">)</span>
+    <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">structures</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stri</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot;(&quot;</span><span class="p">}:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;#define&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="s2">&quot;define&quot;</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;enum&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="s2">&quot;enum&quot;</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;struct&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="s2">&quot;struct&quot;</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;extern&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="s2">&quot;extern&quot;</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">typ</span> <span class="o">==</span> <span class="s2">&quot;define&quot;</span><span class="p">:</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">structures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">define</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stri</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;;&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;extern&quot;</span><span class="p">,</span> <span class="s2">&quot;struct&quot;</span><span class="p">,</span> <span class="s2">&quot;enum&quot;</span><span class="p">}:</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s2">&quot;extern&quot;</span><span class="p">:</span>
+                <span class="n">structures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">extern</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stri</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">i</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">typ</span> <span class="o">==</span> <span class="s2">&quot;enum&quot;</span><span class="p">:</span>
+                <span class="n">structures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">enum</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stri</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">i</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">typ</span> <span class="o">==</span> <span class="s2">&quot;struct&quot;</span><span class="p">:</span>
+                <span class="n">structures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">struct</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stri</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">}:</span>
+            <span class="n">depth</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="s2">&quot;(&quot;</span><span class="p">}:</span>
+            <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">structures</span></div>
+
+
+
+<div class="viewcode-block" id="str_parse_r">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.str_parse_r">[docs]</a>
+<span class="k">def</span> <span class="nf">str_parse_r</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">stri</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the given string into &quot;2nd-order&quot; blocks of C-structures. </span>
+<span class="sd">    </span>
+<span class="sd">    Unlike for :obj:`str_parse` this time &quot;second-order&quot; strings (that is strings inside other already recognised </span>
+<span class="sd">    C-objects; i.e. e.g. inner content of ``struct`` declaration) are expected and the parsing itslef is recursive</span>
+<span class="sd">    (in order to account e.g. for multiple nested occurences of ``struct``).</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        offset (int): Offset of this string from the start of the original file. I.e. original start index of its</span>
+<span class="sd">            first character.</span>
+<span class="sd">        stri (str): The string to be parsed/interpreted into its contents.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        list: List of identified and interpreted C-object inside the original string. Each is represented by an</span>
+<span class="sd">            object which is some child-class of the class :obj:`structure`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">strc</span> <span class="o">=</span> <span class="n">parm</span><span class="o">.</span><span class="n">erase_text</span><span class="p">(</span><span class="n">stri</span><span class="p">)</span>
+    <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">structures</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stri</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">}:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;enum&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="s2">&quot;enum&quot;</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;struct&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="s2">&quot;struct&quot;</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">types</span><span class="p">))</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+                    <span class="n">typ</span> <span class="o">=</span> <span class="n">l</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;;&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s2">&quot;enum&quot;</span><span class="p">:</span>
+                <span class="n">structures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">enum_r</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">start</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stri</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">typ</span> <span class="o">==</span> <span class="s2">&quot;struct&quot;</span><span class="p">:</span>
+                <span class="n">structures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">struct_r</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">start</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stri</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">structures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">misc_r</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">start</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stri</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">}:</span>
+            <span class="n">depth</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">strc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="s2">&quot;(&quot;</span><span class="p">}:</span>
+            <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">structures</span></div>
+
+
+
+<div class="viewcode-block" id="structure">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.structure">[docs]</a>
+<span class="k">class</span> <span class="nc">structure</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parent class of all representations of the C-objects.</span>
+<span class="sd">    </span>
+<span class="sd">    This class holds properties which are shared by all Python representations of C-objects found in the</span>
+<span class="sd">    analysed file.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        typ (str): The type of the C-object (e.g. ``struct`` or ``enum``).</span>
+<span class="sd">        inds (int): Starting index of the C-object.</span>
+<span class="sd">        inde (int): End index of the C-object.</span>
+<span class="sd">        cont (str): Raw text of the C-object as in the source file.</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        type (str): The type of the C-object (e.g. ``struct`` or ``enum``).</span>
+<span class="sd">        start (int): Starting index of the C-object.</span>
+<span class="sd">        end (int): End index of the C-object.</span>
+<span class="sd">        text (str): Raw text of the C-object as in the source file.</span>
+<span class="sd">        comment (list): List holding all found interpretable comments associated to this C-object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">typ</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">inds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">inde</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">cont</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+
+<div class="viewcode-block" id="enum">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.enum">[docs]</a>
+<span class="k">class</span> <span class="nc">enum</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class of an ``enum`` C-object.</span>
+<span class="sd">    </span>
+<span class="sd">    This class is a Python representation of an occurrence of ``enum`` in the C-header file. The inner</span>
+<span class="sd">    structure of the ``enum`` is parsed and represented as a Python dictionary.</span>
+<span class="sd">    </span>
+<span class="sd">    All **parameters** are passed into the :obj:`structure` class from which this structure also inherits all</span>
+<span class="sd">    its **attributes**.</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): Name of the ``enum`` object.</span>
+<span class="sd">        entries (dict): Dictionary containing key-value pairs found in the ``enum``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ele_parse</span><span class="p">(</span><span class="n">cont</span><span class="p">)</span>
+
+<div class="viewcode-block" id="enum.ele_parse">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.enum.ele_parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">ele_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse ``enum`` into its syntactic/semantic components.</span>
+<span class="sd">        </span>
+<span class="sd">        By recognising and parsing the inner syntax of ``enum`` this function identifies all elements in it </span>
+<span class="sd">        and the values assigned to them (be it directly or implicitly by the order of the elements ``enum``).</span>
+<span class="sd">        Subsequently it represents these key-value pairs by a Python dictionary.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cont (str): Text of the whole ``enum`` object.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple containing:</span>
+<span class="sd">            </span>
+<span class="sd">                * *str* - The name of the ``enum``.</span>
+<span class="sd">                * *dict* - A dictionary representing the entries in the ``enum`` and the values/expressions assigned to them. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">parm</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">cont</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">,</span> <span class="s2">&quot;//&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/*&quot;</span><span class="p">,</span> <span class="s2">&quot;*/&quot;</span><span class="p">})</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">brack</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">comma</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;{&quot;</span><span class="p">:</span>
+                <span class="n">brack</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;,&quot;</span><span class="p">:</span>
+                <span class="n">comma</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">brack</span><span class="p">]</span>
+        <span class="n">comma</span> <span class="o">=</span> <span class="p">[</span><span class="n">brack</span><span class="p">]</span> <span class="o">+</span> <span class="n">comma</span> <span class="o">+</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># takes care of trailing commas</span>
+        <span class="k">if</span> <span class="n">comma</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">comma</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">comma</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">elem</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">comma</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">elem</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">comma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">comma</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+        <span class="n">numb</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="p">:</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">numb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="n">position</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]))</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">numb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="n">position</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]))</span>
+                <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[:</span><span class="n">position</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">numb</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">numb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numb</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">numb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">numb</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="define">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.define">[docs]</a>
+<span class="k">class</span> <span class="nc">define</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class of a ``#define`` makro.</span>
+<span class="sd">    </span>
+<span class="sd">    This class is a Python representation of an occurrence of ``#define`` macro in the C-header file. The inner</span>
+<span class="sd">    structure of the macro is parsed and represented as a name and an expression.</span>
+<span class="sd">    </span>
+<span class="sd">    All **parameters** are passed into the :obj:`structure` class from which this structure also inherits all</span>
+<span class="sd">    its **attributes**.</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): The name of the definition in the macro.</span>
+<span class="sd">        expression (str): A string with the expression or value that the macro points to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expression</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">def_parse</span><span class="p">(</span><span class="n">cont</span><span class="p">)</span>
+
+<div class="viewcode-block" id="define.def_parse">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.define.def_parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">def_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the ``#define`` macro into its syntactic/semantic components.</span>
+<span class="sd">        </span>
+<span class="sd">        By looking for whitespace characters, parses the text of the macro into its name and the expression it</span>
+<span class="sd">        points to.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cont (str): The text of the macro.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple containing:</span>
+<span class="sd">            </span>
+<span class="sd">                * *str* - The name of the macro.</span>
+<span class="sd">                * *str* - The expression the macro points to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">parm</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">cont</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;//&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/*&quot;</span><span class="p">,</span> <span class="s2">&quot;*/&quot;</span><span class="p">})</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">8</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">x</span><span class="p">[:</span><span class="n">ind</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="s2">&quot;&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="extern">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.extern">[docs]</a>
+<span class="k">class</span> <span class="nc">extern</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class of external declaration of a constant.</span>
+<span class="sd">    </span>
+<span class="sd">    This class is a Python representation of an occurrence of external constant declaration in the C-header </span>
+<span class="sd">    file. The inner structure of the expression is parsed and represented as its name, type (e.g. ``uint8``)</span>
+<span class="sd">    and an information on whether it is an array.</span>
+<span class="sd">    </span>
+<span class="sd">    All **parameters** are passed into the :obj:`structure` class from which this structure also inherits all</span>
+<span class="sd">    its **attributes**.</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): The name of the external declaration.</span>
+<span class="sd">        flav (str): The data type of the declaration (e.g. ``&quot;uint8&quot;``)</span>
+<span class="sd">        array (str): An expression set to &quot;-1&quot; if the declared constant is not an array and to its number of</span>
+<span class="sd">            elements (either integer value or an text expression to be later evaluated) in case it is an array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flav</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ext_parse</span><span class="p">(</span><span class="n">cont</span><span class="p">)</span>
+
+<div class="viewcode-block" id="extern.ext_parse">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.extern.ext_parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">ext_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the external declaration of a constant into its syntactic/semantic components.</span>
+<span class="sd">        </span>
+<span class="sd">        By looking for whitespace characters and square brackets, parses the text of the declaration into its</span>
+<span class="sd">        name, data type and n information on whether it is an array.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cont (str): The text of the declaration to be parsed.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple containing:</span>
+<span class="sd">            </span>
+<span class="sd">                * *str* - The data type of the declaration (e.g. ``&quot;unsigned integer&quot;``).</span>
+<span class="sd">                * *str* - The name of the declaration.</span>
+<span class="sd">                * *str* - The information on its array size (see above for more detail).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">parm</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">cont</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;//&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/*&quot;</span><span class="p">,</span> <span class="s2">&quot;*/&quot;</span><span class="p">})</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">13</span><span class="p">:]</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="n">part_1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">part_2</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">x</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">part_2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;[&quot;</span> <span class="ow">in</span> <span class="n">x</span> <span class="ow">and</span> <span class="s2">&quot;]&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span>
+            <span class="n">part_3</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span>
+            <span class="n">inde</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
+            <span class="n">part_4</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">inde</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">part_3</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">part_4</span> <span class="o">=</span> <span class="s2">&quot;-1&quot;</span>
+        <span class="k">return</span> <span class="n">part_1</span> <span class="o">+</span> <span class="n">part_2</span><span class="p">,</span> <span class="n">part_3</span><span class="p">,</span> <span class="n">part_4</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="struct">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.struct">[docs]</a>
+<span class="k">class</span> <span class="nc">struct</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class of declaration of a C-structure ``struct ...``.</span>
+<span class="sd">    </span>
+<span class="sd">    This class is a Python representation of an occurrence of ``struct`` structure in the C-header file. The inner</span>
+<span class="sd">    structure of this ... structure is represented by its name, information on whether it is packed and its </span>
+<span class="sd">    contents/elements (which are themselves other similar Python objects).</span>
+<span class="sd">    </span>
+<span class="sd">    All **parameters** are passed into the :obj:`structure` class from which this structure also inherits all</span>
+<span class="sd">    its **attributes**.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): The name of the structure.</span>
+<span class="sd">        packed (bool): True if the structure is packed, false otherwise.</span>
+<span class="sd">        elements (list): A list of elements inside this structure. Each is represented by a Python object which is</span>
+<span class="sd">            some child-class of :obj:`structure`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">packed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stc_parse</span><span class="p">(</span><span class="n">cont</span><span class="p">)</span>
+
+<div class="viewcode-block" id="struct.stc_parse">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.struct.stc_parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">stc_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the ``struct`` C-structure into its syntactic/semantic components.</span>
+<span class="sd">        </span>
+<span class="sd">        By first looking for whitespace characters and &quot;{&quot; and then calling :obj:`str_parse_r`, this function parses</span>
+<span class="sd">        the text of the ``struct`` object into its name, entries, etc.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cont (str): The raw text of the ``struct`` C-structure in the C-header file.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple containing:</span>
+<span class="sd">            </span>
+<span class="sd">                * *str* - The name of the C-structure.</span>
+<span class="sd">                * *bool* - ``True`` if the structure is packed, ``False`` otherwise.</span>
+<span class="sd">                * *list* - List of elements inside the structure. Each represented by an object of </span>
+<span class="sd">                  child-class of :obj:`structure`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">parm</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">cont</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;//&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/*&quot;</span><span class="p">,</span> <span class="s2">&quot;*/&quot;</span><span class="p">})</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">)</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;PACKED&quot;</span> <span class="ow">in</span> <span class="n">head</span><span class="p">:</span>
+            <span class="n">packed</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">packed</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="n">str_parse_r</span><span class="p">(</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">packed</span><span class="p">,</span> <span class="n">entries</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="struct_r">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.struct_r">[docs]</a>
+<span class="k">class</span> <span class="nc">struct_r</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class of a reference to a C-structure ``struct`` inside another.</span>
+<span class="sd">    </span>
+<span class="sd">    This class is used to represent occurrence of declaration of one structure inside another. It can be of two types: </span>
+<span class="sd">    </span>
+<span class="sd">        1. It is only a reference to a structure defined elsewhere. In this case, the :attr:`form` attribute holds the</span>
+<span class="sd">           name of this reference.</span>
+<span class="sd">        2. There is a nested definition of one structure inside another. In this case, an object of class :obj:`struct` is</span>
+<span class="sd">           used to represent the included structure and it is equated to :obj:`form`.</span>
+<span class="sd">            </span>
+<span class="sd">    All **parameters** are passed into the :obj:`structure` class from which this structure also inherits all</span>
+<span class="sd">    its **attributes**.</span>
+<span class="sd">            </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): The name of the referenced C-structure.</span>
+<span class="sd">        form (str or struct): Either name of the referenced structure or directly the object of the referenced structure.</span>
+<span class="sd">        array (str): An expression set to &quot;-1&quot; if the ``struct`` reference is not an array and to its number of</span>
+<span class="sd">            elements (either integer value or an text expression to be later evaluated) in case it is an array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">str_parse</span><span class="p">(</span><span class="n">cont</span><span class="p">)</span>
+
+<div class="viewcode-block" id="struct_r.str_parse">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.struct_r.str_parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">str_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the reference to its syntactic/semantic components.</span>
+<span class="sd">        </span>
+<span class="sd">        By looking for &quot;{&quot; and &quot;}&quot; this function first decides whether the references includes a nested structure or only</span>
+<span class="sd">        and external reference. Depending on the result it either calls the class :obj:`struct` or leaves the reference as</span>
+<span class="sd">        a text. It then continues by looking for the name, array information, etc by looking at the whitespaces and brackets.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cont (str): The text of the structure reference to be analysed.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple consisting of:</span>
+<span class="sd">                </span>
+<span class="sd">                * *str* - The name of the referenced structure.</span>
+<span class="sd">                * *str* or :obj:`struct` - See the attribute :attr:`form` above.</span>
+<span class="sd">                * *str* - See the attribute :attr:`array` above.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;{&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cont</span> <span class="ow">or</span> <span class="s2">&quot;}&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cont</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">cont</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ind</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">form</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span>
+                <span class="n">rest</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;[&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+                    <span class="n">indb</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span>
+                    <span class="n">form</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">indb</span><span class="p">]</span>
+                    <span class="n">rest</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">indb</span><span class="p">:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">form</span> <span class="o">=</span> <span class="n">x</span>
+                    <span class="n">rest</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">cont</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">struct</span><span class="p">(</span><span class="s2">&quot;struct&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cont</span><span class="p">[:</span> <span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">cont</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="s2">&quot;[&quot;</span> <span class="ow">in</span> <span class="n">rest</span> <span class="ow">and</span> <span class="s2">&quot;]&quot;</span> <span class="ow">in</span> <span class="n">rest</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span>
+            <span class="n">inde</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">inde</span><span class="p">]</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span> <span class="o">+</span> <span class="n">rest</span><span class="p">[</span><span class="n">inde</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="s2">&quot;-1&quot;</span>
+        <span class="k">return</span> <span class="n">rest</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">form</span><span class="p">,</span> <span class="n">array</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="enum_r">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.enum_r">[docs]</a>
+<span class="k">class</span> <span class="nc">enum_r</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class of a reference to an ``enum`` inside a C-structure.</span>
+<span class="sd">    </span>
+<span class="sd">    This class is used to represent occurrence of reference to ``enum`` inside a C-structure (a ``struct`` object). It can</span>
+<span class="sd">    be of two types:</span>
+<span class="sd">        </span>
+<span class="sd">        1. It is only a reference to an ``enum`` defined elsewhere. In this case, the :attr:`form` attribute holds the</span>
+<span class="sd">           name of this reference.</span>
+<span class="sd">        2. There is a nested definition of the ``enum`` inside this C-structure. In this case, an object of class :obj:`enum` is</span>
+<span class="sd">           used to represent the included ``enum`` and it is equated to :obj:`form`.</span>
+<span class="sd">           </span>
+<span class="sd">    All **parameters** are passed into the :obj:`structure` class from which this structure also inherits all</span>
+<span class="sd">    its **attributes**.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): The name of the referenced ``enum``.</span>
+<span class="sd">        form (str or enum): Either name of the referenced ``enum`` or directly the object of the referenced ``enum``.</span>
+<span class="sd">        bites (int): Number of bites that the value of this ``enum`` is represented by.</span>
+<span class="sd">        array (str): An expression set to &quot;-1&quot; if the ``enum`` reference is not an array and to its number of</span>
+<span class="sd">            elements (either integer value or an text expression to be later evaluated) in case it is an array.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bites</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enr_parse</span><span class="p">(</span><span class="n">cont</span><span class="p">)</span>
+
+<div class="viewcode-block" id="enum_r.enr_parse">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.enum_r.enr_parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">enr_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the reference to its syntactic/semantic components.</span>
+<span class="sd">        </span>
+<span class="sd">        By looking for &quot;{&quot; and &quot;}&quot; this function first decides whether the references includes a nested ``enum`` or only</span>
+<span class="sd">        and external reference. Depending on the result it either calls the class :obj:`enum` or leaves the reference as</span>
+<span class="sd">        a text. It then continues by looking for the name, array and bites information, etc by looking at the whitespaces and brackets.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cont (str): The text of the ``enum`` reference to be analysed.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple consisting of:</span>
+<span class="sd">                </span>
+<span class="sd">                * *str* - The name of the referenced ``enum``.</span>
+<span class="sd">                * *str* or :obj:`struct` - See the attribute :attr:`form` above.</span>
+<span class="sd">                * *int* - See the atribute :attr:`bite` above.</span>
+<span class="sd">                * *str* - See the attribute :attr:`array` above.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;{&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cont</span> <span class="ow">or</span> <span class="s2">&quot;}&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cont</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">cont</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">cont</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">enum</span><span class="p">(</span><span class="s2">&quot;enum&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cont</span><span class="p">[:</span> <span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">cont</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="s2">&quot;[&quot;</span> <span class="ow">in</span> <span class="n">rest</span> <span class="ow">and</span> <span class="s2">&quot;]&quot;</span> <span class="ow">in</span> <span class="n">rest</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span>
+            <span class="n">inde</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">inde</span><span class="p">]</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span> <span class="o">+</span> <span class="n">rest</span><span class="p">[</span><span class="n">inde</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="s2">&quot;-1&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">rest</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">byte</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rest</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+                <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">byte</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">byte</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">rest</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">form</span><span class="p">,</span> <span class="n">byte</span><span class="p">,</span> <span class="n">array</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="misc_r">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.misc_r">[docs]</a>
+<span class="k">class</span> <span class="nc">misc_r</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class of a declaration of a constant inside a C-structure.</span>
+<span class="sd">    </span>
+<span class="sd">    This class is a Python representation of an occurrence of constant value declaration (e.g. ``uint8``) inside</span>
+<span class="sd">    of some C-structure . The inner structure of the expression is parsed and represented as its name, bite length </span>
+<span class="sd">    and an information on whether it is an array.</span>
+<span class="sd">    </span>
+<span class="sd">    All **parameters** are passed into the :obj:`structure` class from which this structure also inherits all</span>
+<span class="sd">    its **attributes**.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): The name of the declared constant.</span>
+<span class="sd">        bites (int): Number of bites that the value of this constant is represented by.</span>
+<span class="sd">        array (str): An expression set to &quot;-1&quot; if the constant is not an array and to its number of</span>
+<span class="sd">            elements (either integer value or an text expression to be later evaluated) in case it is an array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">inde</span><span class="p">,</span> <span class="n">cont</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bites</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mir_parse</span><span class="p">(</span><span class="n">cont</span><span class="p">)</span>
+
+<div class="viewcode-block" id="misc_r.mir_parse">
+<a class="viewcode-back" href="../../parsing.html#parsing.par_header.misc_r.mir_parse">[docs]</a>
+    <span class="k">def</span> <span class="nf">mir_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cont</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the declaration into its syntactic/semantic components.</span>
+<span class="sd">        </span>
+<span class="sd">        By looking at whitspaces and brackets in the string this function parses the text of the declaration into</span>
+<span class="sd">        the name of the constant, and information about its bite-length and array-size.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cont (str): The text of the constant declaration.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple containing:</span>
+<span class="sd">            </span>
+<span class="sd">                * *str* - The name of the constant.</span>
+<span class="sd">                * *int* - The declared bite-length of the constant.</span>
+<span class="sd">                * *str* - See the attribute :attr:`array` above.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rest</span> <span class="o">=</span> <span class="n">cont</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="s2">&quot;[&quot;</span> <span class="ow">in</span> <span class="n">rest</span> <span class="ow">and</span> <span class="s2">&quot;]&quot;</span> <span class="ow">in</span> <span class="n">rest</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span>
+            <span class="n">inde</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">inde</span><span class="p">]</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span> <span class="o">+</span> <span class="n">rest</span><span class="p">[</span><span class="n">inde</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="s2">&quot;-1&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">rest</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">byte</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rest</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+                <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[:</span><span class="n">ind</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">byte</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">byte</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">rest</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">byte</span><span class="p">,</span> <span class="n">array</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Josef Vácha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>utilities.visualiser &mdash; MIB Generator 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MIB Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About the script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../change.html">I need to change…</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules and packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../main.html">main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">parsing package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../construction.html">construction package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generation.html">generation package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data.html">data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MIB Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">utilities.visualiser</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for utilities.visualiser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Allow a GUI representation of the parsed data.</span>
+
+<span class="sd">This module allows the user to see the output of the parsing process, i.e. the tree of the Python objects that were created as</span>
+<span class="sd">a representation of the original C-files. For the creation of the GUI the Qt framework is used in connection with its Python </span>
+<span class="sd">toolkit/bindings PySide-6.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QMetaObject</span>
+<span class="kn">from</span> <span class="nn">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QApplication</span><span class="p">,</span>
+    <span class="n">QHBoxLayout</span><span class="p">,</span>
+    <span class="n">QLabel</span><span class="p">,</span>
+    <span class="n">QMainWindow</span><span class="p">,</span>
+    <span class="n">QPushButton</span><span class="p">,</span>
+    <span class="n">QSizePolicy</span><span class="p">,</span>
+    <span class="n">QToolBox</span><span class="p">,</span>
+    <span class="n">QVBoxLayout</span><span class="p">,</span>
+    <span class="n">QPlainTextEdit</span><span class="p">,</span>
+    <span class="n">QWidget</span><span class="p">,</span>
+    <span class="n">QTableWidget</span><span class="p">,</span>
+    <span class="n">QTableWidgetItem</span><span class="p">,</span>
+    <span class="n">QScrollArea</span><span class="p">,</span>
+    <span class="n">QFrame</span><span class="p">,</span>
+    <span class="n">QAbstractScrollArea</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">multiprocessing</span>
+
+<span class="kn">import</span> <span class="nn">parsing.load</span> <span class="k">as</span> <span class="nn">load</span>
+<span class="kn">import</span> <span class="nn">data.longdata</span> <span class="k">as</span> <span class="nn">longdata</span>
+
+<span class="n">policy</span> <span class="o">=</span> <span class="n">QSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CommentWindow">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.CommentWindow">[docs]</a>
+<span class="k">class</span> <span class="nc">CommentWindow</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Small window that shows informations about comments in the given entry.</span>
+
+<span class="sd">    This class holds a description of the UI layout of a comment window that is shown when the user asks to view contents of</span>
+<span class="sd">    some comment. Apart from passively showing all the entries, it can also call other window when the user asks to view full</span>
+<span class="sd">    text of some comment.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        comment (list): List of comments to be shown in the window. Each of type :obj:`parsing.par_methods.comment`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Comment view&quot;</span><span class="p">)</span>
+        <span class="c1"># self.resize(600,500)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">comment</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Comment:&quot;</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">()</span>
+            <span class="n">frame</span><span class="o">.</span><span class="n">setFrameShape</span><span class="p">(</span><span class="n">QFrame</span><span class="o">.</span><span class="n">Box</span><span class="p">)</span>
+            <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Show full text&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_text</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">button</span><span class="p">)</span>
+            <span class="n">labeli</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">labeli</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Basic information:&quot;</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">labeli</span><span class="p">)</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="n">QTableWidget</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">intable</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">getdata</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+            <span class="n">labe</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">labe</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Entries:&quot;</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">labe</span><span class="p">)</span>
+            <span class="n">table2</span> <span class="o">=</span> <span class="n">QTableWidget</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">intable</span><span class="p">(</span><span class="n">table2</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">table2</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CommentWindow.view_text">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.CommentWindow.view_text">[docs]</a>
+    <span class="k">def</span> <span class="nf">view_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show a window with full text.</span>
+
+<span class="sd">        This methods when called opens a small window showing the passed text.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text (str): The text to be shown.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">TextWindow</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TextWindow">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.TextWindow">[docs]</a>
+<span class="k">class</span> <span class="nc">TextWindow</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Small window that show parsed text.</span>
+
+<span class="sd">    This class holds description of an UI layout of a small window that can display a single block of text.</span>
+<span class="sd">    It is created mostly in cases when contents of some longer entry or section of C-file have to be shown.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Full text view&quot;</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">textpol</span> <span class="o">=</span> <span class="n">QPlainTextEdit</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">textpol</span><span class="o">.</span><span class="n">setFrameShape</span><span class="p">(</span><span class="n">QFrame</span><span class="o">.</span><span class="n">NoFrame</span><span class="p">)</span>
+        <span class="n">textpol</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">textpol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Ui_MainWindow">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.Ui_MainWindow">[docs]</a>
+<span class="k">class</span> <span class="nc">Ui_MainWindow</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This class holds functions that build up geometry and objects in the main window.</span>
+
+<span class="sd">    In case of this application, the UI has to be dynamically created, i.e. the number of entries in a toolbox has to change</span>
+<span class="sd">    depending on the number of structures that need to be displayed. Because of this, this class which holds the description</span>
+<span class="sd">    of the UI of the main visualisation window is perhaps more complicated than usual. Its base layout is created in</span>
+<span class="sd">    :obj:`setupUi`, but this includes a recursive reference to :obj:`inter`, which always creates a visualisation of contents</span>
+<span class="sd">    of some object (i.e. shows a list of some objects as entries in a toolbox). Since structures can be members of</span>
+<span class="sd">    structures, :obj:`inter` can also call itself, hence the recursivity.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Ui_MainWindow.setupUi">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.Ui_MainWindow.setupUi">[docs]</a>
+    <span class="k">def</span> <span class="nf">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">MainWindow</span><span class="p">,</span> <span class="n">struct</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds up the UI of the Main window.</span>
+
+<span class="sd">        This is done dynamically based on the nature of the passed file representation. See :obj:`Ui_MainWindow` for more info.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            MainWindow (QMainWindow): Base Qt object in which this UI is build.</span>
+<span class="sd">            struct (parsing.parser_main.file): The Python representation of a file on basis of which the UI will be constructed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">MainWindow</span><span class="o">.</span><span class="n">objectName</span><span class="p">():</span>
+            <span class="n">MainWindow</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s2">&quot;MainWindow&quot;</span><span class="p">)</span>
+        <span class="n">MainWindow</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+        <span class="n">centralwidget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="n">MainWindow</span><span class="p">)</span>
+        <span class="n">verlay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">centralwidget</span><span class="p">)</span>
+        <span class="n">scrolarea</span> <span class="o">=</span> <span class="n">QScrollArea</span><span class="p">(</span><span class="n">centralwidget</span><span class="p">)</span>
+        <span class="n">scrolarea</span><span class="o">.</span><span class="n">setWidgetResizable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inter</span><span class="p">(</span><span class="n">struct</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
+        <span class="n">scrolarea</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+        <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">scrolarea</span><span class="p">)</span>
+        <span class="n">MainWindow</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">centralwidget</span><span class="p">)</span>
+
+        <span class="c1"># self.retranslateUi(MainWindow)</span>
+        <span class="n">QMetaObject</span><span class="o">.</span><span class="n">connectSlotsByName</span><span class="p">(</span><span class="n">MainWindow</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Ui_MainWindow.inter">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.Ui_MainWindow.inter">[docs]</a>
+    <span class="k">def</span> <span class="nf">inter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">struct</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively create entries for each C-object in the parsed file.</span>
+
+<span class="sd">        For any passed parsed object, creates an appropriate representation through a Qt Widget. Since such object can also</span>
+<span class="sd">        be a ``struct``, this function is sometimes called recursively. For some objects it also creates buttons which can open</span>
+<span class="sd">        other windows which visualise associated comments or e.g. long section of the original C-file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            struct (child-class of parsing.par_header.structure or parsing.par_cfile.instance_og): The object to be visualised</span>
+<span class="sd">                by the custom-created Qt Widget.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            QFrame: Qt widget representing the passed object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="n">QFrame</span><span class="p">()</span>
+        <span class="n">page</span><span class="o">.</span><span class="n">setFrameShape</span><span class="p">(</span><span class="n">QFrame</span><span class="o">.</span><span class="n">Box</span><span class="p">)</span>
+        <span class="n">page</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
+        <span class="n">verlay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+        <span class="n">methods</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="fm">__dir__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;structures&quot;</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+            <span class="n">toolbox</span> <span class="o">=</span> <span class="n">QToolBox</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span>
+                <span class="n">subwid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">toolbox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">subwid</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">)[:</span><span class="mi">50</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span><span class="p">)</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">toolbox</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">buttont</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Show full text&quot;</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span>
+            <span class="n">buttont</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_text</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">buttont</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+            <span class="n">labeli</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="n">labeli</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Extracted information:&quot;</span><span class="p">)</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">labeli</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">getdata</span><span class="p">(</span><span class="n">struct</span><span class="p">)</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="n">QTableWidget</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="n">intable</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;comment&quot;</span> <span class="ow">in</span> <span class="n">methods</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;View comments&quot;</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span>
+            <span class="c1"># I cannot believe this works</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_comments</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">comment</span><span class="p">))</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">button</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;entries&quot;</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+            <span class="n">label2</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="n">label2</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Entries:&quot;</span><span class="p">)</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label2</span><span class="p">)</span>
+            <span class="n">table2</span> <span class="o">=</span> <span class="n">QTableWidget</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="n">intable</span><span class="p">(</span><span class="n">table2</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">table2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;elements&quot;</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Objects inside:&quot;</span><span class="p">)</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">toolbox</span> <span class="o">=</span> <span class="n">QToolBox</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
+                <span class="n">subwid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">toolbox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">subwid</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">))</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">toolbox</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;form&quot;</span> <span class="ow">in</span> <span class="n">methods</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">form</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">label3</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="n">label3</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;In this structure:&quot;</span><span class="p">)</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label3</span><span class="p">)</span>
+            <span class="n">subview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inter</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+            <span class="n">subview</span><span class="o">.</span><span class="n">setParent</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="n">verlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">subview</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">page</span></div>
+
+
+<div class="viewcode-block" id="Ui_MainWindow.view_comments">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.Ui_MainWindow.view_comments">[docs]</a>
+    <span class="k">def</span> <span class="nf">view_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show a window with comments.</span>
+
+<span class="sd">        This method when called opens a window showing the passed comment.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            comment (list): List of comments to be shown in the new window. Each of type :obj:`parsing.par_methods.comment`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">CommentWindow</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Ui_MainWindow.view_text">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.Ui_MainWindow.view_text">[docs]</a>
+    <span class="k">def</span> <span class="nf">view_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show a window with full text.</span>
+
+<span class="sd">        This method when called opens a small window showing the passed text.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text (str): The text to be shown.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">TextWindow</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="getdata">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.getdata">[docs]</a>
+<span class="k">def</span> <span class="nf">getdata</span><span class="p">(</span><span class="n">struct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract all posible showable (str, int) data about an object</span>
+
+<span class="sd">    From a list of attributes that the passed object has, extracts the interesting ones (which are not buildins for any Python</span>
+<span class="sd">    object) and if they have showable value (their value is either ``str`` or ``int`` and it isn&#39;t the whole text of the</span>
+<span class="sd">    corresponding C code found in the original C-file), adds this attribute-value pair to a list. It also tries to substitute</span>
+<span class="sd">    the name of the attribute with a more human-readable name by looking it up in :obj:`data.longdata.translation`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        struct (any Python object really): The object who&#39;s attributes are to be extracted.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list holding all &quot;interesting&quot; attributes of the original object jointly with their values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="vm">__dict__</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">longdata</span><span class="o">.</span><span class="n">translation</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dic</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">i</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">dic</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<div class="viewcode-block" id="intable">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.intable">[docs]</a>
+<span class="k">def</span> <span class="nf">intable</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add the given data to the given table.</span>
+
+<span class="sd">    This method takes a table (its representation as a Qt widget) and inputs the passed data into its rows and columns.</span>
+<span class="sd">    It expects the inputted data to be a list of pairs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        table (QTableWidget): The Qt table to which the data is to be added.</span>
+<span class="sd">        data (list): List of pairs representing the data to be added to the table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+        <span class="n">e1</span> <span class="o">=</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">e2</span> <span class="o">=</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">e1</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">e2</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">resizeColumnToContents</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">resizeColumnToContents</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">verticalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">setSizeAdjustPolicy</span><span class="p">(</span><span class="n">QAbstractScrollArea</span><span class="o">.</span><span class="n">AdjustToContents</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="MainWindow">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.MainWindow">[docs]</a>
+<span class="k">class</span> <span class="nc">MainWindow</span><span class="p">(</span><span class="n">QMainWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The class of the main window.</span>
+
+<span class="sd">    This class is the actual Qt representation of the Main Window with all of its aspects. Since the whole UI is generated</span>
+<span class="sd">    in :obj:`Ui_MainWindow`, not much happens here.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        struct (parsing.parser_main.file): The Python representation of the file on basis of which the UI will be constructed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">struct</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MainWindow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">Ui_MainWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">struct</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Structure viewer - &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">path</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="runt">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.runt">[docs]</a>
+<span class="k">def</span> <span class="nf">runt</span><span class="p">(</span><span class="n">struct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the app in one process.</span>
+
+<span class="sd">    This method first creates the UI based on the passed file representation and then runs it as a Qt app.</span>
+
+<span class="sd">    At the exit, this method kills the whole process so it should be isolated into separate process if it is only called by</span>
+<span class="sd">    some additional code which is supposed to continue running.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        struct (parsing.parser_main.file): The Python representation of the file on basis of which the visualisation will</span>
+<span class="sd">            be constructed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">(</span><span class="n">struct</span><span class="p">)</span>
+    <span class="n">window</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../utilities.html#utilities.visualiser.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">struct</span><span class="o">=</span><span class="p">[</span><span class="n">load</span><span class="o">.</span><span class="n">TmH</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;For each file create a process and run the visualiser in it.</span>
+
+<span class="sd">    This method creates (or rather starts the process of creating) a visualisation window for each of the files in the passed</span>
+<span class="sd">    list. In order to do this it has to create a separate new process for each of the files since otherwise closing the windows</span>
+<span class="sd">    would exit the whole Python runtime.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">struct</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">runt</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Josef Vácha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

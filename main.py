@@ -1,9 +1,46 @@
-"""This module works as a startpoint and intersection for creation of the MIB databases."""
+"""This module works as a startpoint and a junction for creation of the MIB databases.
+
+If ran directly as a Python script, this module provides the user with a simple CLI which allows for specification of
+various options for runtime of the script itself (whether the MIB databases should be constructed, whether saved, 
+whether the parsed file should be visualised, etc..). It also provides a quick ``--help`` summary and an option to
+run scripts for updating the config and paths files before running the generating script itself. The main generating
+script is then called through the :obj:`main` method.
+"""
 import argparse
 
 
-def main(visual=True, generate=True, parseonly=False, paths=False, config=False):
-    """Run this whole hellish thing."""
+def main(visual=False, generate=True, parseonly=False, paths=False, config=False):
+    """Run this whole hellish thing.
+    
+    This method holds the main logic of the whole program. Roughly it sequentially does this:
+    
+        1. If the appropriate option is raised, run script to update the input/output paths.
+        2. If the appropriate option is raised, run script to update the config file.
+        3. Initialise the :obj:`parsing.load` module which automatically parses the files at
+           the specified paths.
+        4. Unless construction is disabled, call appropriate construction scripts and receive
+           Python representation of all the calibrations, TM-packets, TC-commands, etc. that
+           occur in the parsed files.
+        5. Perform some checks that these objects (mainly TM-packets and calibrations) are linked
+           in a correct way.
+        6. Unless generation is disabled, call the generation script which turns all previously
+           constructed objects into MIB tables and saves them.
+        7. If the appropriate option is raised, show the parsed files' contents in a GUI visualisation.
+        
+    Args:
+        visual (bool): ``True`` if the GUI visualisation of the parsed files should be shown, ``False`` otherwise (and by 
+            default).
+        generate (bool): ``True`` (by default) if the MIB tables should be generated and saved from the constructed 
+            Python representations, ``False`` otherwise.
+        parseonly (bool): ``True`` if only parsing of the C-files should be done and none of the subsequent steps. 
+            ``False`` otherwise and by default.
+        paths (bool): ``True`` if the script to update the input/output paths should be run, ``False`` otherwise (and by
+            default).
+        config (bool): ``True`` if the script to update the config file should be run, ``False`` otherwise (and by default).
+        
+    Returns:
+        bool: ``True`` if the script finished successfully, ``None`` otherwise. 
+    """
     if paths:
         import utilities.update as update
 
@@ -65,7 +102,7 @@ def main(visual=True, generate=True, parseonly=False, paths=False, config=False)
             print(
                 "Warn.:\tPySide6 not found. Please install it in order to show the parsed files."
             )
-    return tm_lis + tc_lis
+    return True
 
 
 if __name__ == "__main__":

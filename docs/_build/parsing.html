@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>parsing package &mdash; MIB Generator 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="construction package" href="construction.html" />
+    <link rel="prev" title="main module" href="main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MIB Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About the script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change.html">I need to change…</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules and packages</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">parsing package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parsing-load-module">parsing.load module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.load.TmH"><code class="docutils literal notranslate"><span class="pre">TmH</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.load.TcH"><code class="docutils literal notranslate"><span class="pre">TcH</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.load.TcTmH"><code class="docutils literal notranslate"><span class="pre">TcTmH</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.load.TmC"><code class="docutils literal notranslate"><span class="pre">TmC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.load.enumerations"><code class="docutils literal notranslate"><span class="pre">enumerations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.load.extr_values"><code class="docutils literal notranslate"><span class="pre">extr_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#parsing-par-cfile-module">parsing.par_cfile module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_cfile.instance"><code class="docutils literal notranslate"><span class="pre">instance</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance.name"><code class="docutils literal notranslate"><span class="pre">instance.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance.array"><code class="docutils literal notranslate"><span class="pre">instance.array</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance.elements"><code class="docutils literal notranslate"><span class="pre">instance.elements</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance.reposition"><code class="docutils literal notranslate"><span class="pre">instance.reposition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance.str_parse"><code class="docutils literal notranslate"><span class="pre">instance.str_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_cfile.instance_og"><code class="docutils literal notranslate"><span class="pre">instance_og</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance_og.type"><code class="docutils literal notranslate"><span class="pre">instance_og.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance_og.start"><code class="docutils literal notranslate"><span class="pre">instance_og.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance_og.end"><code class="docutils literal notranslate"><span class="pre">instance_og.end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance_og.text"><code class="docutils literal notranslate"><span class="pre">instance_og.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.instance_og.comment"><code class="docutils literal notranslate"><span class="pre">instance_og.comment</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_cfile.misc_r"><code class="docutils literal notranslate"><span class="pre">misc_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.misc_r.position"><code class="docutils literal notranslate"><span class="pre">misc_r.position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.misc_r.mis_parse"><code class="docutils literal notranslate"><span class="pre">misc_r.mis_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_cfile.miscal"><code class="docutils literal notranslate"><span class="pre">miscal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.miscal.name"><code class="docutils literal notranslate"><span class="pre">miscal.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.miscal.array"><code class="docutils literal notranslate"><span class="pre">miscal.array</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.miscal.add_parse"><code class="docutils literal notranslate"><span class="pre">miscal.add_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_cfile.str_parse"><code class="docutils literal notranslate"><span class="pre">str_parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_cfile.struct"><code class="docutils literal notranslate"><span class="pre">struct</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.struct.flav"><code class="docutils literal notranslate"><span class="pre">struct.flav</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.struct.name"><code class="docutils literal notranslate"><span class="pre">struct.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.struct.add_parse"><code class="docutils literal notranslate"><span class="pre">struct.add_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_cfile.struct_r"><code class="docutils literal notranslate"><span class="pre">struct_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.struct_r.position"><code class="docutils literal notranslate"><span class="pre">struct_r.position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.struct_r.entries"><code class="docutils literal notranslate"><span class="pre">struct_r.entries</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_cfile.struct_r.srr_parse"><code class="docutils literal notranslate"><span class="pre">struct_r.srr_parse()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#parsing-par-header-module">parsing.par_header module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.define"><code class="docutils literal notranslate"><span class="pre">define</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.define.name"><code class="docutils literal notranslate"><span class="pre">define.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.define.expression"><code class="docutils literal notranslate"><span class="pre">define.expression</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.define.def_parse"><code class="docutils literal notranslate"><span class="pre">define.def_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.enum"><code class="docutils literal notranslate"><span class="pre">enum</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum.name"><code class="docutils literal notranslate"><span class="pre">enum.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum.entries"><code class="docutils literal notranslate"><span class="pre">enum.entries</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum.ele_parse"><code class="docutils literal notranslate"><span class="pre">enum.ele_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.enum_r"><code class="docutils literal notranslate"><span class="pre">enum_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum_r.name"><code class="docutils literal notranslate"><span class="pre">enum_r.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum_r.form"><code class="docutils literal notranslate"><span class="pre">enum_r.form</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum_r.bites"><code class="docutils literal notranslate"><span class="pre">enum_r.bites</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum_r.array"><code class="docutils literal notranslate"><span class="pre">enum_r.array</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.enum_r.enr_parse"><code class="docutils literal notranslate"><span class="pre">enum_r.enr_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.extern"><code class="docutils literal notranslate"><span class="pre">extern</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.extern.name"><code class="docutils literal notranslate"><span class="pre">extern.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.extern.flav"><code class="docutils literal notranslate"><span class="pre">extern.flav</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.extern.array"><code class="docutils literal notranslate"><span class="pre">extern.array</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.extern.ext_parse"><code class="docutils literal notranslate"><span class="pre">extern.ext_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.misc_r"><code class="docutils literal notranslate"><span class="pre">misc_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.misc_r.name"><code class="docutils literal notranslate"><span class="pre">misc_r.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.misc_r.bites"><code class="docutils literal notranslate"><span class="pre">misc_r.bites</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.misc_r.array"><code class="docutils literal notranslate"><span class="pre">misc_r.array</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.misc_r.mir_parse"><code class="docutils literal notranslate"><span class="pre">misc_r.mir_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.str_parse"><code class="docutils literal notranslate"><span class="pre">str_parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.str_parse_r"><code class="docutils literal notranslate"><span class="pre">str_parse_r()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.struct"><code class="docutils literal notranslate"><span class="pre">struct</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct.name"><code class="docutils literal notranslate"><span class="pre">struct.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct.packed"><code class="docutils literal notranslate"><span class="pre">struct.packed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct.elements"><code class="docutils literal notranslate"><span class="pre">struct.elements</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct.stc_parse"><code class="docutils literal notranslate"><span class="pre">struct.stc_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.struct_r"><code class="docutils literal notranslate"><span class="pre">struct_r</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct_r.name"><code class="docutils literal notranslate"><span class="pre">struct_r.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct_r.form"><code class="docutils literal notranslate"><span class="pre">struct_r.form</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct_r.array"><code class="docutils literal notranslate"><span class="pre">struct_r.array</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.struct_r.str_parse"><code class="docutils literal notranslate"><span class="pre">struct_r.str_parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_header.structure"><code class="docutils literal notranslate"><span class="pre">structure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.structure.type"><code class="docutils literal notranslate"><span class="pre">structure.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.structure.start"><code class="docutils literal notranslate"><span class="pre">structure.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.structure.end"><code class="docutils literal notranslate"><span class="pre">structure.end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.structure.text"><code class="docutils literal notranslate"><span class="pre">structure.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_header.structure.comment"><code class="docutils literal notranslate"><span class="pre">structure.comment</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#parsing-par-methods-module">parsing.par_methods module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_methods.clean"><code class="docutils literal notranslate"><span class="pre">clean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_methods.com_parse"><code class="docutils literal notranslate"><span class="pre">com_parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_methods.comment"><code class="docutils literal notranslate"><span class="pre">comment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.comment.start"><code class="docutils literal notranslate"><span class="pre">comment.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.comment.end"><code class="docutils literal notranslate"><span class="pre">comment.end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.comment.text"><code class="docutils literal notranslate"><span class="pre">comment.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.par_methods.comment.entries"><code class="docutils literal notranslate"><span class="pre">comment.entries</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_methods.erase_text"><code class="docutils literal notranslate"><span class="pre">erase_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_methods.line_index"><code class="docutils literal notranslate"><span class="pre">line_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_methods.preproc_eval"><code class="docutils literal notranslate"><span class="pre">preproc_eval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_methods.preproc_filter"><code class="docutils literal notranslate"><span class="pre">preproc_filter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_methods.preproc_parse"><code class="docutils literal notranslate"><span class="pre">preproc_parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.par_methods.split_comment"><code class="docutils literal notranslate"><span class="pre">split_comment()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#parsing-parser-main-module">parsing.parser_main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.parser_main.file"><code class="docutils literal notranslate"><span class="pre">file</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.text"><code class="docutils literal notranslate"><span class="pre">file.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.max_position"><code class="docutils literal notranslate"><span class="pre">file.max_position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.lines"><code class="docutils literal notranslate"><span class="pre">file.lines</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.text_o"><code class="docutils literal notranslate"><span class="pre">file.text_o</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.text_c"><code class="docutils literal notranslate"><span class="pre">file.text_c</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.text_f"><code class="docutils literal notranslate"><span class="pre">file.text_f</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.structures"><code class="docutils literal notranslate"><span class="pre">file.structures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.comments"><code class="docutils literal notranslate"><span class="pre">file.comments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.link"><code class="docutils literal notranslate"><span class="pre">file.link</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing.parser_main.file.linker"><code class="docutils literal notranslate"><span class="pre">file.linker()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing.parser_main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="construction.html">construction package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generation.html">generation package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">utilities package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MIB Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">parsing package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/parsing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="parsing-package">
+<h1>parsing package<a class="headerlink" href="#parsing-package" title="Link to this heading"></a></h1>
+<p id="module-parsing">These modules serve the purpose of parsing the inputted C/header files into a variety Python
+objects, that can be then easily accessed at the later construction stage of the process. The resulting
+product with parsed objects should contain all information in the input files, which requires the
+representation to be a bit convoluted from place to place, but still understandable I hope.</p>
+<p>The submodules here are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#module-parsing.load" title="parsing.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a> - Module that allows for interaction between the parser and rest of the code.</p></li>
+<li><p><a class="reference internal" href="#module-parsing.parser_main" title="parsing.parser_main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parser_main</span></code></a> - Module that initialises the parsing process for a given file and holds class
+that represents the result.</p></li>
+<li><p><a class="reference internal" href="#module-parsing.par_cfile" title="parsing.par_cfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">par_cfile</span></code></a> - Module that holds the methods and classes for parsing <code class="docutils literal notranslate"><span class="pre">.c</span></code> files.</p></li>
+<li><p><a class="reference internal" href="#module-parsing.par_header" title="parsing.par_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">par_header</span></code></a> - Module that holds the methods and classes for parsing header <code class="docutils literal notranslate"><span class="pre">.h</span></code> files.</p></li>
+<li><p><a class="reference internal" href="#module-parsing.par_header" title="parsing.par_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">par_header</span></code></a> - Module holding various methods that are used by other modules throughout the
+parsing process.</p></li>
+</ul>
+</div></blockquote>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="parsing-load-module">
+<h2>parsing.load module<a class="headerlink" href="#parsing-load-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.load">Central location from which other modules can source data from the parsed C-files.</p>
+<p>This module is initialised in the first step of the MIB construction process. At its initialisation the C-files
+are loaded from the defined paths, are parsed using the <a class="reference internal" href="#parsing.parser_main.main" title="parsing.parser_main.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parsing.parser_main.main</span></code></a> method and are
+subsequently available for other scripts throughout the rest of the MIB construction process. The only other
+method here is <a class="reference internal" href="#parsing.load.extr_values" title="parsing.load.extr_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extr_values</span></code></a> which serves the purpose creating a global evaluation dictionary holding
+values from all header enums, macros, etc…</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.load.TmH">
+<span class="sig-prename descclassname"><span class="pre">parsing.load.</span></span><span class="sig-name descname"><span class="pre">TmH</span></span><a class="headerlink" href="#parsing.load.TmH" title="Link to this definition"></a></dt>
+<dd><p>Holds the Python parsed representation of the Tm-header C-file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#parsing.parser_main.file" title="parsing.parser_main.file">parsing.parser_main.file</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.load.TcH">
+<span class="sig-prename descclassname"><span class="pre">parsing.load.</span></span><span class="sig-name descname"><span class="pre">TcH</span></span><a class="headerlink" href="#parsing.load.TcH" title="Link to this definition"></a></dt>
+<dd><p>Holds the Python parsed representation of the Tc-header C-file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#parsing.parser_main.file" title="parsing.parser_main.file">parsing.parser_main.file</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.load.TcTmH">
+<span class="sig-prename descclassname"><span class="pre">parsing.load.</span></span><span class="sig-name descname"><span class="pre">TcTmH</span></span><a class="headerlink" href="#parsing.load.TcTmH" title="Link to this definition"></a></dt>
+<dd><p>Holds the Python parsed representation of the TcTm-header C-file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#parsing.parser_main.file" title="parsing.parser_main.file">parsing.parser_main.file</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.load.TmC">
+<span class="sig-prename descclassname"><span class="pre">parsing.load.</span></span><span class="sig-name descname"><span class="pre">TmC</span></span><a class="headerlink" href="#parsing.load.TmC" title="Link to this definition"></a></dt>
+<dd><p>Holds the Python parsed representation of the Tm (normal) C-file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#parsing.parser_main.file" title="parsing.parser_main.file">parsing.parser_main.file</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.load.enumerations">
+<span class="sig-prename descclassname"><span class="pre">parsing.load.</span></span><span class="sig-name descname"><span class="pre">enumerations</span></span><a class="headerlink" href="#parsing.load.enumerations" title="Link to this definition"></a></dt>
+<dd><p>A dictionary containing all possible usable evaluations/enumerations sourced
+form enums, macros, etc… found in all 3 of the parsed header files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.load.extr_values">
+<span class="sig-prename descclassname"><span class="pre">parsing.load.</span></span><span class="sig-name descname"><span class="pre">extr_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/load.html#extr_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.load.extr_values" title="Link to this definition"></a></dt>
+<dd><p>Create a dictionary from constants, <code class="docutils literal notranslate"><span class="pre">enum</span></code> correspondences, etc… in the given file.</p>
+<p>Goes through all objects in the parsed file and for each <code class="docutils literal notranslate"><span class="pre">enum</span></code> and macro, appends the name-value
+pairs present to a dictionary (which represents the “global” evaluation in the file).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> (<a class="reference internal" href="#parsing.parser_main.file" title="parsing.parser_main.file"><em>parsing.parser_main.file</em></a>) – File from which the evaluation dictionary is to be extracted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with all possible “global” evaluation found in the given file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="parsing-par-cfile-module">
+<h2>parsing.par_cfile module<a class="headerlink" href="#parsing-par-cfile-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.par_cfile">Parsing and structural interpretation module for C files.</p>
+<p>This module holds functions and classes serving the purpose of parsing C files containing information
+about the structure of packets and commands. The parsing in general happens mostly by recognising (a subset of)
+standard C-syntax and the system of Python representations of C-objects tries to include all possible information
+present in the C file, which makes it perhaps a bit too convoluted.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.instance" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance_og</span></code></a></p>
+<p>Class of “first order” C structure/object found in the body of the file.</p>
+<p>This class is a Python representation of an instance of a defined “top-level” object in the C-file. It does
+correspond to any specific type of such object (like <code class="docutils literal notranslate"><span class="pre">struct</span></code>, <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, …) unlike its child-classes,
+but rather holds general properties and methods that all of these classes need, like parsing into array of
+elements.</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance_og</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_cfile.instance.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the instance of a C-object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance.array">
+<span class="sig-name descname"><span class="pre">array</span></span><a class="headerlink" href="#parsing.par_cfile.instance.array" title="Link to this definition"></a></dt>
+<dd><p>Equals to “-1” if the object isn’t an array and otherwise denotes the number of elements
+found in the array. Either as an int number or some abstract expression to be evaluated later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance.elements">
+<span class="sig-name descname"><span class="pre">elements</span></span><a class="headerlink" href="#parsing.par_cfile.instance.elements" title="Link to this definition"></a></dt>
+<dd><p>List of elements present if the structure is an array. Each of the elements is either
+of class <a class="reference internal" href="#parsing.par_cfile.struct_r" title="parsing.par_cfile.struct_r"><code class="xref py py-obj docutils literal notranslate"><span class="pre">struct_r</span></code></a> or <a class="reference internal" href="#parsing.par_cfile.misc_r" title="parsing.par_cfile.misc_r"><code class="xref py py-obj docutils literal notranslate"><span class="pre">misc_r</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance.reposition">
+<span class="sig-name descname"><span class="pre">reposition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#instance.reposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.instance.reposition" title="Link to this definition"></a></dt>
+<dd><p>Use classic ordering if no specific position of each element of a structure is declared.</p>
+<p>The C-code at the level of instances of the structure in the array can contain information about a custom
+ordering inside this array. This is found while parsing the structure-instances, however if this
+information is not present, the default ordering has to be used instead which is what this function does
+by rewriting positions of the elements in the array in such case.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance.str_parse">
+<span class="sig-name descname"><span class="pre">str_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#instance.str_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.instance.str_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the content of the C-object into its syntactic/semantic components.</p>
+<p>By first looking for whitespace characters and various types of brackets and then calling classes
+<a class="reference internal" href="#parsing.par_cfile.struct_r" title="parsing.par_cfile.struct_r"><code class="xref py py-obj docutils literal notranslate"><span class="pre">struct_r</span></code></a> and <a class="reference internal" href="#parsing.par_cfile.misc_r" title="parsing.par_cfile.misc_r"><code class="xref py py-obj docutils literal notranslate"><span class="pre">misc_r</span></code></a>, this function parses the text of the C-object into its name,
+array size and entries present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – The raw text of the C-object as found in the C file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - The name of the C-structure.</p></li>
+<li><p><em>str</em> - See the attribute <a class="reference internal" href="#parsing.par_cfile.instance.array" title="parsing.par_cfile.instance.array"><code class="xref py py-attr docutils literal notranslate"><span class="pre">array</span></code></a> above.</p></li>
+<li><p><em>list</em> - See the attribute <a class="reference internal" href="#parsing.par_cfile.instance.elements" title="parsing.par_cfile.instance.elements"><code class="xref py py-attr docutils literal notranslate"><span class="pre">elements</span></code></a> above.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance_og">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">instance_og</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#instance_og"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.instance_og" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parent class of all representations of the C-objects.</p>
+<p>This class holds properties which are shared by all Python representations of C-objects found in the
+analysed file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>typ</strong> (<em>str</em>) – The type of the C-object (e.g. <code class="docutils literal notranslate"><span class="pre">struct</span></code> or <code class="docutils literal notranslate"><span class="pre">enum</span></code>).</p></li>
+<li><p><strong>inds</strong> (<em>int</em>) – Starting index of the C-object.</p></li>
+<li><p><strong>inde</strong> (<em>int</em>) – End index of the C-object.</p></li>
+<li><p><strong>cont</strong> (<em>str</em>) – Raw text of the C-object as in the source file.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance_og.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#parsing.par_cfile.instance_og.type" title="Link to this definition"></a></dt>
+<dd><p>The type of the C-object (e.g. <code class="docutils literal notranslate"><span class="pre">struct</span></code> or <code class="docutils literal notranslate"><span class="pre">enum</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance_og.start">
+<span class="sig-name descname"><span class="pre">start</span></span><a class="headerlink" href="#parsing.par_cfile.instance_og.start" title="Link to this definition"></a></dt>
+<dd><p>Starting index of the C-object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance_og.end">
+<span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#parsing.par_cfile.instance_og.end" title="Link to this definition"></a></dt>
+<dd><p>End index of the C-object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance_og.text">
+<span class="sig-name descname"><span class="pre">text</span></span><a class="headerlink" href="#parsing.par_cfile.instance_og.text" title="Link to this definition"></a></dt>
+<dd><p>Raw text of the C-object as in the source file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.instance_og.comment">
+<span class="sig-name descname"><span class="pre">comment</span></span><a class="headerlink" href="#parsing.par_cfile.instance_og.comment" title="Link to this definition"></a></dt>
+<dd><p>List holding all found interpretable comments associated to this C-object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.misc_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">misc_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#misc_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.misc_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance_og</span></code></a></p>
+<p>Class of a singular instance of a constant within an array.</p>
+<p>This class represents a specific instance of a constant (e.g. <code class="docutils literal notranslate"><span class="pre">unit32</span></code>, …) inside a defined array.
+The contents of this instance are parsed (based on whitespace characters and “=”) such that the
+extracted information are the position of this instance inside the array and the defined value of this
+instance.</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance_og</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.misc_r.position">
+<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#parsing.par_cfile.misc_r.position" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Position of the instance inside an array. Can be either a specific integer or an</dt><dd><p>abstract expression to be interpreted later.</p>
+</dd>
+<dt>value (str): A value of this instance of the constant. Can be either a specific integer or an abstract</dt><dd><p>expression to be interpreted later.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.misc_r.mis_parse">
+<span class="sig-name descname"><span class="pre">mis_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#misc_r.mis_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.misc_r.mis_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the information about the constant instance.</p>
+<p>Based on the presence of “=” and whitespace characters this function recognises the presence
+of an identifier of the position of the constant instance (inside the array) and interprets the rest
+as the expression/value assigned to this instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – Raw text of the C-code defining the object instance.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - Position of the instance. See <a class="reference internal" href="#parsing.par_cfile.misc_r.position" title="parsing.par_cfile.misc_r.position"><code class="xref py py-attr docutils literal notranslate"><span class="pre">position</span></code></a>.</p></li>
+<li><p><em>str</em> - A value of this instance of constant. See <code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.miscal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">miscal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#miscal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.miscal" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance</span></code></a></p>
+<p>Class of an instance of an array of constants.</p>
+<p>This class represents an instance of definition of a constant (e.g. <code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">integer</span></code>, <code class="docutils literal notranslate"><span class="pre">uint16</span></code>, etc…)
+in the C-file. Being possibly an array of such objects, it inherits from <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a>, which already
+does most of the parsing, so at creation of this child-class, only some already parsed information are
+rewritten and corrected rather than the parsing happening from scratch.</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.miscal.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_cfile.miscal.name" title="Link to this definition"></a></dt>
+<dd><p>Corrected (from <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a>) name of the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.miscal.array">
+<span class="sig-name descname"><span class="pre">array</span></span><a class="headerlink" href="#parsing.par_cfile.miscal.array" title="Link to this definition"></a></dt>
+<dd><p>Corrected (from <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a>) information about the array of the objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.miscal.add_parse">
+<span class="sig-name descname"><span class="pre">add_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#miscal.add_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.miscal.add_parse" title="Link to this definition"></a></dt>
+<dd><p>Correct information about the object’s name.</p>
+<p>Looks again at the string identified by <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a> as the object’s name, correct it (e.g. delete
+whitespace characters from it) and also save this name as a property <code class="xref py py-attr docutils literal notranslate"><span class="pre">misc_r.flav</span></code> of each instance of
+the object in the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The possibly wrong name of the structure as recognised by the parser in <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The actual name of the structure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_cfile.str_parse">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">str_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#str_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.str_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the given string into blocks of “top-level” C-structures.</p>
+<p>By going iteratively through the string and recognising the features of standard C-syntax, this function
+first marks the positions of all C-objects (including <code class="docutils literal notranslate"><span class="pre">#define</span></code> macro declaration) and then creates an
+appropriate Python representation-object of them, which then at its initialisation further parses the
+inner structure of these objects. After going through the whole string, this function then returns all
+found C-objects in a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stri</strong> (<em>str</em>) – A string to be parsed/analysed into the C-objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Python representations of found C-objects, each represented by an object of child-class
+of <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#struct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.struct" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance</span></code></a></p>
+<p>Class of an instance of an array of structs.</p>
+<p>This class represents an instance of definition of a C-structure <code class="docutils literal notranslate"><span class="pre">struct</span></code> in the C-file. Being possibly
+an array of such structures, it inherits from <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a>, which already does most of the parsing, so
+at creation of this child-class only, some already parsed information are rewritten and corrected rather
+than the parsing happening from scratch.</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct.flav">
+<span class="sig-name descname"><span class="pre">flav</span></span><a class="headerlink" href="#parsing.par_cfile.struct.flav" title="Link to this definition"></a></dt>
+<dd><p>The type of the <code class="docutils literal notranslate"><span class="pre">struct</span></code>, i.e. name of the <code class="docutils literal notranslate"><span class="pre">struct</span></code> declared possibly in the header
+of which this structure/array of structures is an instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_cfile.struct.name" title="Link to this definition"></a></dt>
+<dd><p>Corrected (from <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a>) name of the structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct.add_parse">
+<span class="sig-name descname"><span class="pre">add_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#struct.add_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.struct.add_parse" title="Link to this definition"></a></dt>
+<dd><p>Correct information about the object’s name and type.</p>
+<p>Looks again at the string identified by <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a> as the object’s name and if it seems wrong
+(e.g. whitespace characters occur in it) further parse it and extract the actual <a class="reference internal" href="#parsing.par_cfile.struct.name" title="parsing.par_cfile.struct.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></a> and
+<a class="reference internal" href="#parsing.par_cfile.struct.flav" title="parsing.par_cfile.struct.flav"><code class="xref py py-attr docutils literal notranslate"><span class="pre">flav</span></code></a> of the structure from it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The possibly wrong name of the structure as recognised by the parser in <a class="reference internal" href="#parsing.par_cfile.instance" title="parsing.par_cfile.instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance</span></code></a></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - The specific type of the structure. See <a class="reference internal" href="#parsing.par_cfile.struct.flav" title="parsing.par_cfile.struct.flav"><code class="xref py py-attr docutils literal notranslate"><span class="pre">flav</span></code></a>.</p></li>
+<li><p><em>str</em> - The actual name of the structure.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_cfile.</span></span><span class="sig-name descname"><span class="pre">struct_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#struct_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.struct_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-class docutils literal notranslate"><span class="pre">instance_og</span></code></a></p>
+<p>Class of a singular instance of <code class="docutils literal notranslate"><span class="pre">struct</span></code> within an array.</p>
+<p>This class represents a specific instance of a C-structure inside a defined array. The contents of this
+instance are parsed (based on brackets and commas) such that the extracted information are the position
+of this instance inside the array and the contents of the defined array represented by a Python dictionary.</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance_og</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct_r.position">
+<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#parsing.par_cfile.struct_r.position" title="Link to this definition"></a></dt>
+<dd><p>Position of the instance inside an array. Can be either a specific integer or an
+abstract expression to be interpreted later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct_r.entries">
+<span class="sig-name descname"><span class="pre">entries</span></span><a class="headerlink" href="#parsing.par_cfile.struct_r.entries" title="Link to this definition"></a></dt>
+<dd><p>A dictionary representing the defined contents of the instance of the <code class="docutils literal notranslate"><span class="pre">struct</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_cfile.struct_r.srr_parse">
+<span class="sig-name descname"><span class="pre">srr_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_cfile.html#struct_r.srr_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_cfile.struct_r.srr_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the <code class="docutils literal notranslate"><span class="pre">struct</span></code> instance into its entries.</p>
+<p>Based on the presence of “=”, brackets and commas, this function recognises the presence of an identifier
+of the position of the structure instance (inside the array) and each of the entries inside the
+structure definitions. It then further interprets the former and creates a dictionary from the latter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – Raw text of the C-code defining the object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - Position of the instance. See <a class="reference internal" href="#parsing.par_cfile.struct_r.position" title="parsing.par_cfile.struct_r.position"><code class="xref py py-attr docutils literal notranslate"><span class="pre">position</span></code></a>.</p></li>
+<li><p><em>dict</em> - A dictionary with the entries found in the <code class="docutils literal notranslate"><span class="pre">struct</span></code> instance.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="parsing-par-header-module">
+<h2>parsing.par_header module<a class="headerlink" href="#parsing-par-header-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.par_header">Parsing and structural interpretation module for C-header files.</p>
+<p>This module holds functions and classes serving the purpose of parsing C-header files containing information
+about the structure of packets and commands. The parsing in general happens mostly by recognising (a subset of)
+standard C-syntax and the system of Python representations of C-objects tries to include all possible information
+present in the C-header file, which makes it perhaps a bit too convoluted.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.define">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">define</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#define"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.define" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>Class of a <code class="docutils literal notranslate"><span class="pre">#define</span></code> makro.</p>
+<p>This class is a Python representation of an occurrence of <code class="docutils literal notranslate"><span class="pre">#define</span></code> macro in the C-header file. The inner
+structure of the macro is parsed and represented as a name and an expression.</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.define.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_header.define.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the definition in the macro.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.define.expression">
+<span class="sig-name descname"><span class="pre">expression</span></span><a class="headerlink" href="#parsing.par_header.define.expression" title="Link to this definition"></a></dt>
+<dd><p>A string with the expression or value that the macro points to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.define.def_parse">
+<span class="sig-name descname"><span class="pre">def_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#define.def_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.define.def_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the <code class="docutils literal notranslate"><span class="pre">#define</span></code> macro into its syntactic/semantic components.</p>
+<p>By looking for whitespace characters, parses the text of the macro into its name and the expression it
+points to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – The text of the macro.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - The name of the macro.</p></li>
+<li><p><em>str</em> - The expression the macro points to.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.enum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#enum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.enum" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>Class of an <code class="docutils literal notranslate"><span class="pre">enum</span></code> C-object.</p>
+<p>This class is a Python representation of an occurrence of <code class="docutils literal notranslate"><span class="pre">enum</span></code> in the C-header file. The inner
+structure of the <code class="docutils literal notranslate"><span class="pre">enum</span></code> is parsed and represented as a Python dictionary.</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.enum.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_header.enum.name" title="Link to this definition"></a></dt>
+<dd><p>Name of the <code class="docutils literal notranslate"><span class="pre">enum</span></code> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.enum.entries">
+<span class="sig-name descname"><span class="pre">entries</span></span><a class="headerlink" href="#parsing.par_header.enum.entries" title="Link to this definition"></a></dt>
+<dd><p>Dictionary containing key-value pairs found in the <code class="docutils literal notranslate"><span class="pre">enum</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.enum.ele_parse">
+<span class="sig-name descname"><span class="pre">ele_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#enum.ele_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.enum.ele_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse <code class="docutils literal notranslate"><span class="pre">enum</span></code> into its syntactic/semantic components.</p>
+<p>By recognising and parsing the inner syntax of <code class="docutils literal notranslate"><span class="pre">enum</span></code> this function identifies all elements in it
+and the values assigned to them (be it directly or implicitly by the order of the elements <code class="docutils literal notranslate"><span class="pre">enum</span></code>).
+Subsequently it represents these key-value pairs by a Python dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – Text of the whole <code class="docutils literal notranslate"><span class="pre">enum</span></code> object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - The name of the <code class="docutils literal notranslate"><span class="pre">enum</span></code>.</p></li>
+<li><p><em>dict</em> - A dictionary representing the entries in the <code class="docutils literal notranslate"><span class="pre">enum</span></code> and the values/expressions assigned to them.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.enum_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">enum_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#enum_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.enum_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>Class of a reference to an <code class="docutils literal notranslate"><span class="pre">enum</span></code> inside a C-structure.</p>
+<p>This class is used to represent occurrence of reference to <code class="docutils literal notranslate"><span class="pre">enum</span></code> inside a C-structure (a <code class="docutils literal notranslate"><span class="pre">struct</span></code> object). It can
+be of two types:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>It is only a reference to an <code class="docutils literal notranslate"><span class="pre">enum</span></code> defined elsewhere. In this case, the <a class="reference internal" href="#parsing.par_header.enum_r.form" title="parsing.par_header.enum_r.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">form</span></code></a> attribute holds the
+name of this reference.</p></li>
+<li><p>There is a nested definition of the <code class="docutils literal notranslate"><span class="pre">enum</span></code> inside this C-structure. In this case, an object of class <a class="reference internal" href="#parsing.par_header.enum" title="parsing.par_header.enum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum</span></code></a> is
+used to represent the included <code class="docutils literal notranslate"><span class="pre">enum</span></code> and it is equated to <a class="reference internal" href="#parsing.par_header.enum_r.form" title="parsing.par_header.enum_r.form"><code class="xref py py-obj docutils literal notranslate"><span class="pre">form</span></code></a>.</p></li>
+</ol>
+</div></blockquote>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.enum_r.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_header.enum_r.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the referenced <code class="docutils literal notranslate"><span class="pre">enum</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.enum_r.form">
+<span class="sig-name descname"><span class="pre">form</span></span><a class="headerlink" href="#parsing.par_header.enum_r.form" title="Link to this definition"></a></dt>
+<dd><p>Either name of the referenced <code class="docutils literal notranslate"><span class="pre">enum</span></code> or directly the object of the referenced <code class="docutils literal notranslate"><span class="pre">enum</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str or <a class="reference internal" href="#parsing.par_header.enum" title="parsing.par_header.enum">enum</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.enum_r.bites">
+<span class="sig-name descname"><span class="pre">bites</span></span><a class="headerlink" href="#parsing.par_header.enum_r.bites" title="Link to this definition"></a></dt>
+<dd><p>Number of bites that the value of this <code class="docutils literal notranslate"><span class="pre">enum</span></code> is represented by.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.enum_r.array">
+<span class="sig-name descname"><span class="pre">array</span></span><a class="headerlink" href="#parsing.par_header.enum_r.array" title="Link to this definition"></a></dt>
+<dd><p>An expression set to “-1” if the <code class="docutils literal notranslate"><span class="pre">enum</span></code> reference is not an array and to its number of
+elements (either integer value or an text expression to be later evaluated) in case it is an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.enum_r.enr_parse">
+<span class="sig-name descname"><span class="pre">enr_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#enum_r.enr_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.enum_r.enr_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the reference to its syntactic/semantic components.</p>
+<p>By looking for “{” and “}” this function first decides whether the references includes a nested <code class="docutils literal notranslate"><span class="pre">enum</span></code> or only
+and external reference. Depending on the result it either calls the class <a class="reference internal" href="#parsing.par_header.enum" title="parsing.par_header.enum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum</span></code></a> or leaves the reference as
+a text. It then continues by looking for the name, array and bites information, etc by looking at the whitespaces and brackets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – The text of the <code class="docutils literal notranslate"><span class="pre">enum</span></code> reference to be analysed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple consisting of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - The name of the referenced <code class="docutils literal notranslate"><span class="pre">enum</span></code>.</p></li>
+<li><p><em>str</em> or <a class="reference internal" href="#parsing.par_header.struct" title="parsing.par_header.struct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">struct</span></code></a> - See the attribute <a class="reference internal" href="#parsing.par_header.enum_r.form" title="parsing.par_header.enum_r.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">form</span></code></a> above.</p></li>
+<li><p><em>int</em> - See the atribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">bite</span></code> above.</p></li>
+<li><p><em>str</em> - See the attribute <a class="reference internal" href="#parsing.par_header.enum_r.array" title="parsing.par_header.enum_r.array"><code class="xref py py-attr docutils literal notranslate"><span class="pre">array</span></code></a> above.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.extern">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">extern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#extern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.extern" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>Class of external declaration of a constant.</p>
+<p>This class is a Python representation of an occurrence of external constant declaration in the C-header
+file. The inner structure of the expression is parsed and represented as its name, type (e.g. <code class="docutils literal notranslate"><span class="pre">uint8</span></code>)
+and an information on whether it is an array.</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.extern.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_header.extern.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the external declaration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.extern.flav">
+<span class="sig-name descname"><span class="pre">flav</span></span><a class="headerlink" href="#parsing.par_header.extern.flav" title="Link to this definition"></a></dt>
+<dd><p>The data type of the declaration (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;uint8&quot;</span></code>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.extern.array">
+<span class="sig-name descname"><span class="pre">array</span></span><a class="headerlink" href="#parsing.par_header.extern.array" title="Link to this definition"></a></dt>
+<dd><p>An expression set to “-1” if the declared constant is not an array and to its number of
+elements (either integer value or an text expression to be later evaluated) in case it is an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.extern.ext_parse">
+<span class="sig-name descname"><span class="pre">ext_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#extern.ext_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.extern.ext_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the external declaration of a constant into its syntactic/semantic components.</p>
+<p>By looking for whitespace characters and square brackets, parses the text of the declaration into its
+name, data type and n information on whether it is an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – The text of the declaration to be parsed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - The data type of the declaration (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;unsigned</span> <span class="pre">integer&quot;</span></code>).</p></li>
+<li><p><em>str</em> - The name of the declaration.</p></li>
+<li><p><em>str</em> - The information on its array size (see above for more detail).</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.misc_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">misc_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#misc_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.misc_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>Class of a declaration of a constant inside a C-structure.</p>
+<p>This class is a Python representation of an occurrence of constant value declaration (e.g. <code class="docutils literal notranslate"><span class="pre">uint8</span></code>) inside
+of some C-structure . The inner structure of the expression is parsed and represented as its name, bite length
+and an information on whether it is an array.</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.misc_r.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_header.misc_r.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the declared constant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.misc_r.bites">
+<span class="sig-name descname"><span class="pre">bites</span></span><a class="headerlink" href="#parsing.par_header.misc_r.bites" title="Link to this definition"></a></dt>
+<dd><p>Number of bites that the value of this constant is represented by.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.misc_r.array">
+<span class="sig-name descname"><span class="pre">array</span></span><a class="headerlink" href="#parsing.par_header.misc_r.array" title="Link to this definition"></a></dt>
+<dd><p>An expression set to “-1” if the constant is not an array and to its number of
+elements (either integer value or an text expression to be later evaluated) in case it is an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.misc_r.mir_parse">
+<span class="sig-name descname"><span class="pre">mir_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#misc_r.mir_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.misc_r.mir_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the declaration into its syntactic/semantic components.</p>
+<p>By looking at whitspaces and brackets in the string this function parses the text of the declaration into
+the name of the constant, and information about its bite-length and array-size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – The text of the constant declaration.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - The name of the constant.</p></li>
+<li><p><em>int</em> - The declared bite-length of the constant.</p></li>
+<li><p><em>str</em> - See the attribute <a class="reference internal" href="#parsing.par_header.misc_r.array" title="parsing.par_header.misc_r.array"><code class="xref py py-attr docutils literal notranslate"><span class="pre">array</span></code></a> above.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_header.str_parse">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">str_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#str_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.str_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the given string into blocks of “top-level” C-structures.</p>
+<p>By going iteratively through the string and recognising the features of standard C-syntax, this function
+first marks the positions of all C-objects (including <code class="docutils literal notranslate"><span class="pre">#define</span></code> macro declaration) and then creates an
+appropriate Python representation-object of them, which then at its initialisation further parses the inner structure of these
+objects. After going through the whole string, this function then returns all found C-objects in a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stri</strong> (<em>str</em>) – A string to be parsed/analysed into the C-objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Python representations of found C-objects, each represented by an object of child-class
+of <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_header.str_parse_r">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">str_parse_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#str_parse_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.str_parse_r" title="Link to this definition"></a></dt>
+<dd><p>Parse the given string into “2nd-order” blocks of C-structures.</p>
+<p>Unlike for <a class="reference internal" href="#parsing.par_header.str_parse" title="parsing.par_header.str_parse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str_parse</span></code></a> this time “second-order” strings (that is strings inside other already recognised
+C-objects; i.e. e.g. inner content of <code class="docutils literal notranslate"><span class="pre">struct</span></code> declaration) are expected and the parsing itslef is recursive
+(in order to account e.g. for multiple nested occurences of <code class="docutils literal notranslate"><span class="pre">struct</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offset</strong> (<em>int</em>) – Offset of this string from the start of the original file. I.e. original start index of its
+first character.</p></li>
+<li><p><strong>stri</strong> (<em>str</em>) – The string to be parsed/interpreted into its contents.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List of identified and interpreted C-object inside the original string. Each is represented by an</dt><dd><p>object which is some child-class of the class <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.struct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#struct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.struct" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>Class of declaration of a C-structure <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">...</span></code>.</p>
+<p>This class is a Python representation of an occurrence of <code class="docutils literal notranslate"><span class="pre">struct</span></code> structure in the C-header file. The inner
+structure of this … structure is represented by its name, information on whether it is packed and its
+contents/elements (which are themselves other similar Python objects).</p>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.struct.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_header.struct.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.struct.packed">
+<span class="sig-name descname"><span class="pre">packed</span></span><a class="headerlink" href="#parsing.par_header.struct.packed" title="Link to this definition"></a></dt>
+<dd><p>True if the structure is packed, false otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.struct.elements">
+<span class="sig-name descname"><span class="pre">elements</span></span><a class="headerlink" href="#parsing.par_header.struct.elements" title="Link to this definition"></a></dt>
+<dd><p>A list of elements inside this structure. Each is represented by a Python object which is
+some child-class of <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.struct.stc_parse">
+<span class="sig-name descname"><span class="pre">stc_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#struct.stc_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.struct.stc_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the <code class="docutils literal notranslate"><span class="pre">struct</span></code> C-structure into its syntactic/semantic components.</p>
+<p>By first looking for whitespace characters and “{” and then calling <a class="reference internal" href="#parsing.par_header.str_parse_r" title="parsing.par_header.str_parse_r"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str_parse_r</span></code></a>, this function parses
+the text of the <code class="docutils literal notranslate"><span class="pre">struct</span></code> object into its name, entries, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – The raw text of the <code class="docutils literal notranslate"><span class="pre">struct</span></code> C-structure in the C-header file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - The name of the C-structure.</p></li>
+<li><p><em>bool</em> - <code class="docutils literal notranslate"><span class="pre">True</span></code> if the structure is packed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p></li>
+<li><p><em>list</em> - List of elements inside the structure. Each represented by an object of
+child-class of <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a>.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.struct_r">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">struct_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#struct_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.struct_r" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">structure</span></code></a></p>
+<p>Class of a reference to a C-structure <code class="docutils literal notranslate"><span class="pre">struct</span></code> inside another.</p>
+<p>This class is used to represent occurrence of declaration of one structure inside another. It can be of two types:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>It is only a reference to a structure defined elsewhere. In this case, the <a class="reference internal" href="#parsing.par_header.struct_r.form" title="parsing.par_header.struct_r.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">form</span></code></a> attribute holds the
+name of this reference.</p></li>
+<li><p>There is a nested definition of one structure inside another. In this case, an object of class <a class="reference internal" href="#parsing.par_header.struct" title="parsing.par_header.struct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">struct</span></code></a> is
+used to represent the included structure and it is equated to <a class="reference internal" href="#parsing.par_header.struct_r.form" title="parsing.par_header.struct_r.form"><code class="xref py py-obj docutils literal notranslate"><span class="pre">form</span></code></a>.</p></li>
+</ol>
+</div></blockquote>
+<p>All <strong>parameters</strong> are passed into the <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure</span></code></a> class from which this structure also inherits all
+its <strong>attributes</strong>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.struct_r.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#parsing.par_header.struct_r.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the referenced C-structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.struct_r.form">
+<span class="sig-name descname"><span class="pre">form</span></span><a class="headerlink" href="#parsing.par_header.struct_r.form" title="Link to this definition"></a></dt>
+<dd><p>Either name of the referenced structure or directly the object of the referenced structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str or <a class="reference internal" href="#parsing.par_header.struct" title="parsing.par_header.struct">struct</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.struct_r.array">
+<span class="sig-name descname"><span class="pre">array</span></span><a class="headerlink" href="#parsing.par_header.struct_r.array" title="Link to this definition"></a></dt>
+<dd><p>An expression set to “-1” if the <code class="docutils literal notranslate"><span class="pre">struct</span></code> reference is not an array and to its number of
+elements (either integer value or an text expression to be later evaluated) in case it is an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.par_header.struct_r.str_parse">
+<span class="sig-name descname"><span class="pre">str_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#struct_r.str_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.struct_r.str_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the reference to its syntactic/semantic components.</p>
+<p>By looking for “{” and “}” this function first decides whether the references includes a nested structure or only
+and external reference. Depending on the result it either calls the class <a class="reference internal" href="#parsing.par_header.struct" title="parsing.par_header.struct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">struct</span></code></a> or leaves the reference as
+a text. It then continues by looking for the name, array information, etc by looking at the whitespaces and brackets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cont</strong> (<em>str</em>) – The text of the structure reference to be analysed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple consisting of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>str</em> - The name of the referenced structure.</p></li>
+<li><p><em>str</em> or <a class="reference internal" href="#parsing.par_header.struct" title="parsing.par_header.struct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">struct</span></code></a> - See the attribute <a class="reference internal" href="#parsing.par_header.struct_r.form" title="parsing.par_header.struct_r.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">form</span></code></a> above.</p></li>
+<li><p><em>str</em> - See the attribute <a class="reference internal" href="#parsing.par_header.struct_r.array" title="parsing.par_header.struct_r.array"><code class="xref py py-attr docutils literal notranslate"><span class="pre">array</span></code></a> above.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_header.structure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_header.</span></span><span class="sig-name descname"><span class="pre">structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_header.html#structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_header.structure" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parent class of all representations of the C-objects.</p>
+<p>This class holds properties which are shared by all Python representations of C-objects found in the
+analysed file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>typ</strong> (<em>str</em>) – The type of the C-object (e.g. <code class="docutils literal notranslate"><span class="pre">struct</span></code> or <code class="docutils literal notranslate"><span class="pre">enum</span></code>).</p></li>
+<li><p><strong>inds</strong> (<em>int</em>) – Starting index of the C-object.</p></li>
+<li><p><strong>inde</strong> (<em>int</em>) – End index of the C-object.</p></li>
+<li><p><strong>cont</strong> (<em>str</em>) – Raw text of the C-object as in the source file.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.structure.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#parsing.par_header.structure.type" title="Link to this definition"></a></dt>
+<dd><p>The type of the C-object (e.g. <code class="docutils literal notranslate"><span class="pre">struct</span></code> or <code class="docutils literal notranslate"><span class="pre">enum</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.structure.start">
+<span class="sig-name descname"><span class="pre">start</span></span><a class="headerlink" href="#parsing.par_header.structure.start" title="Link to this definition"></a></dt>
+<dd><p>Starting index of the C-object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.structure.end">
+<span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#parsing.par_header.structure.end" title="Link to this definition"></a></dt>
+<dd><p>End index of the C-object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.structure.text">
+<span class="sig-name descname"><span class="pre">text</span></span><a class="headerlink" href="#parsing.par_header.structure.text" title="Link to this definition"></a></dt>
+<dd><p>Raw text of the C-object as in the source file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_header.structure.comment">
+<span class="sig-name descname"><span class="pre">comment</span></span><a class="headerlink" href="#parsing.par_header.structure.comment" title="Link to this definition"></a></dt>
+<dd><p>List holding all found interpretable comments associated to this C-object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="parsing-par-methods-module">
+<h2>parsing.par_methods module<a class="headerlink" href="#parsing-par-methods-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.par_methods">Depository of parsing methods.</p>
+<p>This module holds various methods used for parsing of the header and normal C files and their
+subsequent interpretation into corresponding python objects.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.clean">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.clean" title="Link to this definition"></a></dt>
+<dd><p>Replace tokens with spaces.</p>
+<p>Takes a string and a list of tokens and replaces all occurences of the tokens in the string
+with an appropriate number of space so the absolute positions of unaffected parts of the
+string stay the same.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stri</strong> (<em>str</em>) – A string to be “cleaned”.</p></li>
+<li><p><strong>tokens</strong> (<em>set</em>) – A set of tokens to be replaced.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The resulting “cleaned” string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.com_parse">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">com_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#com_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.com_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse the comments in the string into blocks corresponding to singular comments.</p>
+<p>Looks at each passed comment and evaluates whether it should be interpreted or not. If yes, it then calls
+the class <a class="reference internal" href="#parsing.par_methods.comment" title="parsing.par_methods.comment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">comment</span></code></a> from it and adds this object to the list of interpreted comments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>comm</strong> (<em>list</em>) – List of strings each representing the content of a  single comment.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of found interpreted comments, each represented by an object of the <a class="reference internal" href="#parsing.par_methods.comment" title="parsing.par_methods.comment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">comment</span></code></a> class.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.par_methods.comment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#comment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.comment" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class representing an occurrence of an interpretable comment in the file, entries found in it, etc.</p>
+<p>Saves the comment text and its start/end indexes and then it tries to interpret the comment as a dictionary
+represented in the json5 format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>int</em>) – Start index of the comment in the original file.</p></li>
+<li><p><strong>end</strong> (<em>int</em>) – End index of the comment in the original file.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – Original text of the comment.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_methods.comment.start">
+<span class="sig-name descname"><span class="pre">start</span></span><a class="headerlink" href="#parsing.par_methods.comment.start" title="Link to this definition"></a></dt>
+<dd><p>Start index of the comment in the original file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_methods.comment.end">
+<span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#parsing.par_methods.comment.end" title="Link to this definition"></a></dt>
+<dd><p>End index of the comment in the original file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_methods.comment.text">
+<span class="sig-name descname"><span class="pre">text</span></span><a class="headerlink" href="#parsing.par_methods.comment.text" title="Link to this definition"></a></dt>
+<dd><p>Original text of the comment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.par_methods.comment.entries">
+<span class="sig-name descname"><span class="pre">entries</span></span><a class="headerlink" href="#parsing.par_methods.comment.entries" title="Link to this definition"></a></dt>
+<dd><p>Dictionary containing the content of the comment found in the json5 string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.erase_text">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">erase_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#erase_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.erase_text" title="Link to this definition"></a></dt>
+<dd><p>Erase all text inside quotation marks in the given string.</p>
+<p>Looks for first order quotation marks (that is, not inside another quotation marks) and
+replaces their content with matching amount of spaces so that the total length of the
+string remains the same.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stri</strong> (<em>str</em>) – The string in which the quotation marks are to be replaced.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The string with the quotation marks contents replaced.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.line_index">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">line_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#line_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.line_index" title="Link to this definition"></a></dt>
+<dd><p>Give list of indexes of line starts of the given string.</p>
+<p>Based on the newline character, looks for indexes of new lines and adds them to a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stri</strong> (<em>str</em>) – The string to be analysed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of indexes at which new lines start.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.preproc_eval">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">preproc_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variab</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#preproc_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.preproc_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate whether a pre-processing condition holds.</p>
+<p>Looks into config file whether the passed pre-processing condition holds. If the condition name
+does not occur in the config file, asks the user what boolean value it should assign to it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>variab</strong> (<em>str</em>) – Name of the pre-processing variable/condition to be evaluated.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Truth-value of the condition.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.preproc_filter">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">preproc_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#preproc_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.preproc_filter" title="Link to this definition"></a></dt>
+<dd><p>Filter out what parts of the C-code should be further considered based on preprocessor directives.</p>
+<p>First, this function looks for blocks pre-processor logic using the <a class="reference internal" href="#parsing.par_methods.preproc_parse" title="parsing.par_methods.preproc_parse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preproc_parse</span></code></a> function. It then
+the condition associated with this logic with <a class="reference internal" href="#parsing.par_methods.preproc_eval" title="parsing.par_methods.preproc_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preproc_eval</span></code></a> and depending on the result, decides what
+parts of the string should be deleted (replaced by equal number of spaces). Finally it performs this replacement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stri</strong> (<em>str</em>) – The text to be filtered on the basis of pre-processor logic.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The text with the pre-processor logic applied.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.preproc_parse">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">preproc_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#preproc_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.preproc_parse" title="Link to this definition"></a></dt>
+<dd><p>Parse C-preprocessor conditional syntax into logic blocks.</p>
+<p>Looks for logical C-preprocessor directives (specifically <code class="docutils literal notranslate"><span class="pre">#ifdef</span></code>, <code class="docutils literal notranslate"><span class="pre">#ifndef</span></code>, etc.), and marks
+the start/end indices of the corresponding “logic blocks” (i.e. sections beween <code class="docutils literal notranslate"><span class="pre">#ifdef</span></code> and <code class="docutils literal notranslate"><span class="pre">#else</span></code>).
+Then returns these block indexes in a list. Also performs some checks along the way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stri</strong> (<em>str</em>) – The string to be analysed/parsed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of list of indexes denoting start/end positions of the logic blocks.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.par_methods.split_comment">
+<span class="sig-prename descclassname"><span class="pre">parsing.par_methods.</span></span><span class="sig-name descname"><span class="pre">split_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/par_methods.html#split_comment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.par_methods.split_comment" title="Link to this definition"></a></dt>
+<dd><p>Split the given string into a section with C comments and a section without them.</p>
+<p>Goes iteratively through the string and based on single/multi-line C-comment syntax, recognised
+blocks of comments and marks their start/end positions. It then constructs versions of the passed
+string with the comment/code blocks ommited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stri</strong> (<em>str</em>) – The string to be split into comments/code.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A tuple consisting of:</dt><dd><ul class="simple">
+<li><p><em>str</em> - The original string with comments omitted.</p></li>
+<li><p><em>str</em> - The original string with C-code omitted.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="parsing-parser-main-module">
+<h2>parsing.parser_main module<a class="headerlink" href="#parsing-parser-main-module" title="Link to this heading"></a></h2>
+<p id="module-parsing.parser_main">The main parsing module.</p>
+<p>This module is a starting point for parsing of C-files and holds class which plays the role of their interpretation.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="parsing.parser_main.file">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">parsing.parser_main.</span></span><span class="sig-name descname"><span class="pre">file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/parser_main.html#file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.parser_main.file" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class representing the file being analysed and its internal structure in an easily Python-accessible format.</p>
+<p>During creation this class goes through multiple steps of parsing/interpretation using methods in <a class="reference internal" href="#module-parsing.par_header" title="parsing.par_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parsing.par_header</span></code></a>, <a class="reference internal" href="#module-parsing.par_cfile" title="parsing.par_cfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parsing.par_cfile</span></code></a>:
+and <a class="reference internal" href="#module-parsing.par_methods" title="parsing.par_methods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parsing.par_methods</span></code></a>. The steps are as follows:</p>
+<ol class="arabic simple">
+<li><p>Get general information about the file (length, line indexes)</p></li>
+<li><p>Separate text in comment and the code (while keeping the absolute positions in the file).</p></li>
+<li><p>Process any C-preprocessor logic that’s in the code.</p></li>
+<li><p>Parse the resulting code into Python representations of the corresponding C-objects.</p></li>
+<li><p>Parse the comments into intepretable sections (written in json5) and interpret their content.</p></li>
+<li><p>Create links between the found C-objects and interterpretable comments</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stri</strong> (<em>str</em>) – The content of the file to be parsed/analysed.</p></li>
+<li><p><strong>header</strong> (<em>bool</em>) – Parameter denoting whether file is a header or normal C file.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.parser_main.file.text">
+<span class="sig-name descname"><span class="pre">text</span></span><a class="headerlink" href="#parsing.parser_main.file.text" title="Link to this definition"></a></dt>
+<dd><p>Text of the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.parser_main.file.max_position">
+<span class="sig-name descname"><span class="pre">max_position</span></span><a class="headerlink" href="#parsing.parser_main.file.max_position" title="Link to this definition"></a></dt>
+<dd><p>Length of the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.parser_main.file.lines">
+<span class="sig-name descname"><span class="pre">lines</span></span><a class="headerlink" href="#parsing.parser_main.file.lines" title="Link to this definition"></a></dt>
+<dd><p>List of positions of line starts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.parser_main.file.text_o">
+<span class="sig-name descname"><span class="pre">text_o</span></span><a class="headerlink" href="#parsing.parser_main.file.text_o" title="Link to this definition"></a></dt>
+<dd><p>File text with only code (without comments).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.parser_main.file.text_c">
+<span class="sig-name descname"><span class="pre">text_c</span></span><a class="headerlink" href="#parsing.parser_main.file.text_c" title="Link to this definition"></a></dt>
+<dd><p>File text with only comments (without code).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.parser_main.file.text_f">
+<span class="sig-name descname"><span class="pre">text_f</span></span><a class="headerlink" href="#parsing.parser_main.file.text_f" title="Link to this definition"></a></dt>
+<dd><p>File (with code) after sorting out the pre-processor logic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.parser_main.file.structures">
+<span class="sig-name descname"><span class="pre">structures</span></span><a class="headerlink" href="#parsing.parser_main.file.structures" title="Link to this definition"></a></dt>
+<dd><p>List of Python representations of C-objects found in the file.</p>
+<p>The Python representations are child classes of either <a class="reference internal" href="#parsing.par_cfile.instance_og" title="parsing.par_cfile.instance_og"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parsing.par_cfile.instance_og</span></code></a> or <a class="reference internal" href="#parsing.par_header.structure" title="parsing.par_header.structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parsing.par_header.structure</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.parser_main.file.comments">
+<span class="sig-name descname"><span class="pre">comments</span></span><a class="headerlink" href="#parsing.parser_main.file.comments" title="Link to this definition"></a></dt>
+<dd><p>List of found interpretable comments which are represented using <a class="reference internal" href="#parsing.par_methods.comment" title="parsing.par_methods.comment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parsing.par_methods.comment</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="parsing.parser_main.file.link">
+<span class="sig-name descname"><span class="pre">link</span></span><a class="headerlink" href="#parsing.parser_main.file.link" title="Link to this definition"></a></dt>
+<dd><p>List of pairs of comments and the Python representation of C-objects they belong to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="parsing.parser_main.file.linker">
+<span class="sig-name descname"><span class="pre">linker</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/parser_main.html#file.linker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.parser_main.file.linker" title="Link to this definition"></a></dt>
+<dd><p>Link each comment to a corresponding C-object in the file</p>
+<p>Goes one by one through comments and searches for their corresponding structure.
+For the closes found match, creates link from the comment to the structure and from the structure to the comment
+(by generating attributes for their respectives classes) and returns them in a list of pairs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pairs of comments and their corresponding structures.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of pairs</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parsing.parser_main.main">
+<span class="sig-prename descclassname"><span class="pre">parsing.parser_main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/home/vachaj11/Documents/MIB/start/src/PUS_TmDefs.h'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parsing/parser_main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parsing.parser_main.main" title="Link to this definition"></a></dt>
+<dd><p>Create a parsed python representation of a file.</p>
+<p>Opens file, depending on its ending chooses correct parser and lets it run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Path to file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>File object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#parsing.parser_main.file" title="parsing.parser_main.file">file</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="main.html" class="btn btn-neutral float-left" title="main module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="construction.html" class="btn btn-neutral float-right" title="construction package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Josef Vácha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
