@@ -1,1 +1,3 @@
 sphinx-rtd-theme
+json5
+PySide6
