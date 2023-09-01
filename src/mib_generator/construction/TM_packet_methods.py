@@ -3,8 +3,8 @@
 This module holds methods that help with formatting of parsed data into monitoring packet characteristics. They are usually
 concerned with value evaluation, bite counting, type identification etc. I.e. mostly kind of housekeeping jobs.
 """
-import parsing.load as load
-import data.longdata as longdata
+import mib_generator.parsing.load as load
+import mib_generator.data.longdata as longdata
 from copy import copy
 
 
@@ -13,7 +13,7 @@ def apidnum(name):
 
     This method is probably unnecessarily complicated because I tried to follow a logic of C here, which seemed to have a
     missing link anyways. But what it does is simply looking up the value of apid based on its name. This value is stored
-    in an array in the ``.c`` telemetry file and hence isn't included in the standard :obj:`parsing.load.enumerations` and
+    in an array in the ``.c`` telemetry file and hence isn't included in the standard :obj:`mib_generator.parsing.load.enumerations` and
     hence has to be evaluated this more complicated way.
 
     Args:
@@ -34,7 +34,7 @@ def evalu(string):
     """Evaluate the given expression using all known substitutions, macros, etc.
 
     This methods tries to evaluate the passed expression using various methods. First it tries a simple integer conversion,
-    then it tries to evaluate it using the dictionary :obj:`parsing.load.enumerations` which stores all the possible substitutions
+    then it tries to evaluate it using the dictionary :obj:`mib_generator.parsing.load.enumerations` which stores all the possible substitutions
     found across the code. Then even if this doesn't work (e.g. the string contains algebraic expressions), tries to use Python's
     ``eval()`` function. If even this fails, it evaluates the expression as ``-1``.
 
@@ -62,7 +62,8 @@ def getptcpcf(entry, size):
     """Get ptc and pfc values from the size and nature of the given entry.
 
     From data type (in C) of the entry and information in its comments, tries to deduce what SCOS data type given by the ptc|pcf combination it
-    should be assigned. Uses data from :obj:`data.longdata.time_pfc` and :obj:`data.longdata.uint_pfc`.
+    should be assigned. Uses data from :obj:`mib_generator.data.longdata.time_pfc` and
+    :obj:`mib_generator.data.longdata.uint_pfc`.
 
     Args:
         entry (parsing.par_header.misc_r): The entry who's value is to be evaluated.
@@ -122,7 +123,7 @@ def header_search(typ):
     """Search for corresponding header structures of the packet based on information in the comments.
 
     Given the name of the packet as it appears in the TM ``.c`` file, this method searches among structures
-    in :obj:`parsing.load.TmH` (the TM ``.h`` file) for a corresponding packet/packets description (list of parameters, etc).
+    in :obj:`mib_generator.parsing.load.TmH` (the TM ``.h`` file) for a corresponding packet/packets description (list of parameters, etc).
     More packet definitions can correspond to a single type (they then differ in additional packet identifiers) and hence
     more than one such structures can be found sometimes.
 
@@ -167,7 +168,7 @@ def h_analysis(h_struct):
         h_struct (parsing.par_header.struct): The packet structure from which the parameters are to be expanded.
 
     Returns:
-        list: List of parameters found inside the structure. Each is of type :obj:`parsing.par_header.misc_r`.
+        list: List of parameters found inside the structure. Each is of type :obj:`mib_generator.parsing.par_header.misc_r`.
     """
     entries = []
     if not (type(h_struct) is int or type(h_struct) is None):
@@ -212,7 +213,7 @@ def var_get(entries):
     instead.
 
     Args:
-        entries (list): List of parameters to be searched for vpd. Each of type :obj:`parsing.par_header.misc_r`.
+        entries (list): List of parameters to be searched for vpd. Each of type :obj:`mib_generator.parsing.par_header.misc_r`.
 
     Returns:
         list: List of indices (or their negations in case of fixed repetitions) at which vpd parameters were found.
@@ -233,7 +234,7 @@ def count_size(entries):
     of the whole list and bite-positions of start of each parameter within it.
 
     Args:
-        entries (list): List of parameters who's length is to be determined. Each of type :obj:`parsing.par_header.misc_r`.
+        entries (list): List of parameters who's length is to be determined. Each of type :obj:`mib_generator.parsing.par_header.misc_r`.
 
     Returns:
         tuple: A tuple consisting of:
@@ -267,7 +268,7 @@ def pi_sid(entries, positions):
     the start of the packet.
 
     Args:
-        entries (list): List of entries (of type :obj:`parsing.par_header.misc_r`) among which the additional identification field
+        entries (list): List of entries (of type :obj:`mib_generator.parsing.par_header.misc_r`) among which the additional identification field
             is searched for.
         positions (list): List of position (bite-offests from the start of the packet) of the parameters in the packet.
 

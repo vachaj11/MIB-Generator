@@ -3,8 +3,13 @@
 This module holds methods that help with formatting of parsed data into TC packet and commands characteristics. They are usually
 concerned with value evaluation, bite counting, type identification etc. I.e. mostly kind of housekeeping jobs.
 """
-import parsing.load as load
-from construction.TM_packet_methods import count_size, evalu, getptcpcf, categfromptc
+import mib_generator.parsing.load as load
+from mib_generator.construction.TM_packet_methods import (
+    count_size,
+    evalu,
+    getptcpcf,
+    categfromptc,
+)
 from copy import copy
 
 
@@ -14,10 +19,10 @@ def find_header(file):
     Based on its name, find a structure which corresponds to a TC header. Otherwise return a warning.
 
     Args:
-        file (:obj:`parsing.parser_main.file`): File (in Python representation) which is searched for the header.
+        file (parsing.parser_main.file): File (in Python representation) which is searched for the header.
 
     Returns:
-        :obj:`parsing.par_cfile.struct`: The structure identifies as the header.
+        parsing.par_cfile.struct: The structure identifies as the header.
     """
     for i in file.structures:
         if "name" in i.__dir__() and i.name == "TcHead":
@@ -35,10 +40,10 @@ def packet_search(file):
     here all packets' definitions have to be found in the first place.
 
     Args:
-        file (:obj:`parsing.parser_main.file`): File (in Python representation) which is searched for the command definitions.
+        file (:obj:`mib_generator.parsing.parser_main.file`): File (in Python representation) which is searched for the command definitions.
 
     Returns:
-        list: List of command definition structures found in the file. Each an instance of :obj:`parsing.par_header.struct`
+        list: List of command definition structures found in the file. Each an instance of :obj:`mib_generator.parsing.par_header.struct`
     """
     packets = []
     for i in file.structures:
@@ -68,9 +73,9 @@ def h_analysis(h_struct):
         tuple: A tuple consisting of:
 
             * *list* - List of parameters found inside the structure relating to the packet header. Each is of type
-              :obj:`parsing.par_header.misc_r`.
+              :obj:`mib_generator.parsing.par_header.misc_r`.
             * *list* - List of parameters found inside the structure relating to the command content. Each is of type
-              :obj:`parsing.par_header.misc_r`.
+              :obj:`mib_generator.parsing.par_header.misc_r`.
     """
     entries_head = []
     entries = []
@@ -106,7 +111,7 @@ def get_gr_sizes(entries):
     where position of each counter corresponds to a group size and the remaining entries are left 0.
 
     Args:
-        entries (list): List of entries which are to be analysed for command groups. Each of type :obj:`parsing.par_header.misc_r`.
+        entries (list): List of entries which are to be analysed for command groups. Each of type :obj:`mib_generator.parsing.par_header.misc_r`.
 
     Returns:
         list: List parallel to the inputted one with "counter" parameters having the value of their group-sizes and all other values are ``0``.
@@ -137,7 +142,7 @@ def param_list(entries):
     fixed area. It then creates a list in which parameters are marked by their original index and fixed areas by ``-1``.
 
     Args:
-        entries (list): List of entries which are to be analysed. Each of type :obj:`parsing.par_header.misc_r`.
+        entries (list): List of entries which are to be analysed. Each of type :obj:`mib_generator.parsing.par_header.misc_r`.
     Returns:
         list: List parallel to the inputted one with parameters having the value of their index and fixed areas a value of ``-1``.
     """

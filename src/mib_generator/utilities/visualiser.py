@@ -24,8 +24,8 @@ from PySide6.QtWidgets import (
 )
 import sys, multiprocessing
 
-import parsing.load as load
-import data.longdata as longdata
+import mib_generator.parsing.load as load
+import mib_generator.data.longdata as longdata
 
 policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
 
@@ -210,7 +210,8 @@ class Ui_MainWindow(object):
         This method when called opens a window showing the passed comment.
 
         Args:
-            comment (list): List of comments to be shown in the new window. Each of type :obj:`parsing.par_methods.comment`.
+            comment (list): List of comments to be shown in the new window. Each of
+                type :obj:`mib_generator.parsing.par_methods.comment`.
         """
         self.a = CommentWindow(comment)
         self.a.show()
@@ -233,7 +234,8 @@ def getdata(struct):
     From a list of attributes that the passed object has, extracts the interesting ones (which are not buildins for any Python
     object) and if they have showable value (their value is either ``str`` or ``int`` and it isn't the whole text of the
     corresponding C code found in the original C-file), adds this attribute-value pair to a list. It also tries to substitute
-    the name of the attribute with a more human-readable name by looking it up in :obj:`data.longdata.translation`.
+    the name of the attribute with a more human-readable name by looking it up in
+    :obj:`mib_generator.data.longdata.translation`.
 
     Args:
         struct (any Python object really): The object who's attributes are to be extracted.

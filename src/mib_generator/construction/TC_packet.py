@@ -5,25 +5,25 @@ entries for MIB databases. These classes represent the TC commands only in the s
 form any possible information that could be found relating to that command including the entries in various MIB tables that
 correspond to it.
 """
-import parsing.load as load
-import construction.TC_packet_methods as pm
+import mib_generator.parsing.load as load
+import mib_generator.construction.TC_packet_methods as pm
 
 
 class TC_header:
     """Class representing the TC header common to all TC-packets.
 
     This class is an abstract representation of a TC packet header with all of its properties, entries and corresponding MIB tables.
-    It is created from passed :obj:`parsing.par_header.struct` object and and subsequently analysed using included methods into
+    It is created from passed :obj:`mib_generator.parsing.par_header.struct` object and and subsequently analysed using included methods into
     the entries in various TC-side MIB tables.
 
     Args:
         structure (parsing.par_cfile.struct):  An object corresponding to a description of this packet-header found in the
-            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).
+            :obj:`mib_generator.parsing.load.TcH` file (i.e. the TC ``.h`` file).
 
     Attributes:
         structure (parsing.par_cfile.struct): An object corresponding to a description of this packet found in the
-            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).
-        entries (list): List of entries found inside the TC-header. Each is an instance of :obj:`parsing.par_header.misc_r`.
+            :obj:`mib_generator.parsing.load.TcH` file (i.e. the TC ``.h`` file).
+        entries (list): List of entries found inside the TC-header. Each is an instance of :obj:`mib_generator.parsing.par_header.misc_r`.
         size (int): Size of the packet header (joint size of all its entries) in bytes.
         positions (list): List of starting positions of entries in the TC-header packet. Each entry is an integer representing an
             offset from the header start.
@@ -143,22 +143,22 @@ class TC_packet:
     """Class representing a TC-packet/command and its various properties.
 
     This class is an abstract representation of a TC command with all of its properties, entries and corresponding MIB tables.
-    It is created from passed :obj:`parsing.par_header.struct` and :obj:`TC_header` objects and and subsequently analysed using
+    It is created from passed :obj:`mib_generator.parsing.par_header.struct` and :obj:`TC_header` objects and and subsequently analysed using
     included methods into the entries in various TC-side MIB tables.
 
     Args:
         h_structure (parsing.par_header.struct):  An object corresponding to a description of this command found in the
-            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).
+            :obj:`mib_generator.parsing.load.TcH` file (i.e. the TC ``.h`` file).
         header (TC_header): A TC-header included at the start of the packet in which the command in question is send.
 
     Attributes:
         h_structure (parsing.par_header.struct):  An object corresponding to a description of this command found in the
-            :obj:`parsing.load.TcH` file (i.e. the TC ``.h`` file).
+            :obj:`mib_generator.parsing.load.TcH` file (i.e. the TC ``.h`` file).
         header (TC_header): A TC-header included at the start of the packet in which the command in question is send.
         h_entries (list): List of entries that relate to the header found inside the command definition. Each is an instance of
-            :obj:`parsing.par_header.misc_r`.
+            :obj:`mib_generator.parsing.par_header.misc_r`.
         entries (list): List of entries that do not relate to the headerfound inside the command definition. Each is an instance
-            of :obj:`parsing.par_header.misc_r`.
+            of :obj:`mib_generator.parsing.par_header.misc_r`.
         size (int): Size of the command definition (joint size of all parameters in :attr:`entries`) in bytes.
         positions (list): List of starting positions of :attr:`entries` in the command definition. Each entry is an integer representing an
             offset from the start.

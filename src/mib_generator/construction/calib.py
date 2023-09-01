@@ -4,7 +4,7 @@ This module puts together all classes and function that represent the calibratio
 These representations only collect all information about the structure of the calibrations and its corresponding MIB tables
 in a structured form (but are not functional themselves).
 """
-import parsing.load as load
+import mib_generator.parsing.load as load
 
 
 def cur_update(packet, cal):
@@ -95,7 +95,7 @@ def calib_extract(comments):
     dictionary where they are joined in lists by their types.
 
     Args:
-        comments (list): List of interpreted comments. Each of type :obj:`parsing.par_methods.comment`.
+        comments (list): List of interpreted comments. Each of type :obj:`mib_generator.parsing.par_methods.comment`.
 
     Returns:
         dict: A dictionary holding lists of interpreted calibrations sorted by their types. Each calibration is of some
@@ -127,7 +127,7 @@ def decal_extract(comments):
     list of them.
 
     Args:
-        comments (list): List of interpreted comments. Each of type :obj:`parsing.par_methods.comment`.
+        comments (list): List of interpreted comments. Each of type :obj:`mib_generator.parsing.par_methods.comment`.
 
     Returns:
         list: A list of all found decalibrations. Each of the type :obj:`decalib`.
@@ -576,7 +576,7 @@ def verif_extract(comments):
     list of them.
 
     Args:
-        comments (list): List of interpreted comments. Each of type :obj:`parsing.par_methods.comment`.
+        comments (list): List of interpreted comments. Each of type :obj:`mib_generator.parsing.par_methods.comment`.
 
     Returns:
         list: A list of all found verifications. Each of the type :obj:`verification`.

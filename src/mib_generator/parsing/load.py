@@ -1,7 +1,7 @@
 """Central location from which other modules can source data from the parsed C-files.
 
 This module is initialised in the first step of the MIB construction process. At its initialisation the C-files
-are loaded from the defined paths, are parsed using the :obj:`parsing.parser_main.main` method and are
+are loaded from the defined paths, are parsed using the :obj:`mib_generator.parsing.parser_main.main` method and are
 subsequently available for other scripts throughout the rest of the MIB construction process. The only other
 method here is :obj:`extr_values` which serves the purpose creating a global evaluation dictionary holding
 values from all header enums, macros, etc...
@@ -17,7 +17,7 @@ Attributes:
 import json5
 import os
 
-import parsing.parser_main as par
+import mib_generator.parsing.parser_main as par
 
 file_path = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), "data", "paths.json5"
@@ -44,13 +44,13 @@ except:
 
 def extr_values(file):
     """Create a dictionary from constants, ``enum`` correspondences, etc... in the given file.
-    
+
     Goes through all objects in the parsed file and for each ``enum`` and macro, appends the name-value
     pairs present to a dictionary (which represents the "global" evaluation in the file).
-    
+
     Args:
         file (parsing.parser_main.file): File from which the evaluation dictionary is to be extracted.
-        
+
     Returns:
         dict: A dictionary with all possible "global" evaluation found in the given file.
     """

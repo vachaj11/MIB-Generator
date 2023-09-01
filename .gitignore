@@ -4,3 +4,6 @@ MIB
 out.txt
 **/out.txt
 tmp
+dist
+*.egg
+*.egg-info

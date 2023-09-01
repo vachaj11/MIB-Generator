@@ -5,7 +5,7 @@ entries for MIB databases. These classes represent the monitoring packets only i
 form any possible information that could be found relating to that packet including the entries in various MIB tables that
 correspond to it.
 """
-import construction.TM_packet_methods as pm
+import mib_generator.construction.TM_packet_methods as pm
 
 
 class TM_header:
@@ -21,7 +21,7 @@ class TM_header:
     Attributes:
         structure (parsing.par_header.struct): The structure found in the header file (in its Python representation)
             which describes the common TM header.
-        entries (list): List of entries found inside the TM header. Each is an instance of :obj:`parsing.par_header.misc_r`.
+        entries (list): List of entries found inside the TM header. Each is an instance of :obj:`mib_generator.parsing.par_header.misc_r`.
         size (int): Size of the whole TM header in bytes.
         positions (list): List of starting positions of entries in the TM header. Each entry is an integer representing an
             offset from the header start.
@@ -38,10 +38,10 @@ class TM_header:
         Based on its name, find a structure which corresponds to the TM header. Otherwise return a warning.
 
         Args:
-            file (:obj:`parsing.parser_main.file`): File (in Python representation) which is searched for the header.
+            file (:obj:`mib_generator.parsing.parser_main.file`): File (in Python representation) which is searched for the header.
 
         Returns:
-            :obj:`parsing.par_header.struct`: The structure identifies as the header.
+            :obj:`mib_generator.parsing.par_header.struct`: The structure identifies as the header.
         """
         for i in file.structures:
             methods = i.__dir__()
@@ -54,24 +54,24 @@ class TM_packet:
     """Class representing a TM packet type and its various properties.
 
     This class is an abstract representation of a TM packet with all of its properties, entries and corresponding MIB tables.
-    It is created from passed structures found in the :obj:`parsing.load.TmH` and :obj:`parsing.load.TmC` (Python representations
+    It is created from passed structures found in the :obj:`mib_generator.parsing.load.TmH` and :obj:`mib_generator.parsing.load.TmC` (Python representations
     of the two files describing telemetry packets) and subsequently using included methods analysed into the entries in various
     telemetry-side MIB tables.
 
     Args:
         structure (parsing.par_cfile.struct): An object corresponding to a description of this packet found in the
-            :obj:`parsing.load.TmC` file (i.e. the telemetry ``.c`` file).
+            :obj:`mib_generator.parsing.load.TmC` file (i.e. the telemetry ``.c`` file).
         h_structure (parsing.par_header.struct): An object corresponding to a description of this packet found in the
-            :obj:`parsing.load.TmH` file (i.e. the telemetry ``.h`` file).
+            :obj:`mib_generator.parsing.load.TmH` file (i.e. the telemetry ``.h`` file).
         header (TM_header): The header structure included in the packet.
 
     Attributes:
         structure (parsing.par_cfile.struct): An object corresponding to a description of this packet found in the
-            :obj:`parsing.load.TmC` file (i.e. the telemetry ``.c`` file).
+            :obj:`mib_generator.parsing.load.TmC` file (i.e. the telemetry ``.c`` file).
         h_structure (parsing.par_header.struct): An object corresponding to a description of this packet found in the
-            :obj:`parsing.load.TmH` file (i.e. the telemetry ``.h`` file).
+            :obj:`mib_generator.parsing.load.TmH` file (i.e. the telemetry ``.h`` file).
         header (TM_header): The header structure included in the packet.
-        entries (list): List of entries found inside the TM packet. Each is an instance of :obj:`parsing.par_header.misc_r`.
+        entries (list): List of entries found inside the TM packet. Each is an instance of :obj:`mib_generator.parsing.par_header.misc_r`.
         var_entries (list): List of entries which are subject to variable packet definition. For every such entry, the index
             of this entry (w.r.t. :attr:`entries`) is added to this list (or its negated value in case it is a fixed repetition).
         size (int): Size of the packet (joint size of all its entries) in bytes.
@@ -153,7 +153,7 @@ class TM_packet:
 
         Creates a dictionary where each key-value pair corresponds to an entry in one column of the pic table (with the key being
         the name of the column and value the entry to be filled in). Here most of the work is done at the search of the ``sid`` entry
-        of the packet (which is done using :obj:`construction.TM_packet_methods.pi_sid` method) and extracting information about additional packet
+        of the packet (which is done using :obj:`mib_generator.construction.TM_packet_methods.pi_sid` method) and extracting information about additional packet
         identifiers from it.
 
         Because of how these tables are created. I can't initially respect the requirement that there should be only one unique

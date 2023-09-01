@@ -9,15 +9,15 @@ import os
 
 def clean(stri, tokens):
     """Replace tokens with spaces.
-    
+
     Takes a string and a list of tokens and replaces all occurences of the tokens in the string
     with an appropriate number of space so the absolute positions of unaffected parts of the
     string stay the same.
-    
+
     Args:
         stri (str): A string to be "cleaned".
         tokens (set): A set of tokens to be replaced.
-        
+
     Returns:
         str: The resulting "cleaned" string.
     """
@@ -29,14 +29,14 @@ def clean(stri, tokens):
 
 def erase_text(stri):
     """Erase all text inside quotation marks in the given string.
-    
+
     Looks for first order quotation marks (that is, not inside another quotation marks) and
     replaces their content with matching amount of spaces so that the total length of the
     string remains the same.
-    
+
     Args:
         stri (str): The string in which the quotation marks are to be replaced.
-        
+
     Returns:
         str: The string with the quotation marks contents replaced.
     """
@@ -60,14 +60,14 @@ def erase_text(stri):
 
 def line_index(stri):
     """Give list of indexes of line starts of the given string.
-    
+
     Based on the newline character, looks for indexes of new lines and adds them to a list.
-    
+
     Args:
         stri (str): The string to be analysed.
-        
+
     Returns:
-        list: List of indexes at which new lines start. 
+        list: List of indexes at which new lines start.
     """
     starts = []
     for i in range(len(stri)):
@@ -78,19 +78,19 @@ def line_index(stri):
 
 def split_comment(stri):
     """Split the given string into a section with C comments and a section without them.
-    
+
     Goes iteratively through the string and based on single/multi-line C-comment syntax, recognised
     blocks of comments and marks their start/end positions. It then constructs versions of the passed
     string with the comment/code blocks ommited.
-    
+
     Args:
         stri (str): The string to be split into comments/code.
-        
+
     Returns:
         tuple: A tuple consisting of:
             * *str* - The original string with comments omitted.
             * *str* - The original string with C-code omitted.
-            
+
     """
     mod = (
         0  # 0 for normal content, 1 for '...', 2 for "...", 3 for /* ...*/ and 4 for //
@@ -149,14 +149,14 @@ def split_comment(stri):
 
 def preproc_parse(stri):
     """Parse C-preprocessor conditional syntax into logic blocks.
-    
+
     Looks for logical C-preprocessor directives (specifically ``#ifdef``, ``#ifndef``, etc.), and marks
     the start/end indices of the corresponding "logic blocks" (i.e. sections beween ``#ifdef`` and ``#else``).
     Then returns these block indexes in a list. Also performs some checks along the way.
-    
+
     Args:
         stri (str): The string to be analysed/parsed.
-        
+
     Returns:
         list: List of list of indexes denoting start/end positions of the logic blocks.
     """
@@ -195,16 +195,16 @@ def preproc_parse(stri):
 
 def preproc_eval(variab):
     """Evaluate whether a pre-processing condition holds.
-    
+
     Looks into config file whether the passed pre-processing condition holds. If the condition name
     does not occur in the config file, asks the user what boolean value it should assign to it.
-    
+
     Args:
         variab (str): Name of the pre-processing variable/condition to be evaluated.
-        
+
     Returns:
         bool: Truth-value of the condition.
-    
+
     """
     file_path = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
@@ -220,14 +220,14 @@ def preproc_eval(variab):
 
 def preproc_filter(stri):
     """Filter out what parts of the C-code should be further considered based on preprocessor directives.
-    
+
     First, this function looks for blocks pre-processor logic using the :obj:`preproc_parse` function. It then
     the condition associated with this logic with :obj:`preproc_eval` and depending on the result, decides what
     parts of the string should be deleted (replaced by equal number of spaces). Finally it performs this replacement.
-    
+
     Args:
         stri (str): The text to be filtered on the basis of pre-processor logic.
-        
+
     Returns:
         str: The text with the pre-processor logic applied.
     """
@@ -263,13 +263,13 @@ def preproc_filter(stri):
 
 def com_parse(comm):
     """Parse the comments in the string into blocks corresponding to singular comments.
-    
+
     Looks at each passed comment and evaluates whether it should be interpreted or not. If yes, it then calls
     the class :obj:`comment` from it and adds this object to the list of interpreted comments.
-    
+
     Args:
         comm (list): List of strings each representing the content of a  single comment.
-        
+
     Returns:
         list: List of found interpreted comments, each represented by an object of the :obj:`comment` class.
     """
@@ -292,15 +292,15 @@ def com_parse(comm):
 
 class comment:
     """Class representing an occurrence of an interpretable comment in the file, entries found in it, etc.
-    
+
     Saves the comment text and its start/end indexes and then it tries to interpret the comment as a dictionary
     represented in the json5 format.
-    
+
     Args:
         start (int): Start index of the comment in the original file.
         end (int): End index of the comment in the original file.
         text (str): Original text of the comment.
-    
+
     Attributes:
         start (int): Start index of the comment in the original file.
         end (int): End index of the comment in the original file.

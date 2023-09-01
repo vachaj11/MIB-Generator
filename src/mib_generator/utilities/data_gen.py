@@ -1,5 +1,5 @@
 """This is just a quick script that helped me automate translating the information about structure and characteristics
-of MIB tables into Python (now stored in :obj:`data.longdata`).
+of MIB tables into Python (now stored in :obj:`mib_generator.data.longdata`).
 """
 a = '    {"name": "'
 b = '", "type": ["'
