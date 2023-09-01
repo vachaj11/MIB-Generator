@@ -15,20 +15,20 @@ Welcome to MIB Generator's documentation!
    :maxdepth: 1
    :caption: Documentation:
 
-   about
-   usage
-   change
+   About <about>
+   Installation and usage <usage>
+   Changing the code <change>
 
 .. toctree::
    :maxdepth: 1
-   :caption: Modules and packages
+   :caption: Sub-packages
    
-   main
-   parsing
-   construction
-   generation
-   data
-   utilities
+   Main sub-package <mib_generator.main>
+   Parsing sub-package <mib_generator.parsing>
+   Construction sub-package <mib_generator.construction>
+   Generation sub-package <mib_generator.generation>
+   Data sub-package <mib_generator.data>
+   Utilities sub-package <mib_generator.utilities>
 
 Indices
 =======
