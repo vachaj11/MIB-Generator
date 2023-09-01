@@ -19,18 +19,26 @@ import os
 
 import mib_generator.parsing.parser_main as par
 
-file_path = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)), "data", "paths.json5"
-)
-file = open(file_path, "r")
-paths = json5.load(file)
-file.close()
+try:
+    file_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)), "data", "paths.json5"
+    )
+    file = open(file_path, "r")
+    paths = json5.load(file)
+    file.close()
 
-TmC_path = paths["TmFile"]
-TmH_path = paths["TmHeader"]
-TcH_path = paths["TcHeader"]
-TcTmH_path = paths["TcTmHeader"]
-out_dir = paths["OutDir"]
+    TmC_path = paths["TmFile"]
+    TmH_path = paths["TmHeader"]
+    TcH_path = paths["TcHeader"]
+    TcTmH_path = paths["TcTmHeader"]
+    out_dir = paths["OutDir"]
+except:
+    print("Error:\tFailed to locate one of the C files.")
+    TmC_path = ""
+    TmH_path = ""
+    TcH_path = ""
+    TcTmH_path = ""
+    out_dir = ""
 
 try:
     TmH = par.main(TmH_path)
@@ -38,8 +46,11 @@ try:
     TcTmH = par.main(TcTmH_path)
     TmC = par.main(TmC_path)
 except:
-    print("Error:\tFailed to load one of the C files")
-    exit()
+    print("Error:\tFailed to load one of the C files.")
+    TmH = None
+    TcH = None
+    TcTmH = None
+    TmC = None
 
 
 def extr_values(file):
@@ -72,8 +83,11 @@ def extr_values(file):
                 lis[name] = value
     return lis
 
-
-enum1 = extr_values(TmH)
-enum2 = extr_values(TcTmH)
-enum3 = extr_values(TcH)
-enumerations = enum1 | enum2 | enum3
+try:
+    enum1 = extr_values(TmH)
+    enum2 = extr_values(TcTmH)
+    enum3 = extr_values(TcH)
+    enumerations = enum1 | enum2 | enum3
+except:
+    print("Warn:\tFailed to construct the list of available enumerations.")
+    enumerations = {}
