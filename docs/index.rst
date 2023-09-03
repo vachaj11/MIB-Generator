@@ -16,7 +16,8 @@ Welcome to MIB Generator's documentation!
    :caption: Documentation:
 
    About <about>
-   Installation and usage <usage>
+   Installation and building <installation>
+   Usage <usage>
    Changing the code <change>
 
 .. toctree::

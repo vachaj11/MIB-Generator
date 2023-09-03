@@ -6,10 +6,6 @@ whether the parsed file should be visualised, etc..). It also provides a quick `
 run scripts for updating the config and paths files before running the generating script itself. 
 """
 
-import mib_generator.main.main as main
-import argparse
-
-
 def cli_run():
     """Manages the CLI and runs the program.
 
@@ -18,6 +14,9 @@ def cli_run():
     interpret passed flags and options and creates a small CLI interface which can be presented to the user
     with the ``--help`` flag.
     """
+    import mib_generator.main.main as main
+    import argparse
+    
     prog = "MIB Creator"
     desc = "Creates MIB databases from C-files defined in paths.json5"
     parser = argparse.ArgumentParser(prog=prog, description=desc)
@@ -62,4 +61,9 @@ def cli_run():
 
 
 if __name__ == "__main__":
+    import sys, os
+    file_path = os.path.dirname(
+        os.path.dirname(os.path.dirname(__file__))
+    )
+    sys.path.append(file_path)
     cli_run()
