@@ -6,7 +6,7 @@
 Welcome to MIB Generator's documentation!
 =========================================
 
-**MIB Generator** is a set of Python scripts that serve the puspose of generating MIB databases (Used in ESA's MCS SCOS 2000) from a given set of packet header (and others) files written in C. It is concieved mostly as a single script which the user runs from ``main.py`` rather than a series of methods, but the structure of the project should hopefully allow easy modification of the generation process, which itself in the current implementation heavily assumes one specific structure of the inputted C-files.
+**MIB Generator** is a set of Python scripts that serve the puspose of generating MIB databases (Used in ESA's MCS SCOS 2000) from a given set of packet header (and others) files written in C. It is concieved mostly as a single script which the user runs from the terminal rather than a series of methods, but the structure of the project should hopefully allow easy modification of the generation process, which itself in the current implementation heavily assumes one specific structure of the inputted C-files.
 
 .. note::
    This project is under active development.

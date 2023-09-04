@@ -44,7 +44,8 @@ def main(visual=False, generate=True, parseonly=False, paths=False, config=False
     if config:
         import mib_generator.utilities.update as update
 
-        update.update_config()
+        update.update_config_d()
+        update.update_config_m()
 
     tm_lis = []
     tc_lis = []

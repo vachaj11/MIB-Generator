@@ -4,187 +4,19 @@ Methods in this module generate MIB databases from their representations previou
 :obj:`mib_generator.construction` package/modules and run finals checks on the results to ensure that the outputted tables/MIB files 
 adhere to the requirements on the type, length, uniqueness and "mandatoriness".
 """
-import mib_generator.data.longdata as longdata
-import mib_generator.parsing.load as load
-
-out_path = load.out_dir
-
-
-def list_to_mib(lis):
-    """Convert a 2D list of values into a string formatted as MIB ASCII file.
-
-    From a 2D list (list in list) this functions creates one string by joining all the entries with a junction \\\\\ n for entries
-    in the "1D" list and with \\\\\ t for the "nested" entries.
-
-    Args:
-        lis (list): A 2D list (list of lists) to be joined into one string.
-
-    Returns:
-        str: A string which is created from the 2D list and is formatted as an MIB database.
-    """
-    rowstr = []
-    for row in lis:
-        rowstr.append("\t".join(row))
-    out = "\n".join(rowstr)
-    return out
-
-
-def save_mib(mib, name):
-    """Save the string-MIB database into the specified folder.
-
-    This function saves the passed string into a file named with the passed name (+.dat ending) at the location specified in
-    :obj:`mib_generator.parsing.load.out_dir`.
-
-    Args:
-        mib (str): The string to be saved into a file
-        name (str): Name of the file (+.dat) the string will be saved into.
-    """
-    path = out_path + "/" + name + ".dat"
-    fil = open(path, "w")
-    fil.write(mib)
-    fil.close()
-
-
-def check(value, typ):
-    """Check whether the given value matches the given type.
-
-    This method checks whether the passed value matches the passed type (either integer number or ASCII string without a few
-    characters).
-
-    Args:
-        value (str): Value who's type is to be checked.
-        typ (str): The type the value should have.
-
-    Returns:
-        bool: ``True`` if the value matches the type, ``False`` otherwise.
-    """
-    if len(value) > typ[1]:
-        return False
-    if typ[0] == "n":
-        try:
-            x = int(value)
-        except:
-            return False
-    if typ[0] == "c":
-        if (not value.isascii()) or bool({'"', "&", "<", ">"} & set(value)):
-            return False
-    return True
-
-
-def delete_empty(table):
-    """Delete empty entries in arrays.
-
-    This function goes through list of dictionaries to be made into MIB tables, and removes every empty (equal to ``""``) entry
-    it finds. This is done so that the later tests trigger appropriate warnings.
-
-    Args:
-        table (list): List of dictionaries, each one representing a row of an MIB table, which is to be cleaned from empty
-            entries.
-    """
-    for i in range(len(table)):
-        dic = {}
-        for l in table[i]:
-            if table[i][l] not in {"", None}:
-                dic[l] = table[i][l]
-        table[i] = dic
-
-
-def exclude_repetition(table, typ):
-    """Exclude repetition in columns where there should be unique entries.
-
-    This function checks whether there is any repetition in columns where entries should be unique in the passed MIB table
-    and if so, deletes the additional rows and raises a warning. (the required uniqueness of entries for a given MIB table
-    is defined in :obj:`mib_generator.data.longdata.unique_entries`)
-
-    Args:
-        table (list): List of dictionaries which represents the MIB database to be checked for repetition.
-        typ (str): The name of the MIB database the passed table adheres to.
-    """
-    constraints = longdata.unique_entries[typ]
-    redundance = set()
-    for i in constraints:
-        bare_table = []
-        for l in table:
-            bare_table.append([l[x - 1] for x in i])
-        for x in range(len(bare_table)):
-            for y in range(len(bare_table)):
-                if (
-                    bare_table[x] == bare_table[y]
-                    and y > x
-                    and "".join(bare_table[x]) != ""
-                ):
-                    redundance.add(y)
-    if redundance:
-        print(
-            "Warn.:\tFound repetition in table "
-            + typ
-            + ". Deleting rows: "
-            + str(redundance)[1:-1]
-            + ". (This is to be expected for some tables like pic.)"
-        )
-    indexes = sorted(list(redundance), reverse=True)
-    for i in indexes:
-        table.pop(i)
-
-
-def generate(table_type, source):
-    """From a list of dictionaries (per rows) generate and save a MIB database of a given type.
-
-    This function generates and saves the MIB database in the following steps:
-
-        1. Based on the passed MIB table name, looks up what entries/columns the generated table should have
-           (it takes this information from :obj:`mib_generator.data.longdata.tables_format`).
-        2. From the passed list of dictionaries it creates a 2D list (list of lists) mirroring the structure of the MIB table.
-        3. While doing that it runs some checks of type and uniqueness of the entries.
-        4. From the 2D list generates the string that is the contents of the MIB file.
-        5. Saves this string to an appropriate location.
-
-    Args:
-        table_type (str): The name of the MIB database the passed table adheres to.
-        table (list): List of dictionaries which correspond to the rows of the MIB table with the appropriate entries.
-    """
-    columns = longdata.tables_format[table_type]
-    table = []
-    row_ind = 1
-    for i in source:
-        row = []
-        for l in columns:
-            if l["name"] in i.keys():
-                val = str(i[l["name"]])
-                row.append(val)
-                if not check(val, l["type"]):
-                    print(
-                        "Warn.:\tThe value in table "
-                        + table_type
-                        + ", column "
-                        + l["name"]
-                        + ", row "
-                        + str(row_ind)
-                        + " doesn't have the required type."
-                    )
-                    print("\tValue: " + str(val) + "; Type: " + str(l["type"]))
-            else:
-                row.append("")
-                if l["mandatory"]:
-                    print(
-                        "Warn.:\tMissing a mandatory entry in table "
-                        + table_type
-                        + ", column "
-                        + l["name"]
-                        + ", row "
-                        + str(row_ind)
-                        + "."
-                    )
-
-        table.append(row)
-        row_ind += 1
-    exclude_repetition(table, table_type)
-    mib = list_to_mib(table)
-    save_mib(mib, table_type)
+import mib_generator.generation.gener_methods as gm
+import os
+import json5
 
 
 def generation_hub(
-    Tm_packets, Tc_packets, calibrations, decalibrations, verifications, Tc_head
+    Tm_packets=None,
+    Tc_packets=None,
+    calibrations=None,
+    decalibrations=None,
+    verifications=None,
+    Tc_head=None,
+    cfg=None,
 ):
     """Take all constructed packets/calibrations/commands and call generation scripts for each table.
 
@@ -192,6 +24,11 @@ def generation_hub(
     associated to them and for each of them calls the appropriate generation methods (either :obj:`one_generate` for objects
     which have only one row of the given MIB table associated to them or :obj:`two_generate` in case of possibly multiple
     rows) with the correct parameters.
+
+    What tables are generated is determined by the contents of the ``../data/config.json5`` config file, or it can be overridden
+    using the :obj:`cfg` argument. Because of this optionality, none of the arguments of this method are compulsory, since they
+    are not needed for generation of some tables, which is what this method could be asked to do. However they have to be present
+    if a table which is based on them is to be generated.
 
     Args:
         Tm_packets (list): List of TM-packets (their Python representations), each represented by an object of type
@@ -205,79 +42,216 @@ def generation_hub(
         verifications (list): List of TC-command verifications (their Python representations), each represented by an object of
             type :obj:`mib_generator.construction.calib.verification`.
         Tc_head (construction.TC_packet.TC_header): A header included in all TC-commands.
+        cfg (list): List of names of the MIB tables to be generated. Otherwise a default list stated in the config file is used.
 
-    Todo:
-        Make this generation configurable.
     """
-    one_generate(calibrations["mcfs"], "mcf")
-    one_generate(calibrations["lgfs"], "lgf")
-    one_generate(calibrations["txfs"], "txf")
-    two_generate(calibrations["txfs"], "txp")
-    one_generate(calibrations["cafs"], "caf")
-    two_generate(calibrations["cafs"], "cap")
-    one_generate(decalibrations, "paf")
-    two_generate(decalibrations, "pas")
-    one_generate(verifications, "cvs")
-    one_generate(Tm_packets, "pid")
-    one_generate(Tm_packets, "pic")
-    one_generate(Tm_packets, "tpcf")
-    two_generate(Tm_packets, "pcf")
-    two_generate(Tm_packets, "plf")
-    two_generate(Tm_packets, "cur")
-    two_generate(Tm_packets, "vpd")
-    # Don't generate these for now.
-    # one_generate([Tc_head], "tcp")
-    # two_generate([Tc_head], "pcpc")
-    # two_generate([Tc_head], "pcdf")
-    one_generate(Tc_packets, "ccf")
-    two_generate(Tc_packets, "cpc")
-    two_generate(Tc_packets, "cdf")
-    two_generate(Tc_packets, "prf")
-    two_generate(Tc_packets, "prv")
-    two_generate(Tc_packets, "cvp")
+    if cfg is None:
+        file_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
+        )
+        fil = open(file_path, "r")
+        to_be = json5.load(fil)["mib"]
+        fil.close()
+    else:
+        to_be = cfg
+
+    warn = lambda a: print(
+        '''Warn:\tDidn't get an input object on basis of which the table "'''
+        + a
+        + '" could be constructed.'
+    )
+
+    tables = {}
+    for i in to_be:
+        if i in {"mcf", "lgf", "txf", "txp", "caf", "cap"}:
+            if calibrations is not None:
+                tables[i] = cal_gen(i, calibrations)
+            else:
+                warn(i)
+        elif i in {"pid", "pic", "tpcf", "pcf", "plf", "cur", "vpd"}:
+            if Tm_packets is not None:
+                tables[i] = Tmp_gen(i, Tm_packets)
+            else:
+                warn(i)
+        elif i in {"ccf", "cpc", "cdf", "prf", "prv", "cvp"}:
+            if Tc_packets is not None:
+                tables[i] = Tcp_gen(i, Tc_packets)
+            else:
+                warn(i)
+        elif i in {"tcp", "pcpc", "pcdf"}:
+            if Tc_head is not None:
+                tables[i] = Tch_gen(i, [Tc_head])
+            else:
+                warn(i)
+        elif i in {"paf", "pas"}:
+            if decalibrations is not None:
+                tables[i] = dec_gen(i, decalibrations)
+            else:
+                warn(i)
+        elif i in {"cvs"}:
+            if verifications is not None:
+                tables[i] = ver_gen(i, verifications)
+            else:
+                warn(i)
+        else:
+            print(
+                'Warn:\tThe construction of the table "'
+                + i
+                + """" isn't yet implemented. And hence it wasn't generated."""
+            )
+
+    for i in tables:
+        mib = gm.list_to_mib(tables[i])
+        gm.save_mib(mib, i)
 
 
-def one_generate(lists, name):
-    """Generate MIB database of the given name from the passed list of objects.
+def cal_gen(typ, calibrations):
+    """Choose how the given calibration MIB table should be constructed and construct it.
 
-    This method does a few precursor steps to the generation process. For each of the objects in the passed list, it
-    extracts the appropriate dictionary corresponding to the row in the MIB table associated to the object and appends this
-    dictionary (alias row) to a list of all rows for this table. It then passes the resulting list through a "filter" which
-    erases all entries left empty (method :obj:`delete_empty`) and calls the main generation method :obj:`generate` with
-    this list.
+    Based on its name, this function chooses what method to call in order to generate and check the given table. It then
+    calls this method and returns the result.
 
     Args:
-        lists (list): List of the objects (these can be of many types) the rows of the MIB tables (as dictionaries) are
-            associated to.
-        name (str): Name of the MIB table that is to be generated from these objects.
+        typ (str): Name of the MIB table to be generated.
+        calibrations (list): List of dictionaries of calibrations from which the table is to be constructed. Each calibration
+            is of some type which is a child-class of :obj:`mib_generator.construction.calib.calib`.
 
+    Returns:
+        list: A 2D list (list of lists) representing the outputted MIB table (still in Python format).
     """
-    rows = []
-    for i in lists:
-        rows.append(vars(i)[name])
-    delete_empty(rows)
-    generate(name, rows)
+    match typ:
+        case "mcf":
+            return gm.one_generate(calibrations["mcfs"], "mcf")
+        case "lgf":
+            return gm.one_generate(calibrations["lgfs"], "lgf")
+        case "txf":
+            return gm.one_generate(calibrations["txfs"], "txf")
+        case "txp":
+            return gm.two_generate(calibrations["txfs"], "txp")
+        case "caf":
+            return gm.one_generate(calibrations["cafs"], "caf")
+        case "cap":
+            return gm.two_generate(calibrations["cafs"], "cap")
 
 
-def two_generate(lists, name):
-    """Generate MIB database of the given name from the passed list of objects.
+def Tmp_gen(typ, Tm_packets):
+    """Choose how the given Tm-packet MIB table should be constructed and construct it.
 
-    This method does a few precursor steps to the generation process. For each of the objects in the passed list, it
-    extracts the appropriate dictionaries (in a list) corresponding to the rows in the MIB table associated to the object
-    and appends these dictionaries (alias rows) to a list of all rows for this table. It then passes the resulting list
-    through a "filter" which erases all entries left empty (method :obj:`delete_empty`) and calls the main generation
-    method :obj:`generate` with this list.
+    Based on its name, this function chooses what method to call in order to generate and check the given table. It then
+    calls this method and returns the result.
 
     Args:
-        lists (list): List of the objects (these can be of many types) the rows of the MIB tables (as dictionaries) are
-            associated to.
-        name (str): Name of the MIB table that is to be generated from these objects.
+        typ (str): Name of the MIB table to be generated.
+        Tm_packets (list): List of Tm-packets from which the table is to be constructed. Each of type
+            :obj:`mib_generator.construction.TM_packet.TM_packet`.
 
+    Returns:
+        list: A 2D list (list of lists) representing the outputted MIB table (still in Python format).
     """
-    rows = []
-    rows = []
-    for i in lists:
-        for l in vars(i)[name]:
-            rows.append(l)
-    delete_empty(rows)
-    generate(name, rows)
+    match typ:
+        case "pid":
+            return gm.one_generate(Tm_packets, "pid")
+        case "pic":
+            return gm.one_generate(Tm_packets, "pic")
+        case "tpcf":
+            return gm.one_generate(Tm_packets, "tpcf")
+        case "pcf":
+            return gm.two_generate(Tm_packets, "pcf")
+        case "plf":
+            return gm.two_generate(Tm_packets, "plf")
+        case "cur":
+            return gm.two_generate(Tm_packets, "cur")
+        case "vpd":
+            return gm.two_generate(Tm_packets, "vpd")
+
+
+def Tcp_gen(typ, Tc_packets):
+    """Choose how the given Tc-packet MIB table should be constructed and construct it.
+
+    Based on its name, this function chooses what method to call in order to generate and check the given table. It then
+    calls this method and returns the result.
+
+    Args:
+        typ (str): Name of the MIB table to be generated.
+        Tc_packets (list): List of Tc-packets from which the table is to be constructed. Each of type
+            :obj:`mib_generator.construction.TC_packet.TC_packet`.
+
+    Returns:
+        list: A 2D list (list of lists) representing the outputted MIB table (still in Python format).
+    """
+    match typ:
+        case "ccf":
+            return gm.one_generate(Tc_packets, "ccf")
+        case "cpc":
+            return gm.two_generate(Tc_packets, "cpc")
+        case "cdf":
+            return gm.two_generate(Tc_packets, "cdf")
+        case "prf":
+            return gm.two_generate(Tc_packets, "prf")
+        case "prv":
+            return gm.two_generate(Tc_packets, "prv")
+        case "cvp":
+            return gm.two_generate(Tc_packets, "cvp")
+
+
+def Tch_gen(typ, Tc_head):
+    """Choose how the given Tc-header MIB table should be constructed and construct it.
+
+    Based on its name, this function chooses what method to call in order to generate and check the given table. It then
+    calls this method and returns the result.
+
+    Args:
+        typ (str): Name of the MIB table to be generated.
+        Tc_head (list): List of Tc-headers from which the table is to be constructed. Each of type
+            :obj:`mib_generator.construction.TC_packet.TC_header`.
+
+    Returns:
+        list: A 2D list (list of lists) representing the outputted MIB table (still in Python format).
+    """
+    match typ:
+        case "tcp":
+            return gm.one_generate(Tc_head, "tcp")
+        case "pcpc":
+            return gm.two_generate(Tc_head, "pcpc")
+        case "pcdf":
+            return gm.two_generate(Tc_head, "pcdf")
+
+
+def dec_gen(typ, decalibrations):
+    """Choose how the given decalibration MIB table should be constructed and construct it.
+
+    Based on its name, this function chooses what method to call in order to generate and check the given table. It then
+    calls this method and returns the result.
+
+    Args:
+        typ (str): Name of the MIB table to be generated.
+        decalibrations (list): List of decalibrations from which the table is to be constructed. Each of type
+            :obj:`mib_generator.construction.calib.decalib`.
+
+    Returns:
+        list: A 2D list (list of lists) representing the outputted MIB table (still in Python format).
+    """
+    match typ:
+        case "paf":
+            return gm.one_generate(decalibrations, "paf")
+        case "pas":
+            return gm.two_generate(decalibrations, "pas")
+
+
+def ver_gen(typ, verifications):
+    """Choose how the given verification MIB table should be constructed and construct it.
+
+    Based on its name, this function chooses what method to call in order to generate and check the given table. It then
+    calls this method and returns the result.
+
+    Args:
+        typ (str): Name of the MIB table to be generated.
+        verifications (list): List of verifications from which the table is to be constructed. Each of type
+            :obj:`mib_generator.construction.calib.verification`.
+
+    Returns:
+        list: A 2D list (list of lists) representing the outputted MIB table (still in Python format).
+    """
+    match typ:
+        case "cvs":
+            return gm.one_generate(verifications, "cvs")

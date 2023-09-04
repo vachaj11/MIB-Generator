@@ -210,7 +210,7 @@ def preproc_eval(variab):
         os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
     )
     file = open(file_path, "r")
-    config = json5.load(file)
+    config = json5.load(file)["def"]
     file.close()
     if variab in config.keys():
         return bool(config[variab])

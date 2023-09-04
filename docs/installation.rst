@@ -18,6 +18,8 @@ Or alternatively: ::
 Building from source
 --------------------
 
+In case you want to build the project from source yourself:
+
 Clone the source repository using: ::
 
 	$ git clone https://github.com/vachaj11/MIB-Generator.git

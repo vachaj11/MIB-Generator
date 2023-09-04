@@ -6,7 +6,7 @@ Finding and running the main script:
 With the package installed
 --------------------------
 
-If you have the project installed as a package (either from `PyPI <https://pypi.org/project/mib-generator>`_ or built yourself.), running is should be easy as typing: ::
+If you have the project installed as a package (either from `PyPI <https://pypi.org/project/mib-generator>`_ or built yourself.), running is should be as easy as typing: ::
 
 	$ mib-generator
 	
@@ -29,7 +29,7 @@ First time
 ----------
 
 If you're running the program for the first time, you should start by specifying the input/output files. This can be either done manually by modifying the file
-``data/paths.json5`` (found in ``...src//data/`` with respect to the rest of the package) or by running the script as: ::
+``data/paths.json5`` (found in ``.../src//data/`` with respect to the rest of the package) or by running the script as: ::
 
 	$ mib-generator -p
 

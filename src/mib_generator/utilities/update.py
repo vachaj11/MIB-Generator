@@ -106,27 +106,30 @@ def update_path():
     fil.close()
 
 
-def update_config():
-    """Run a series of queries asking user to specify configuration parameters.
+def update_config_d():
+    """Run a series of queries asking user to specify parsing configuration parameters.
 
-    This method allows the user to specify various configuration parameters. First, the already saved parameters are loaded
-    and the user is asked whether he wants to keep the current value, change it or delete the parameter altogether. Then,
-    the user is given the option to create a new parameter. The only valid accepted of parameters are boolean or a string.
+    This method allows the user to specify configuration parameters to be used by the parsing pre-processor (i.e. say, 
+    whether the macro is defined or not). First, the already saved parameters are loaded and the user is asked whether 
+    he wants to keep the current value, change it or delete the parameter altogether. Then, the user is given the option
+    to create a new parameter. The only valid accepted of parameters are boolean or a string.
     """
     file_path = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
     )
     fil = open(file_path, "r")
-    leg_data = json5.load(fil)
+    leg_fil = json5.load(fil)
+    leg_data = leg_fil["def"]
     fil.close()
     data = {}
-    print("To change the config parameters:")
-    print('Write "True" to set the parameter to True.')
-    print('Write "False" to set the parameter to False.')
-    print('Write "DEL" to delete this parameter.')
-    print("Write anything else to store that value as a string.")
+    print("To change the pre-processor config parameters:")
+    print('Write "True" to set the parameter to True (marking it as defined).')
+    print('Write "False" to set the parameter to False (marking it as undefined).')
+    print('Write "DEL" to delete this parameter (which will mean it is undefined if asked).')
+    print("Write anything else to store that value as a string (non-empty string will mean defined).")
     print("Leave the input field blank to leave the value unchanged.")
     print("------")
+    
     for i in leg_data:
         print(
             "Set value of parameter "
@@ -169,7 +172,57 @@ def update_config():
             else:
                 data[y] = x
             print("------")
+            
     fil = open(file_path, "w")
     fil.write("// This file stores various definitions used mainly by the parser\n")
-    fil.write(json5.dumps(data))
+    leg_fil["def"] = data
+    fil.write(json5.dumps(leg_fil))
     fil.close()
+    print("======")
+    
+def update_config_m():
+    """Run a series of queries asking user to specify generation configuration parameters.
+
+    This method allows the user to specify configuration parameters to be used at the generation step (i.e. the list of the MIB 
+    databases to be generated). First, the already saved parameters are loaded and the user is asked whether 
+    he wants to keep, change or delete them. Then, the user is given the option
+    to create a new parameter. The only valid accepted of parameters are strins.
+    """
+    file_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
+    )
+    fil = open(file_path, "r")
+    leg_fil = json5.load(fil)
+    leg_data = leg_fil["mib"]
+    fil.close()
+    data = []
+    print("To change the generation config parameters:")
+    print('Write "del" (or similar) to delete the parameter.')
+    print('Write anything else (including "") to keep it.')
+    print("------")
+    print("The currently saved parameters (mib tables to be generated) are:")
+    for i in leg_data:
+        x = input('The parameter "'+ i + '". Keep it? ')
+        if x in {"del", "Del", "DEL", "delete", "Delete", "DELETE"}:
+            print('The parameter "'+i+'" was deleted')
+        else:
+            data.append(i)
+    print("------")
+    additional = True
+    while additional:
+        print(
+            "If you want to add additional parameter, input parameter name (otherwise leave the field blank)."
+        )
+        y = input("Input: ")
+        if y:
+            data.append(y)
+            print('Parameter "'+y+'" added.')
+        else:
+            additional = False
+        
+    fil = open(file_path, "w")
+    fil.write("// This file stores various definitions used mainly by the parser\n")
+    leg_fil["mib"] = data
+    fil.write(json5.dumps(leg_fil))
+    fil.close()
+    print("======")
