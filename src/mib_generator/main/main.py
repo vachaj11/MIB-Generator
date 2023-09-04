@@ -5,7 +5,7 @@ appropriate files between sub-packages, calls appropriate methods for each task,
 """
 
 
-def main(visual=False, generate=True, parseonly=False, paths=False, config=False):
+def main(visual=False, generate=True, parseonly=False, paths=False, config=False, generate_t=False):
     """Run this whole hellish thing.
 
     This method holds the main logic of the whole program. Roughly it sequentially does this:
@@ -21,7 +21,8 @@ def main(visual=False, generate=True, parseonly=False, paths=False, config=False
            in a correct way.
         6. Unless generation is disabled, call the generation script which turns all previously
            constructed objects into MIB tables and saves them.
-        7. If the appropriate option is raised, show the parsed files' contents in a GUI visualisation.
+        7. If the appropriate option is raised, generate a document summing up the interpreted TM/TC packages.
+        8. If the appropriate option is raised, show the parsed files' contents in a GUI visualisation.
 
     Args:
         visual (bool): ``True`` if the GUI visualisation of the parsed files should be shown, ``False`` otherwise (and by
@@ -90,6 +91,11 @@ def main(visual=False, generate=True, parseonly=False, paths=False, config=False
             import mib_generator.generation.gener as gener
 
             gener.generation_hub(tm_lis, tc_lis, cal, dec, ver, TcHead)
+            
+        if generate_t:
+            import mib_generator.generation.gener_doc as generd
+            
+            generd.gen_doc(tm_lis, tc_lis)
     if visual:
         try:
             import mib_generator.utilities.visualiser as visualiser

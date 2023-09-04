@@ -50,6 +50,12 @@ def cli_run():
         help="start by running script to update config parameters (stored in json5 file)",
         action="store_true",
     )
+    parser.add_argument(
+        "-d",
+        "--docgenerate",
+        help="generate a document summarising characteristic of the TM and TC packages",
+        action="store_true",
+    )
     arguments = parser.parse_args()
     main.main(
         arguments.visualise,
@@ -57,6 +63,7 @@ def cli_run():
         arguments.onlyparse,
         arguments.update_paths,
         arguments.update_config,
+        arguments.docgenerate,
     )
 
 

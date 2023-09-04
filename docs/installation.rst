@@ -18,7 +18,7 @@ Or alternatively: ::
 Building from source
 --------------------
 
-In case you want to build the project from source yourself:
+In case you want to build the project from the source yourself:
 
 Clone the source repository using: ::
 
