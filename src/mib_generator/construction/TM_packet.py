@@ -179,7 +179,7 @@ class TM_packet:
         except:
             diction["PIC_PI2_OFF"] = -1
             diction["PIC_PI2_WID"] = 0
-        diction["PID_APID"] = self.pid["PID_APID"]
+        diction["PIC_APID"] = self.pid["PID_APID"]
         return diction
 
     def tpcf_dictionary(self):

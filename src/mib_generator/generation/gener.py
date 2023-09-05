@@ -47,7 +47,7 @@ def generation_hub(
     """
     if cfg is None:
         file_path = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
+            os.path.dirname(os.path.dirname(__file__)), "temp", "config.json5"
         )
         fil = open(file_path, "r")
         to_be = json5.load(fil)["mib"]
@@ -152,7 +152,9 @@ def Tmp_gen(typ, Tm_packets):
         case "pid":
             return gm.one_generate(Tm_packets, "pid")
         case "pic":
-            return gm.one_generate(Tm_packets, "pic")
+            # the infamous pic filter
+            pic_packets = gm.pic_filter(Tm_packets)
+            return gm.one_generate(pic_packets, "pic")
         case "tpcf":
             return gm.one_generate(Tm_packets, "tpcf")
         case "pcf":

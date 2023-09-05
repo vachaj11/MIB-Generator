@@ -8,7 +8,7 @@ import json5
 import os
 
 
-def update_path():
+def update_path(directory):
     """Run a series of queries asking user to specify valid paths to input files.
 
     This method allows the user to specify paths to the 4 input files and 1 output directory that the MIB generator requires.
@@ -16,12 +16,20 @@ def update_path():
     the target files either in terms of absolute or relative path. The inputted location is then checked and if it exists, then
     the path is saved (in absolute form). Only existence is checked, not that the file is valid for the given purpose.
     """
-    file_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)), "data", "paths.json5"
-    )
-    fil = open(file_path, "r")
-    leg_data = json5.load(fil)
-    fil.close()
+    if not directory:
+        file_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "data", "paths.json5"
+        )
+    else:
+        file_path = os.path.join(directory, "paths.json5")
+    if os.path.isfile(file_path):
+        fil = open(file_path, "r")
+        leg_data = json5.load(fil)
+        fil.close()
+    else:
+        leg_data = {}
+        for i in ["TmHeader","TcTmHeader","TmFile","TcHeader","OutDir","OutDoc"]:
+            leg_data[i] = "TO BE INPUTTED"
     data = {}
     valid_TmH = False
     print("The current absolute path is: " + os.getcwd())
@@ -100,13 +108,29 @@ def update_path():
         else:
             print("Error:\tFailed to find the specified directory, try again.")
         print("------")
+    valid_Doc = False
+    while not valid_Doc:
+        print("State relative or absolute path to the docx output file.")
+        print("Currently this path is: " + str(leg_data["OutDoc"]))
+        print("(press Enter if you want to keep this value)")
+        path = input("Path: ")
+        if path == "" and os.path.isdir(os.path.dirname(leg_data["OutDoc"])):
+            data["OutDoc"] = leg_data["OutDoc"]
+            valid_Doc = True
+        elif os.path.isdir(os.path.dirname(path)):
+            data["OutDoc"] = os.path.abspath(path)
+            valid_Doc = True
+        else:
+            print("Error:\tFailed to find the specified directory into which the file should be placed, try again.")
+        print("------")
     fil = open(file_path, "w")
     fil.write("// This file stores various paths to source/output files\n")
     fil.write(json5.dumps(data))
     fil.close()
+    print("======")
 
 
-def update_config_d():
+def update_config_d(directory):
     """Run a series of queries asking user to specify parsing configuration parameters.
 
     This method allows the user to specify configuration parameters to be used by the parsing pre-processor (i.e. say, 
@@ -114,13 +138,23 @@ def update_config_d():
     he wants to keep the current value, change it or delete the parameter altogether. Then, the user is given the option
     to create a new parameter. The only valid accepted of parameters are boolean or a string.
     """
-    file_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
-    )
-    fil = open(file_path, "r")
-    leg_fil = json5.load(fil)
-    leg_data = leg_fil["def"]
-    fil.close()
+    if not directory:
+        file_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
+        )
+    else:
+        file_path = os.path.join(directory, "config.json5")
+    if os.path.isfile(file_path):
+        fil = open(file_path, "r")
+        leg_fil = json5.load(fil)
+        fil.close()
+        if "def" in leg_fil.keys():
+            leg_data = leg_fil["def"]
+        else:
+            leg_data = {}
+    else:
+        leg_fil = {}
+        leg_data = {}
     data = {}
     print("To change the pre-processor config parameters:")
     print('Write "True" to set the parameter to True (marking it as defined).')
@@ -180,7 +214,7 @@ def update_config_d():
     fil.close()
     print("======")
     
-def update_config_m():
+def update_config_m(directory):
     """Run a series of queries asking user to specify generation configuration parameters.
 
     This method allows the user to specify configuration parameters to be used at the generation step (i.e. the list of the MIB 
@@ -188,13 +222,22 @@ def update_config_m():
     he wants to keep, change or delete them. Then, the user is given the option
     to create a new parameter. The only valid accepted of parameters are strins.
     """
-    file_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
-    )
-    fil = open(file_path, "r")
-    leg_fil = json5.load(fil)
-    leg_data = leg_fil["mib"]
-    fil.close()
+    if not directory:
+        file_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
+        )
+    else:
+        file_path = os.path.join(directory, "config.json5")
+    if os.path.isfile(file_path):
+        fil = open(file_path, "r")
+        leg_fil = json5.load(fil)
+        fil.close()
+        if "mib" in leg_fil.keys():
+            leg_data = leg_fil["mib"]
+        else:
+            leg_data = []
+    else:
+        leg_data = []
     data = []
     print("To change the generation config parameters:")
     print('Write "del" (or similar) to delete the parameter.')

@@ -115,7 +115,6 @@ def split_comment(stri):
         elif xy == "/*" and mod == 0:
             mod = 3
             sections.append([start, i + 1])
-            start = i + 2
         elif xy == "*/" and mod == 3:
             mod = 0
             sections.append([start, i - 1])
@@ -207,7 +206,7 @@ def preproc_eval(variab):
 
     """
     file_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
+        os.path.dirname(os.path.dirname(__file__)), "temp", "config.json5"
     )
     file = open(file_path, "r")
     config = json5.load(file)["def"]

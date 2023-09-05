@@ -5,7 +5,7 @@ appropriate files between sub-packages, calls appropriate methods for each task,
 """
 
 
-def main(visual=False, generate=True, parseonly=False, paths=False, config=False, generate_t=False):
+def main(visual=False, generate=True, parseonly=False, paths=False, config=False, generate_t=False,custom_dir=None):
     """Run this whole hellish thing.
 
     This method holds the main logic of the whole program. Roughly it sequentially does this:
@@ -41,13 +41,16 @@ def main(visual=False, generate=True, parseonly=False, paths=False, config=False
     if paths:
         import mib_generator.utilities.update as update
 
-        update.update_path()
+        update.update_path(custom_dir)
     if config:
         import mib_generator.utilities.update as update
 
-        update.update_config_d()
-        update.update_config_m()
-
+        update.update_config_d(custom_dir)
+        update.update_config_m(custom_dir)
+    
+    import mib_generator.temp.temp as temp
+    temp.move_conf(custom_dir)
+    
     tm_lis = []
     tc_lis = []
     import mib_generator.parsing.load as load

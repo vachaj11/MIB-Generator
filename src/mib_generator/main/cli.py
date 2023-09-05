@@ -5,6 +5,16 @@ various options for runtime of the script itself (whether the MIB databases shou
 whether the parsed file should be visualised, etc..). It also provides a quick ``--help`` summary and an option to
 run scripts for updating the config and paths files before running the generating script itself. 
 """
+import sys
+import os
+import argparse
+
+def directory(string):
+    if os.path.isdir(string):
+        return string
+    else:
+        raise ValueError
+
 
 def cli_run():
     """Manages the CLI and runs the program.
@@ -15,7 +25,6 @@ def cli_run():
     with the ``--help`` flag.
     """
     import mib_generator.main.main as main
-    import argparse
     
     prog = "MIB Creator"
     desc = "Creates MIB databases from C-files defined in paths.json5"
@@ -56,6 +65,14 @@ def cli_run():
         help="generate a document summarising characteristic of the TM and TC packages",
         action="store_true",
     )
+    parser.add_argument(
+        "-u",
+        "--custom_dir",
+        help='use config files in the specified directory instead (use with "-c" and "-p" flags to generate them)',
+        required=False,
+        type=directory,
+        
+    )
     arguments = parser.parse_args()
     main.main(
         arguments.visualise,
@@ -64,11 +81,11 @@ def cli_run():
         arguments.update_paths,
         arguments.update_config,
         arguments.docgenerate,
+        arguments.custom_dir,
     )
 
 
 if __name__ == "__main__":
-    import sys, os
     file_path = os.path.dirname(
         os.path.dirname(os.path.dirname(__file__))
     )

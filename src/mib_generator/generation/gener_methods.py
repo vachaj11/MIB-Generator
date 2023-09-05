@@ -120,11 +120,51 @@ def exclude_repetition(table, typ):
             + typ
             + ". Deleting rows: "
             + str(redundance)[1:-1]
-            + ". (This is to be expected for some tables like pic.)"
         )
+        print("The content of these rows is")
+        for i in redundance:
+            print(table[i])
     indexes = sorted(list(redundance), reverse=True)
     for i in indexes:
         table.pop(i)
+
+
+def pic_filter(packets):
+    repete = set()
+    for x in range(len(packets)):
+        for y in range(x + 1, len(packets)):
+            x1 = packets[x].pic["PIC_TYPE"]
+            x2 = packets[x].pic["PIC_STYPE"]
+            x3 = packets[x].pic["PIC_PI1_OFF"]
+            x7 = packets[x].pic["PIC_APID"]
+            y1 = packets[y].pic["PIC_TYPE"]
+            y2 = packets[y].pic["PIC_STYPE"]
+            y3 = packets[y].pic["PIC_PI1_OFF"]
+            y7 = packets[y].pic["PIC_APID"]
+            if (x1, x2, x7) == (y1, y2, y7):
+                if x3 != y3:
+                    print(
+                        "Warn:\tTm-packets "
+                        + str(packets[x].pid["PID_SPID"])
+                        + " and "
+                        + str(packets[y].pid["PID_SPID"])
+                        + " share packet type, subtype and apid, but differ in specification of additional identification field."
+                    )
+                elif {-1, "-1"} & {x3, y3}:
+                    print(
+                        "Warn:\tTm-packets "
+                        + str(packets[x].pid["PID_SPID"])
+                        + " and "
+                        + str(packets[y].pid["PID_SPID"])
+                        + " share packet type, subtype and apid, but do not have additional identification field specified."
+                    )
+                else:
+                    repete.add(y)
+    filtered_packets = []
+    for i in range(len(packets)):
+        if i not in repete:
+            filtered_packets.append(packets[i])
+    return filtered_packets
 
 
 def generate(table_type, source):

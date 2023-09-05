@@ -21,7 +21,7 @@ import mib_generator.parsing.parser_main as par
 
 try:
     file_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)), "data", "paths.json5"
+        os.path.dirname(os.path.dirname(__file__)), "temp", "paths.json5"
     )
     file = open(file_path, "r")
     paths = json5.load(file)
@@ -32,6 +32,7 @@ try:
     TcH_path = paths["TcHeader"]
     TcTmH_path = paths["TcTmHeader"]
     out_dir = paths["OutDir"]
+    out_doc = paths["OutDoc"]
 except:
     print("Error:\tFailed to locate one of the C files.")
     TmC_path = ""
@@ -39,6 +40,7 @@ except:
     TcH_path = ""
     TcTmH_path = ""
     out_dir = ""
+    out_doc = "" 
 
 try:
     TmH = par.main(TmH_path)
