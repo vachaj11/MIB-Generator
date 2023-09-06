@@ -4,28 +4,30 @@ This module allows the user to see the output of the parsing process, i.e. the t
 a representation of the original C-files. For the creation of the GUI the Qt framework is used in connection with its Python 
 toolkit/bindings PySide-6.
 """
+import multiprocessing
+import sys
+
 from PySide6.QtCore import QMetaObject
 from PySide6.QtWidgets import (
+    QAbstractScrollArea,
     QApplication,
+    QFrame,
     QHBoxLayout,
     QLabel,
     QMainWindow,
-    QPushButton,
-    QSizePolicy,
-    QToolBox,
-    QVBoxLayout,
     QPlainTextEdit,
-    QWidget,
+    QPushButton,
+    QScrollArea,
+    QSizePolicy,
     QTableWidget,
     QTableWidgetItem,
-    QScrollArea,
-    QFrame,
-    QAbstractScrollArea,
+    QToolBox,
+    QVBoxLayout,
+    QWidget,
 )
-import sys, multiprocessing
 
-import mib_generator.parsing.load as load
 import mib_generator.data.longdata as longdata
+import mib_generator.parsing.load as load
 
 policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
 

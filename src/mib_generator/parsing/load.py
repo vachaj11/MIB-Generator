@@ -14,9 +14,11 @@ Attributes:
     enumerations (dict): A dictionary containing all possible usable evaluations/enumerations sourced 
         form enums, macros, etc... found in all 3 of the parsed header files.
 """
-import json5
 import os
 
+import json5
+
+import mib_generator.data.warn as warn
 import mib_generator.parsing.parser_main as par
 
 try:
@@ -34,13 +36,13 @@ try:
     out_dir = paths["OutDir"]
     out_doc = paths["OutDoc"]
 except:
-    print("Error:\tFailed to locate one of the C files.")
+    warn.raises("EPL1")
     TmC_path = ""
     TmH_path = ""
     TcH_path = ""
     TcTmH_path = ""
     out_dir = ""
-    out_doc = "" 
+    out_doc = ""
 
 try:
     TmH = par.main(TmH_path)
@@ -48,7 +50,7 @@ try:
     TcTmH = par.main(TcTmH_path)
     TmC = par.main(TmC_path)
 except:
-    print("Error:\tFailed to load one of the C files.")
+    warn.raises("EPL2")
     TmH = None
     TcH = None
     TcTmH = None
@@ -85,11 +87,12 @@ def extr_values(file):
                 lis[name] = value
     return lis
 
+
 try:
     enum1 = extr_values(TmH)
     enum2 = extr_values(TcTmH)
     enum3 = extr_values(TcH)
     enumerations = enum1 | enum2 | enum3
 except:
-    print("Warn:\tFailed to construct the list of available enumerations.")
+    warn.raises("WPL1")
     enumerations = {}

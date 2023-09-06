@@ -5,6 +5,7 @@ representations of Tm/Tc packets, calibrations, etc..
 """
 
 import mib_generator.data.longdata as longdata
+import mib_generator.data.warn as warn
 import mib_generator.parsing.load as load
 
 out_path = load.out_dir
@@ -115,15 +116,10 @@ def exclude_repetition(table, typ):
                 ):
                     redundance.add(y)
     if redundance:
-        print(
-            "Warn.:\tFound repetition in table "
-            + typ
-            + ". Deleting rows: "
-            + str(redundance)[1:-1]
-        )
-        print("The content of these rows is")
+        stradd = "\n\tThe content of these rows is:"
         for i in redundance:
-            print(table[i])
+            stradd = stradd + "\n\t" + str(table[i])
+        warn.raises("WGM1", typ, str(redundance)[1:-1], stradd)
     indexes = sorted(list(redundance), reverse=True)
     for i in indexes:
         table.pop(i)
@@ -164,20 +160,16 @@ def pic_filter(packets):
             y7 = packets[y].pic["PIC_APID"]
             if (x1, x2, x7) == (y1, y2, y7):
                 if x3 != y3:
-                    print(
-                        "Warn:\tTm-packets "
-                        + str(packets[x].pid["PID_SPID"])
-                        + " and "
-                        + str(packets[y].pid["PID_SPID"])
-                        + " share packet type, subtype and apid, but differ in specification of additional identification field."
+                    warn.raises(
+                        "WGM2",
+                        str(packets[x].pid["PID_SPID"]),
+                        str(packets[y].pid["PID_SPID"]),
                     )
                 elif {-1, "-1"} & {x3, y3}:
-                    print(
-                        "Warn:\tTm-packets "
-                        + str(packets[x].pid["PID_SPID"])
-                        + " and "
-                        + str(packets[y].pid["PID_SPID"])
-                        + " share packet type, subtype and apid, but do not have additional identification field specified."
+                    warn.raises(
+                        "WGM3",
+                        str(packets[x].pid["PID_SPID"]),
+                        str(packets[y].pid["PID_SPID"]),
                     )
                 else:
                     repete.add(y)
@@ -216,28 +208,13 @@ def generate(table_type, source):
                 val = str(i[l["name"]])
                 row.append(val)
                 if not check(val, l["type"]):
-                    print(
-                        "Warn.:\tThe value in table "
-                        + table_type
-                        + ", column "
-                        + l["name"]
-                        + ", row "
-                        + str(row_ind)
-                        + " doesn't have the required type."
-                    )
-                    print("\tValue: " + str(val) + "; Type: " + str(l["type"]))
+                    stradd = "\n\tValue: " + str(val) + "; Type: " + str(l["type"])
+                    warn.raises("WGM4", table_type, l["name"], str(row_ind), stradd)
+
             else:
                 row.append("")
                 if l["mandatory"]:
-                    print(
-                        "Warn.:\tMissing a mandatory entry in table "
-                        + table_type
-                        + ", column "
-                        + l["name"]
-                        + ", row "
-                        + str(row_ind)
-                        + "."
-                    )
+                    warn.raises("WGM5", table_type, l["name"], str(row_ind))
 
         table.append(row)
         row_ind += 1

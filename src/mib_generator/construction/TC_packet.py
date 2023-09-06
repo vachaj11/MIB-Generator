@@ -5,8 +5,8 @@ entries for MIB databases. These classes represent the TC commands only in the s
 form any possible information that could be found relating to that command including the entries in various MIB tables that
 correspond to it.
 """
-import mib_generator.parsing.load as load
 import mib_generator.construction.TC_packet_methods as pm
+import mib_generator.parsing.load as load
 
 
 class TC_header:

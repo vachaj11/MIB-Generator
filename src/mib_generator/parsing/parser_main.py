@@ -3,8 +3,8 @@
 This module is a starting point for parsing of C-files and holds class which plays the role of their interpretation.
 """
 
-import mib_generator.parsing.par_header as parh
 import mib_generator.parsing.par_cfile as parc
+import mib_generator.parsing.par_header as parh
 import mib_generator.parsing.par_methods as parm
 
 

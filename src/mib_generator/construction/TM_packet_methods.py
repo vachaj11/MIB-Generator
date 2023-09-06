@@ -3,9 +3,11 @@
 This module holds methods that help with formatting of parsed data into monitoring packet characteristics. They are usually
 concerned with value evaluation, bite counting, type identification etc. I.e. mostly kind of housekeeping jobs.
 """
-import mib_generator.parsing.load as load
-import mib_generator.data.longdata as longdata
 from copy import copy
+
+import mib_generator.data.longdata as longdata
+import mib_generator.data.warn as warn
+import mib_generator.parsing.load as load
 
 
 def apidnum(name):
@@ -54,7 +56,7 @@ def evalu(string):
                 x = eval(string, load.enumerations)
             except:
                 x = -1
-                print("Warn.:\tWasn't able to find the numerical value of " + string)
+                warn.raises("WCM1", string)
     return x
 
 
@@ -145,11 +147,7 @@ def header_search(typ):
     # if typ in load.enumerations.keys() and not hstruct:
     #    hstruct.append(load.enumerations[typ])
     if not hstruct:
-        print(
-            "Warn.:\tWasn't able to establish the link of packet "
-            + typ
-            + " to any header structure."
-        )
+        warn.raises("WCM2", typ)
     return hstruct
 
 

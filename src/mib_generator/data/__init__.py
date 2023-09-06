@@ -6,6 +6,7 @@ The files/submodules here are:
 
     * :obj:`longdata` - This giant module stores mostly all information about the structures of MIB
       tables and what checks should be performed by each entry in them.
+    * :obj:`warn` - Module storing definition of various warnings and errors that can be raised by the program. 
     * ``paths.json5`` - This file stores default information about paths to the input/output files in a json5 format.
     * ``config.json5`` - This file stores default config information which mostly include what pre-processor macros
       should be taken as defined when parsing the inputted files and what mib tables should be generated.

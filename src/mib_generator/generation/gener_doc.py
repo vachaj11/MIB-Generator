@@ -5,10 +5,10 @@ The only (important) method in this module builds up the ``.docx`` file using th
 """
 
 from docx import Document
-from docx.shared import Inches
-from docx.oxml.ns import nsdecls
-from docx.oxml import parse_xml
 from docx.enum.table import WD_ALIGN_VERTICAL
+from docx.oxml import parse_xml
+from docx.oxml.ns import nsdecls
+from docx.shared import Inches
 
 import mib_generator.parsing.load as load
 

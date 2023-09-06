@@ -4,8 +4,11 @@ This module holds methods that allow the user to easily modify various files tha
 script. They can be called by simply importing and calling them or through appropriate flags build into the main CLI of the 
 MIB generator.  
 """
-import json5
 import os
+
+import json5
+
+import mib_generator.data.warn as warn
 
 
 def update_path(directory=None):

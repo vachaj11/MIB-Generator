@@ -5,9 +5,10 @@ various options for runtime of the script itself (whether the MIB databases shou
 whether the parsed file should be visualised, etc..). It also provides a quick ``--help`` summary and an option to
 run scripts for updating the config and paths files before running the generating script itself. 
 """
-import sys
-import os
 import argparse
+import os
+import sys
+
 
 def directory(string):
     if os.path.isdir(string):
@@ -25,7 +26,7 @@ def cli_run():
     with the ``--help`` flag.
     """
     import mib_generator.main.main as main
-    
+
     prog = "MIB Creator"
     desc = "Creates MIB databases from C-files defined in paths.json5"
     parser = argparse.ArgumentParser(prog=prog, description=desc)
@@ -71,7 +72,6 @@ def cli_run():
         help='use config files in the specified directory instead (use with "-c" and "-p" flags to generate them)',
         required=False,
         type=directory,
-        
     )
     arguments = parser.parse_args()
     main.main(
@@ -86,8 +86,6 @@ def cli_run():
 
 
 if __name__ == "__main__":
-    file_path = os.path.dirname(
-        os.path.dirname(os.path.dirname(__file__))
-    )
+    file_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     sys.path.append(file_path)
     cli_run()

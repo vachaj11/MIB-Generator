@@ -16,3 +16,11 @@ mib\_generator.data.longdata module
    :members:
    :undoc-members:
    :show-inheritance:
+
+mib\_generator.data.warn module
+-------------------------------
+
+.. automodule:: mib_generator.data.warn
+   :members:
+   :undoc-members:
+   :show-inheritance:

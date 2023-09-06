@@ -6,6 +6,7 @@ form any possible information that could be found relating to that packet includ
 correspond to it.
 """
 import mib_generator.construction.TM_packet_methods as pm
+import mib_generator.data.warn as warn
 
 
 class TM_header:
@@ -47,7 +48,7 @@ class TM_header:
             methods = i.__dir__()
             if "name" in methods and i.name == "TmHead":
                 return i
-        print("Warn.:\tWasn't able to find the common Tm header.")
+        warn.raises("WCT2")
 
 
 class TM_packet:

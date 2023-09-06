@@ -3,14 +3,16 @@
 This module holds methods that help with formatting of parsed data into TC packet and commands characteristics. They are usually
 concerned with value evaluation, bite counting, type identification etc. I.e. mostly kind of housekeeping jobs.
 """
+from copy import copy
+
+import mib_generator.data.warn as warn
 import mib_generator.parsing.load as load
 from mib_generator.construction.TM_packet_methods import (
+    categfromptc,
     count_size,
     evalu,
     getptcpcf,
-    categfromptc,
 )
-from copy import copy
 
 
 def find_header(file):
@@ -27,7 +29,7 @@ def find_header(file):
     for i in file.structures:
         if "name" in i.__dir__() and i.name == "TcHead":
             return i
-    print("Warn.:\tWasn't able to find the common Tc header.")
+    warn.raises("WCT1")
 
 
 def packet_search(file):

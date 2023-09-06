@@ -4,6 +4,7 @@ This module puts together all classes and function that represent the calibratio
 These representations only collect all information about the structure of the calibrations and its corresponding MIB tables
 in a structured form (but are not functional themselves).
 """
+import mib_generator.data.warn as warn
 import mib_generator.parsing.load as load
 
 
@@ -32,12 +33,7 @@ def cur_update(packet, cal):
                 i["CUR_SELECT"] = l.comment.entries["cal_ident"]
                 match_count += 1
         if match_count == 0:
-            print(
-                "Warn.:\tWasn't able to find matching calibration for "
-                + i["CUR_PNAME"]
-                + " in packet "
-                + str(packet.pid["PID_SPID"])
-            )
+            warn.raises("WCC1", i["CUR_PNAME"], str(packet.pid["PID_SPID"]))
             packet.cur.remove(i)
     for i in packet.pcf:
         if "PCF_CURTX" in i.keys() and i["PCF_CURTX"]:
@@ -49,12 +45,7 @@ def cur_update(packet, cal):
                     if "txf" in l.__dir__():
                         i["PCF_CATEG"] = "S"
             if match_count == 0:
-                print(
-                    "Warn.:\tWasn't able to find matching calibration for "
-                    + i["PCF_CURTX"]
-                    + " in packet "
-                    + str(packet.pid["PID_SPID"])
-                )
+                warn.raises("WCC1", i["PCF_CURTX"], str(packet.pid["PID_SPID"]))
                 i["PCF_CURTX"] = ""
 
 
@@ -77,12 +68,7 @@ def cpc_update(command, dec):
                     i["CPC_PAFREF"] = l.comment.entries["dec_ident"]
                     match_count += 1
             if match_count == 0:
-                print(
-                    "Warn.:\tWasn't able to find matching decalibration for "
-                    + i["CPC_PAFREF"]
-                    + " in command "
-                    + str(command.ccf["CCF_CNAME"])
-                )
+                warn.raises("WCC2", i["CPC_PAFREF"], str(command.ccf["CCF_CNAME"]))
                 i["CPC_PAFREF"] = ""
 
 
@@ -618,11 +604,10 @@ def cvs_update(command, verifs):
         maxi = len(command.cvp)
         for i in range(maxi):
             if command.cvp[maxi - 1 - i]["CVP_CVSID"] not in lis:
-                print(
-                    "Warn.:\tWasn't able to find the required verification "
-                    + str(command.cvp[maxi - 1 - i]["CVP_CVSID"])
-                    + " for command "
-                    + str(command.ccf["CCF_CNAME"])
+                warn.raises(
+                    "WCC3",
+                    str(command.cvp[maxi - 1 - i]["CVP_CVSID"]),
+                    str(command.ccf["CCF_CNAME"]),
                 )
                 command.cvp.pop(maxi - i - 1)
 

@@ -4,9 +4,12 @@ Methods in this module generate MIB databases from their representations previou
 :obj:`mib_generator.construction` package/modules and run finals checks on the results to ensure that the outputted tables/MIB files 
 adhere to the requirements on the type, length, uniqueness and "mandatoriness".
 """
-import mib_generator.generation.gener_methods as gm
 import os
+
 import json5
+
+import mib_generator.data.warn as warn
+import mib_generator.generation.gener_methods as gm
 
 
 def generation_hub(
@@ -55,50 +58,40 @@ def generation_hub(
     else:
         to_be = cfg
 
-    warn = lambda a: print(
-        '''Warn:\tDidn't get an input object on basis of which the table "'''
-        + a
-        + '" could be constructed.'
-    )
-
     tables = {}
     for i in to_be:
         if i in {"mcf", "lgf", "txf", "txp", "caf", "cap"}:
             if calibrations is not None:
                 tables[i] = cal_gen(i, calibrations)
             else:
-                warn(i)
+                warn.raises("WGG1", i)
         elif i in {"pid", "pic", "tpcf", "pcf", "plf", "cur", "vpd"}:
             if Tm_packets is not None:
                 tables[i] = Tmp_gen(i, Tm_packets)
             else:
-                warn(i)
+                warn.raises("WGG1", i)
         elif i in {"ccf", "cpc", "cdf", "prf", "prv", "cvp"}:
             if Tc_packets is not None:
                 tables[i] = Tcp_gen(i, Tc_packets)
             else:
-                warn(i)
+                warn.raises("WGG1", i)
         elif i in {"tcp", "pcpc", "pcdf"}:
             if Tc_head is not None:
                 tables[i] = Tch_gen(i, [Tc_head])
             else:
-                warn(i)
+                warn.raises("WGG1", i)
         elif i in {"paf", "pas"}:
             if decalibrations is not None:
                 tables[i] = dec_gen(i, decalibrations)
             else:
-                warn(i)
+                warn.raises("WGG1", i)
         elif i in {"cvs"}:
             if verifications is not None:
                 tables[i] = ver_gen(i, verifications)
             else:
-                warn(i)
+                warn.raises("WGG1", i)
         else:
-            print(
-                'Warn:\tThe construction of the table "'
-                + i
-                + """" isn't yet implemented. And hence it wasn't generated."""
-            )
+            warn.raises("WGG2", i)
 
     for i in tables:
         mib = gm.list_to_mib(tables[i])

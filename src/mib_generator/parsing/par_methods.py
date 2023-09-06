@@ -3,8 +3,11 @@
 This module holds various methods used for parsing of the header and normal C files and their
 subsequent interpretation into corresponding python objects.
 """
-import json5
 import os
+
+import json5
+
+import mib_generator.data.warn as warn
 
 
 def clean(stri, tokens):
@@ -175,20 +178,16 @@ def preproc_parse(stri):
         elif stri[i : i + 5] == "#else":
             log[-1].append(i)
             if status != 1:
-                print(
-                    "Warn.:\tInvalid logic encountered when parsing preprocessor directives."
-                )
+                warn.raises("WPM1")
             status = 2
         elif stri[i : i + 6] == "#endif":
             if status not in {1, 2}:
-                print(
-                    "Warn.:\tInvalid logic encountered when parsing preprocessor directives."
-                )
+                warn.raises("WPM1")
             status = status_log.pop(-1)
             log[-1].append(i)
             blocks.append(log.pop(-1))
     if status != 0:
-        print("Warn.:\tInvalid logic encountered when parsing preprocessor directives.")
+        warn.raises("WPM1")
     return blocks
 
 
@@ -314,5 +313,5 @@ class comment:
         try:
             self.entries = json5.loads(text)
         except:
-            print("Error:\tFailed loading json5 comment: " + self.text)
+            warn.raises("EPM1", self.text)
             self.entries = {}

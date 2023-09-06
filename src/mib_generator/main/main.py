@@ -4,6 +4,8 @@ This module through its :obj:`main` method serves the role of a logical centre o
 appropriate files between sub-packages, calls appropriate methods for each task, etc. See :obj:`main` for more info.
 """
 
+import mib_generator.data.warn as warn
+
 
 def main(
     visual=False,
@@ -119,7 +121,5 @@ def main(
 
             visualiser.main([load.TmH, load.TcTmH, load.TmC, load.TcH])
         except ModuleNotFoundError:
-            print(
-                "Warn.:\tPySide6 not found. Please install it in order to show the parsed files."
-            )
+            warn.raises("WMM1")
     return True
