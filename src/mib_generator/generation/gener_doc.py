@@ -1,7 +1,7 @@
-"""This module enables...
-Todo:
-    Add correct dependencies for package and documentation.
+"""This module enables generation of a ``.docx`` file which documents in a human-readable way what was put in MIB tables for a
+given set of Tm and Tc packets.
 
+The only (important) method in this module builds up the ``.docx`` file using the not so powerful ``python-docx`` library.
 """
 
 from docx import Document
@@ -13,9 +13,24 @@ from docx.enum.table import WD_ALIGN_VERTICAL
 import mib_generator.parsing.load as load
 
 
-def gen_doc(Tm_packets, Tc_packets):
+def gen_doc(Tm_packets=[], Tc_packets=[]):
+    """Create and save a ``.docx`` document which sketches out what entries are in each of the Tm and Tc packets in the passed
+    list.
+
+    This method goes through all passed Tm and Tc packets and for each adds an entry to the created ``.docx`` document
+    including basic info about the packet and a table of entries within it. The format of the output tries to adhere to a
+    standard scheme of an ICD document used normally for these purposes.
+
+    Args:
+        Tm_packets (list): List of Tm-packets, each of type :obj:`mib_generator.construction.TM_packet.TM_packet`, from which
+            the document is to be generated.
+        Tc_packets (list): List of Tc-packets, each of type :obj:`mib_generator.construction.TC_packet.TC_packet`, from which
+            the document is to be generated.
+
+    """
     document = Document()
-    document.add_heading("TM packets", 0)
+    if Tm_packets:
+        document.add_heading("TM packets", 0)
     for i in Tm_packets:
         h = document.add_paragraph("")
         try:
@@ -43,7 +58,8 @@ def gen_doc(Tm_packets, Tc_packets):
             for k in range(4):
                 row[k].vertical_alignment = WD_ALIGN_VERTICAL.CENTER
         document.add_paragraph()
-    document.add_heading("TC packets", 0)
+    if Tc_packets:
+        document.add_heading("TC packets", 0)
     for i in Tc_packets:
         h = document.add_paragraph("")
         h.add_run(i.ccf["CCF_DESCR2"]).italic = True
@@ -72,9 +88,22 @@ def gen_doc(Tm_packets, Tc_packets):
                 row[k].vertical_alignment = WD_ALIGN_VERTICAL.CENTER
         document.add_paragraph()
     document.save(load.out_doc)
+    return document
 
 
 def to_bytes(bits):
+    """Give the number of bits in bytes and in some meaning full format.
+
+    Calculates how many bytes are in the passed bits, how many residual bits, and puts together this information into a
+    meaningful-looking string.
+
+    Args:
+        bits (int): Numeber of bits to be "translated".
+
+    Returns:
+        str: The number of bits in bytes and residual bits in understandable form.
+
+    """
     byt = int(bits / 8)
     bit = bits - byt * 8
     if bit == 0:

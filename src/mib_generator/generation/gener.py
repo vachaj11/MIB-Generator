@@ -140,6 +140,10 @@ def Tmp_gen(typ, Tm_packets):
     Based on its name, this function chooses what method to call in order to generate and check the given table. It then
     calls this method and returns the result.
 
+    The special case here is with respect to the pic table in case of which, first a filter on the packet list have to be run
+    since the entries in the pic table are a subset of those in pid/list of packages and hence otherwise false warning would
+    be raised later (due to lack of uniqueness).
+
     Args:
         typ (str): Name of the MIB table to be generated.
         Tm_packets (list): List of Tm-packets from which the table is to be constructed. Each of type

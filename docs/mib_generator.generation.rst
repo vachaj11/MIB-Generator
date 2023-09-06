@@ -17,6 +17,14 @@ mib\_generator.generation.gener module
    :undoc-members:
    :show-inheritance:
 
+mib\_generator.generation.gener\_doc module
+-------------------------------------------
+
+.. automodule:: mib_generator.generation.gener_doc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 mib\_generator.generation.gener\_methods module
 -----------------------------------------------
 

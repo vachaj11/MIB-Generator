@@ -17,4 +17,5 @@ Subpackages
    mib_generator.generation
    mib_generator.main
    mib_generator.parsing
+   mib_generator.temp
    mib_generator.utilities

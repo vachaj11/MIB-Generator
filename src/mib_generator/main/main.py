@@ -5,24 +5,33 @@ appropriate files between sub-packages, calls appropriate methods for each task,
 """
 
 
-def main(visual=False, generate=True, parseonly=False, paths=False, config=False, generate_t=False,custom_dir=None):
+def main(
+    visual=False,
+    generate=True,
+    parseonly=False,
+    paths=False,
+    config=False,
+    generate_t=False,
+    custom_dir=None,
+):
     """Run this whole hellish thing.
 
     This method holds the main logic of the whole program. Roughly it sequentially does this:
 
-        1. If the appropriate option is raised, run script to update the input/output paths.
-        2. If the appropriate option is raised, run script to update the config file.
-        3. Initialise the :obj:`mib_generator.parsing.load` module which automatically parses the files at
+        1. If the appropriate option is raised, run script to update the input/output paths in default/specified directory.
+        2. If the appropriate option is raised, run script to update the config file in default/specified directory.
+        3. Load the configuration file into the runtime directory (:obj:`mib_generator.temp`).
+        4. Initialise the :obj:`mib_generator.parsing.load` module which automatically parses the files at
            the specified paths.
-        4. Unless construction is disabled, call appropriate construction scripts and receive
+        5. Unless construction is disabled, call appropriate construction scripts and receive
            Python representation of all the calibrations, TM-packets, TC-commands, etc. that
            occur in the parsed files.
-        5. Perform some checks that these objects (mainly TM-packets and calibrations) are linked
+        6. Perform some checks that these objects (mainly TM-packets and calibrations) are linked
            in a correct way.
-        6. Unless generation is disabled, call the generation script which turns all previously
+        7. Unless generation is disabled, call the generation script which turns all previously
            constructed objects into MIB tables and saves them.
-        7. If the appropriate option is raised, generate a document summing up the interpreted TM/TC packages.
-        8. If the appropriate option is raised, show the parsed files' contents in a GUI visualisation.
+        8. If the appropriate option is raised, generate a document summing up the interpreted TM/TC packages.
+        9. If the appropriate option is raised, show the parsed files' contents in a GUI visualisation.
 
     Args:
         visual (bool): ``True`` if the GUI visualisation of the parsed files should be shown, ``False`` otherwise (and by
@@ -34,6 +43,10 @@ def main(visual=False, generate=True, parseonly=False, paths=False, config=False
         paths (bool): ``True`` if the script to update the input/output paths should be run, ``False`` otherwise (and by
             default).
         config (bool): ``True`` if the script to update the config file should be run, ``False`` otherwise (and by default).
+        generate_t (bool): ``True`` if the ``.docx`` document summing up the processed TM and TC packets is to be generated,
+            ``False`` otherwise.
+        custom_dir (str): A string specifying the path to a directory where the configuration files on basis of which this
+            program runs, are located.
 
     Returns:
         bool: ``True`` if the script finished successfully, ``None`` otherwise.
@@ -47,10 +60,11 @@ def main(visual=False, generate=True, parseonly=False, paths=False, config=False
 
         update.update_config_d(custom_dir)
         update.update_config_m(custom_dir)
-    
+
     import mib_generator.temp.temp as temp
+
     temp.move_conf(custom_dir)
-    
+
     tm_lis = []
     tc_lis = []
     import mib_generator.parsing.load as load
@@ -94,10 +108,10 @@ def main(visual=False, generate=True, parseonly=False, paths=False, config=False
             import mib_generator.generation.gener as gener
 
             gener.generation_hub(tm_lis, tc_lis, cal, dec, ver, TcHead)
-            
+
         if generate_t:
             import mib_generator.generation.gener_doc as generd
-            
+
             generd.gen_doc(tm_lis, tc_lis)
     if visual:
         try:

@@ -8,13 +8,19 @@ import json5
 import os
 
 
-def update_path(directory):
+def update_path(directory=None):
     """Run a series of queries asking user to specify valid paths to input files.
 
     This method allows the user to specify paths to the 4 input files and 1 output directory that the MIB generator requires.
     The previously stored values are shown to the user and he can leave them be or choose to modify them stating the location of
     the target files either in terms of absolute or relative path. The inputted location is then checked and if it exists, then
     the path is saved (in absolute form). Only existence is checked, not that the file is valid for the given purpose.
+
+    All of this happens with respect to either a paths config file specified through the passed ``directory`` parameter or
+    w.r.t. the default paths config file which is located in :obj:`mib_generator.data`.
+
+    Args:
+        directory (str): String with the location of the directory in which the paths config file to be modified is located.
     """
     if not directory:
         file_path = os.path.join(
@@ -28,7 +34,7 @@ def update_path(directory):
         fil.close()
     else:
         leg_data = {}
-        for i in ["TmHeader","TcTmHeader","TmFile","TcHeader","OutDir","OutDoc"]:
+        for i in ["TmHeader", "TcTmHeader", "TmFile", "TcHeader", "OutDir", "OutDoc"]:
             leg_data[i] = "TO BE INPUTTED"
     data = {}
     valid_TmH = False
@@ -121,7 +127,9 @@ def update_path(directory):
             data["OutDoc"] = os.path.abspath(path)
             valid_Doc = True
         else:
-            print("Error:\tFailed to find the specified directory into which the file should be placed, try again.")
+            print(
+                "Error:\tFailed to find the specified directory into which the file should be placed, try again."
+            )
         print("------")
     fil = open(file_path, "w")
     fil.write("// This file stores various paths to source/output files\n")
@@ -130,13 +138,19 @@ def update_path(directory):
     print("======")
 
 
-def update_config_d(directory):
+def update_config_d(directory=None):
     """Run a series of queries asking user to specify parsing configuration parameters.
 
-    This method allows the user to specify configuration parameters to be used by the parsing pre-processor (i.e. say, 
-    whether the macro is defined or not). First, the already saved parameters are loaded and the user is asked whether 
+    This method allows the user to specify configuration parameters to be used by the parsing pre-processor (i.e. say,
+    whether the macro is defined or not). First, the already saved parameters are loaded and the user is asked whether
     he wants to keep the current value, change it or delete the parameter altogether. Then, the user is given the option
     to create a new parameter. The only valid accepted of parameters are boolean or a string.
+
+    All of this happens with respect to either a config file specified through the passed ``directory`` parameter or
+    w.r.t. the default config file which is located in :obj:`mib_generator.data`.
+
+    Args:
+        directory (str): String with the location of the directory in which the config file to be modified is located.
     """
     if not directory:
         file_path = os.path.join(
@@ -159,11 +173,15 @@ def update_config_d(directory):
     print("To change the pre-processor config parameters:")
     print('Write "True" to set the parameter to True (marking it as defined).')
     print('Write "False" to set the parameter to False (marking it as undefined).')
-    print('Write "DEL" to delete this parameter (which will mean it is undefined if asked).')
-    print("Write anything else to store that value as a string (non-empty string will mean defined).")
+    print(
+        'Write "DEL" to delete this parameter (which will mean it is undefined if asked).'
+    )
+    print(
+        "Write anything else to store that value as a string (non-empty string will mean defined)."
+    )
     print("Leave the input field blank to leave the value unchanged.")
     print("------")
-    
+
     for i in leg_data:
         print(
             "Set value of parameter "
@@ -206,21 +224,28 @@ def update_config_d(directory):
             else:
                 data[y] = x
             print("------")
-            
+
     fil = open(file_path, "w")
     fil.write("// This file stores various definitions used mainly by the parser\n")
     leg_fil["def"] = data
     fil.write(json5.dumps(leg_fil))
     fil.close()
     print("======")
-    
-def update_config_m(directory):
+
+
+def update_config_m(directory=None):
     """Run a series of queries asking user to specify generation configuration parameters.
 
-    This method allows the user to specify configuration parameters to be used at the generation step (i.e. the list of the MIB 
-    databases to be generated). First, the already saved parameters are loaded and the user is asked whether 
+    This method allows the user to specify configuration parameters to be used at the generation step (i.e. the list of the MIB
+    databases to be generated). First, the already saved parameters are loaded and the user is asked whether
     he wants to keep, change or delete them. Then, the user is given the option
     to create a new parameter. The only valid accepted of parameters are strins.
+
+    All of this happens with respect to either a config file specified through the passed ``directory`` parameter or
+    w.r.t. the default config file which is located in :obj:`mib_generator.data`.
+
+    Args:
+        directory (str): String with the location of the directory in which the config file to be modified is located.
     """
     if not directory:
         file_path = os.path.join(
@@ -245,9 +270,9 @@ def update_config_m(directory):
     print("------")
     print("The currently saved parameters (mib tables to be generated) are:")
     for i in leg_data:
-        x = input('The parameter "'+ i + '". Keep it? ')
+        x = input('The parameter "' + i + '". Keep it? ')
         if x in {"del", "Del", "DEL", "delete", "Delete", "DELETE"}:
-            print('The parameter "'+i+'" was deleted')
+            print('The parameter "' + i + '" was deleted')
         else:
             data.append(i)
     print("------")
@@ -259,10 +284,10 @@ def update_config_m(directory):
         y = input("Input: ")
         if y:
             data.append(y)
-            print('Parameter "'+y+'" added.')
+            print('Parameter "' + y + '" added.')
         else:
             additional = False
-        
+
     fil = open(file_path, "w")
     fil.write("// This file stores various definitions used mainly by the parser\n")
     leg_fil["mib"] = data

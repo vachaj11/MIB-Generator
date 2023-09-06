@@ -130,6 +130,27 @@ def exclude_repetition(table, typ):
 
 
 def pic_filter(packets):
+    """Check whether the information saved in the list of Tm-packet is self-consistent and prune it for generation of pic.
+
+    This function is an ad-hoc filter, that accounts for the fact that pic table has to have fewer entries than pid or other
+    similar tables because of the fact that one entry in it corresponds only to one combination of packet type/subtype.
+    However for a set of packets to be reducible to this single entry in pic, it has to be the case that they all share the
+    same declaration of additional identification fields which set them apart but have the same position relative to the packet
+    structure. This is hence also something that this filter checks and raises a warning whenever it encounters something
+    suspicious. Finally it deletes all (valid) repetition in types/subtypes it finds, so that pic table can be directly
+    generated from the output list of packets without raising further exceptions.
+
+    Args:
+        packets (list):
+            List of representations of Tm-packets, each of type :obj:`mib_generator.construction.TM_packet.TM_packet`.
+            This list corresponds to the pid table.
+
+    Returns:
+        list:
+            List of representations of Tm-packets, each of type :obj:`mib_generator.construction.TM_packet.TM_packet`
+            This list corresponds to the pic table.
+
+    """
     repete = set()
     for x in range(len(packets)):
         for y in range(x + 1, len(packets)):
