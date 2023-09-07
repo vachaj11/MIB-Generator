@@ -13,3 +13,13 @@ The workings of the MIB generator can be divided into multiple steps:
 	   
 For a further general understanding of how this code functions, I recommend you to start by reading the documentation for the
 :obj:`mib_generator.main.main` module and then continue from there on.
+
+Currently, four C files are expected as a basis for the generation process:
+
+	1. Tm ``.h`` file. This should include information about the structure of Tm packets, their entries, associated calibrations, etc.
+	2. Tm ``.c`` file. This should include mainly list of all Tm packet types and some of their meta-characteristics.
+	3. Tc ``.h`` file. This should include information about the structure of Tc commands, their entries, headers of Tc packets and
+	   associated decalibrations and verifications.
+   	4. TcTm ``.h`` file. This should include information common to both Tm and Tc packets like the common id structures or various enums. 
+	
+For the expected content of these files in more detail see :doc:`code examples here<samples>`. 
