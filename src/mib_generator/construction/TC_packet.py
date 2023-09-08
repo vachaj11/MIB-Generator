@@ -205,11 +205,11 @@ class TC_packet:
         except:
             diction["CCF_CNAME"] = ""
         try:
-            diction["CCF_DESCR"] = self.h_structure.name
+            diction["CCF_DESCR"] = self.h_structure.comment[-1].entries["desc"]
         except:
             diction["CCF_DESCR"] = ""
         try:
-            diction["CCF_DESCR2"] = self.h_structure.comment[-1].entries["desc"]
+            diction["CCF_DESCR2"] = self.h_structure.comment[-1].entries["Mnemonic"]
         except:
             diction["CCF_DESCR2"] = ""
         # diction["CCF_CTYPE"] = ""
@@ -319,7 +319,10 @@ class TC_packet:
                 # diction["CPC_DEFVAL"] = ""
                 # diction["CPC_CORR"] = ""
                 # diction["CPC_OBTID"] = ""
-                # diction["CPC_DESCR2"] = ""
+                try:
+                    diction["CPC_DESCR2"] = self.entries[i].comment[-1].entries["Mnemonic"]
+                except:
+                    diction["CPC_DESCR2"] = ""
                 # diction["CPC_ENDIAN"] = ""
                 entrydict.append(diction)
         return entrydict

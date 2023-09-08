@@ -155,6 +155,7 @@ def Tmp_gen(typ, Tm_packets):
         case "tpcf":
             return gm.one_generate(Tm_packets, "tpcf")
         case "pcf":
+            gm.mnemon_check(Tm_packets, "pcf")
             return gm.two_generate(Tm_packets, "pcf")
         case "plf":
             return gm.two_generate(Tm_packets, "plf")
@@ -180,8 +181,10 @@ def Tcp_gen(typ, Tc_packets):
     """
     match typ:
         case "ccf":
+            gm.mnemon_check(Tc_packets, "ccf")
             return gm.one_generate(Tc_packets, "ccf")
         case "cpc":
+            gm.mnemon_check(Tc_packets, "cpc")
             return gm.two_generate(Tc_packets, "cpc")
         case "cdf":
             return gm.two_generate(Tc_packets, "cdf")

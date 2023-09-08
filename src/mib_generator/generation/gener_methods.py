@@ -177,6 +177,47 @@ def pic_filter(packets):
             filtered_packets.append(packets[i])
     return filtered_packets
 
+def mnemon_check(packets, typ):
+    """Check whether mnemonics for the set of passed packets and the given table are unique and existent.
+    
+    This follows additional mib specifications by OHB Italia, which requires special mnemonic parameter to be
+    saved into the description field for a few mib tables. The mnemonics are specified to be unique and present, which is what
+    this method checks and raises warning if they aren't.
+    
+    Args:
+        packets (list): List of packets/commands. Each either of type :obj:`mib_generator.construction.TM_packet.TM_packet`
+            or :obj:`mib_generator.construction.TC_packet.TC_packet`.
+        typ (str): The name of the MIB table for which this is checked.
+    """
+    lis = set()
+    repeat = set()
+    for i in packets:
+        dic = i.__dict__[typ]
+        if type(dic) == dict:
+            try:
+                mnem = dic[typ.upper()+"_DESCR2"]
+            except:
+                mnem = None
+            if mnem in lis:
+                repeat.add(mnem)
+            elif mnem is not None:
+                lis.add(mnem)
+        elif type(dic) == list:
+            for k in dic:
+                try:
+                    mnem = k[typ.upper()+"_DESCR2"]
+                except:
+                    mnem = None
+                if mnem in lis:
+                    repeat.add(mnem)
+                elif mnem is None:
+                    repeat.add("")
+                else:
+                    lis.add(mnem)
+                
+    if repeat:
+        stradd = "\n\tThe repeating mnemonics are:\n\t"+str(repeat)
+        warn.raises("WGM6", typ, stradd)
 
 def generate(table_type, source):
     """From a list of dictionaries (per rows) generate a MIB table of a given type.

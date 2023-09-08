@@ -261,7 +261,10 @@ class TM_packet:
             # diction["PCF_OBTID"] =
             # diction["PCF_DARC"] =
             # diction["PCF_ENDIAN"] =
-            # diction["PCF_DESCR2"] =
+            try:
+                diction["PCF_DESCR2"] = self.entries[i].comment[-1].entries["Mnemonic"]
+            except:
+                diction["PCF_DESCR2"] = ""
             entrydict.append(diction)
         return entrydict
 

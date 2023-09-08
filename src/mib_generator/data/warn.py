@@ -21,6 +21,7 @@ warnings = {
     "WGM3": "Tm-packets {} and {} share packet type, subtype and apid, but do not have additional identification field specified.",
     "WGM4": "The value in table {}, column {}, row {} doesn't have the required type.{}",
     "WGM5": "Missing a mandatory entry in table {}, column {}, row {}.",
+    "WGM6": "There are either missing or repeating mnemonics for table {}.{}",
     "WGG1": "Didn't get an input object on basis of which the table {} could be constructed.",
     "WGG2": "The construction of the table {} isn't yet implemented. And hence it wasn't generated.",
     "WMM1": "PySide6 not found. Please install it in order to show the parsed files",
