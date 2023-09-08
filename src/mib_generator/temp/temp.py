@@ -32,6 +32,13 @@ def move_conf(dire=None):
         source_c = os.path.join(data, "config.json5")
     shutil.copy(source_c, here)
     
+def evom_conf(dire):
+    here = os.path.dirname(__file__)
+    temp = os.path.join(os.path.dirname(here), "temp")
+    if os.path.isdir(dire):
+        shutil.copy(os.path.join(temp, "config.json5"),os.path.join(dire, "config.json5"))
+        shutil.copy(os.path.join(temp, "paths.json5"),os.path.join(dire, "paths.json5"))
+    
 def update_paths(diction):
     file_path = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), "temp", "paths.json5"
@@ -62,4 +69,16 @@ def update_paths(diction):
     fil.write(json5.dumps(diction))
     fil.close()
     return diction
+    
+def fetch_paths():
+    file_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)), "temp", "paths.json5"
+    )
+    try:
+        fil = open(file_path, "r")
+        leg_data = json5.load(fil)
+        fil.close()
+    except:
+        leg_data = {}
+    return leg_data
             

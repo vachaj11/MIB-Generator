@@ -8,3 +8,5 @@ dist
 *.egg
 *.egg-info
 _build
+src/mib_generator/temp/config.json5
+src/mib_generator/temp/paths.json5

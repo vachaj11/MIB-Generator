@@ -29,6 +29,7 @@ warnings = {
     "WPM1": "Invalid logic encountered when parsing preprocessor directives.",
     "WTT1": "The path {} for file {} does not exist, using previous value {}.",
     "WTT2": "The path {} for file {} does not exist (and there is no valid previous value to use in its place).",
+    "WUU1": "The directory {} to which the config files are to be saved doesn't exist."
 }
 
 errors = {

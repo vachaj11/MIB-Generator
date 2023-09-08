@@ -19,6 +19,7 @@ import mib_generator.parsing.load as load
 import mib_generator.temp.temp as temp
 import mib_generator.utilities.visualiser as visualiser
 import mib_generator.data.warn as warn
+import mib_generator.gui.gui_methods as gm
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -65,6 +66,11 @@ class MainWindow(QMainWindow):
         self.ui.outdocbutton.clicked.connect(self.Dfile)
         self.ui.configbutton.clicked.connect(lambda:self.direc(self.ui.configfield))
         self.ui.pathsbutton.clicked.connect(self.use_paths)
+        self.ui.configdefault.clicked.connect(self.def_config)
+        self.ui.configload.clicked.connect(self.load_config)
+        self.ui.configsave.clicked.connect(self.save_config)
+        self.ui.mibbutton.clicked.connect(self.mib_use)
+        self.ui.prebutton.clicked.connect(self.pre_set)
 
     @Slot()
     def compute(self):
@@ -221,17 +227,49 @@ class MainWindow(QMainWindow):
         load.get_paths()
         self.dist_paths(dictn)
 
+    @Slot()
+    def def_config(self):
+        file_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "data"
+        )
+        self.ui.configfield.setText(file_path)
+
+    @Slot()
+    def load_config(self):
+        if os.path.isdir(self.ui.configfield.text()):
+            temp.move_conf(self.ui.configfield.text())
+            load.get_paths()
+            self.dist_paths(temp.fetch_paths())
+            self.ui.mibfield.setPlainText(gm.conf_to_json("mib"))
+            self.ui.prefield.setPlainText(gm.conf_to_json("def"))
+        else:
+            warn.raises("WUU1", self.ui.configfield.text())
+
+    @Slot()
+    def save_config(self):
+        self.ui.pathsbutton.click()
+        temp.evom_conf(self.ui.configfield.text())
+
+    @Slot()
+    def mib_use(self):
+        gm.update_json("mib", self.ui.mibfield.toPlainText())
+        
+    def pre_set(self):
+        gm.update_json("def", self.ui.prefield.toPlainText())
 
     def dist_paths(self, dic):
-        try:
+        if "TmHeader" in dic.keys():
             self.ui.TmHfield.setText(dic["TmHeader"])
+        if "TcTmHeader" in dic.keys():
             self.ui.TcTmHfield.setText(dic["TcTmHeader"])
+        if "TmFile" in dic.keys():
             self.ui.TmCfield.setText(dic["TmFile"])
-            self.ui.TcHfiled.setText(dic["TcHeader"])
+        if "TcHeader" in dic.keys():
+            self.ui.TcHfield.setText(dic["TcHeader"])
+        if "OutDir" in dic.keys():
             self.ui.outdirfield.setText(dic["OutDir"])
+        if "OutDoc" in dic.keys():
             self.ui.outdocfield.setText(dic["OutDoc"])
-        except:
-            self.ui.console.append("WARN.:\tThe list of files to be distributed into all the fields isn't complete.")
 
 
 if __name__ == "__main__":
