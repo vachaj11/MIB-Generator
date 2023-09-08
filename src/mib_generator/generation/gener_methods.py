@@ -8,8 +8,6 @@ import mib_generator.data.longdata as longdata
 import mib_generator.data.warn as warn
 import mib_generator.parsing.load as load
 
-out_path = load.out_dir
-
 
 def list_to_mib(lis):
     """Convert a 2D list of values into a string formatted as MIB ASCII file.
@@ -40,7 +38,7 @@ def save_mib(mib, name):
         mib (str): The string to be saved into a file
         name (str): Name of the file (+.dat) the string will be saved into.
     """
-    path = out_path + "/" + name + ".dat"
+    path = load.out_dir + "/" + name + ".dat"
     fil = open(path, "w")
     fil.write(mib)
     fil.close()

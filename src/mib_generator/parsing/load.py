@@ -21,41 +21,69 @@ import json5
 import mib_generator.data.warn as warn
 import mib_generator.parsing.parser_main as par
 
-try:
-    file_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)), "temp", "paths.json5"
-    )
-    file = open(file_path, "r")
-    paths = json5.load(file)
-    file.close()
+TmC_path = ""
+TmH_path = ""
+TcH_path = ""
+TcTmH_path = ""
+out_dir = ""
+out_doc = ""
 
-    TmC_path = paths["TmFile"]
-    TmH_path = paths["TmHeader"]
-    TcH_path = paths["TcHeader"]
-    TcTmH_path = paths["TcTmHeader"]
-    out_dir = paths["OutDir"]
-    out_doc = paths["OutDoc"]
-except:
-    warn.raises("EPL1")
-    TmC_path = ""
-    TmH_path = ""
-    TcH_path = ""
-    TcTmH_path = ""
-    out_dir = ""
-    out_doc = ""
+TmH = None
+TcH = None
+TcTmH = None
+TmC = None
 
-try:
-    TmH = par.main(TmH_path)
-    TcH = par.main(TcH_path)
-    TcTmH = par.main(TcTmH_path)
-    TmC = par.main(TmC_path)
-except:
-    warn.raises("EPL2")
-    TmH = None
-    TcH = None
-    TcTmH = None
-    TmC = None
+enumerations = {}
 
+def get_paths():
+    try:
+        file_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "temp", "paths.json5"
+        )
+        file = open(file_path, "r")
+        paths = json5.load(file)
+        file.close()
+
+        globals()["TmC_path"] = paths["TmFile"]
+        globals()["TmH_path"] = paths["TmHeader"]
+        globals()["TcH_path"] = paths["TcHeader"]
+        globals()["TcTmH_path"] = paths["TcTmHeader"]
+        globals()["out_dir"] = paths["OutDir"]
+        globals()["out_doc"] = paths["OutDoc"]
+    except:
+        warn.raises("EPL1")
+
+def parse_all():
+    try:
+        globals()["TmH"] = par.main(TmH_path)
+    except:
+        warn.raises("EPL2", "Tm .h")
+    try:
+        globals()["TcH"] = par.main(TcH_path)
+    except:
+        warn.raises("EPL2", "Tc .h")
+    try:
+        globals()["TcTmH"] = par.main(TcTmH_path)
+    except:
+        warn.raises("EPL2", "TcTm .h")
+    try:
+        globals()["TmC"] = par.main(TmC_path)
+    except:
+        warn.raises("EPL2", "Tm .c")
+
+def enum_stuff():
+    try:
+        enum1 = extr_values(TmH)
+        enum2 = extr_values(TcTmH)
+        enum3 = extr_values(TcH)
+        globals()["enumerations"] = enum1 | enum2 | enum3
+    except:
+        warn.raises("WPL1")
+
+def load_all():
+    get_paths()
+    parse_all()
+    enum_stuff()
 
 def extr_values(file):
     """Create a dictionary from constants, ``enum`` correspondences, etc... in the given file.
@@ -70,29 +98,20 @@ def extr_values(file):
         dict: A dictionary with all possible "global" evaluation found in the given file.
     """
     lis = {}
-    for x in file.structures:
-        if x.type == "enum":
-            lis.update(x.entries)
-        if x.type == "define":
-            name = x.name
-            if "(" in x.expression:
-                value_raw = x.expression[1:-1]
-            else:
-                value_raw = x.expression
-            try:
-                value = int(value_raw)
-            except:
-                value = None
-            if value is not None:
-                lis[name] = value
+    if file:
+        for x in file.structures:
+            if x.type == "enum":
+                lis.update(x.entries)
+            if x.type == "define":
+                name = x.name
+                if "(" in x.expression:
+                    value_raw = x.expression[1:-1]
+                else:
+                    value_raw = x.expression
+                try:
+                    value = int(value_raw)
+                except:
+                    value = None
+                if value is not None:
+                    lis[name] = value
     return lis
-
-
-try:
-    enum1 = extr_values(TmH)
-    enum2 = extr_values(TcTmH)
-    enum3 = extr_values(TcH)
-    enumerations = enum1 | enum2 | enum3
-except:
-    warn.raises("WPL1")
-    enumerations = {}

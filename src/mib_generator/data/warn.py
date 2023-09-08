@@ -30,7 +30,7 @@ warnings = {
 
 errors = {
     "EPL1": "Failed to locate one of the C files.",
-    "EPL2": "Failed to load one of the C files.",
+    "EPL2": "Failed to load the {} C file.",
     "EPM1": "Falied loading json5 comment: {}",
 }
 

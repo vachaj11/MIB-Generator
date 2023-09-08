@@ -261,8 +261,8 @@ def count_size(entries):
 def pi_sid(entries, positions):
     """Extract position of additional identification field from packet entries.
 
-    This method looks the presence/position of the first additional identification field (which is assumed to be
-    named ``"sid"``) in the packet, and if it finds it, calculates its width (in bites) and offset position (in bytes) from
+    This method looks the presence/position of the first additional identification field (which is recognised by the entry ``"sid"`` in its
+    comments) in the packet, and if it finds it, calculates its width (in bites) and offset position (in bytes) from
     the start of the packet.
 
     Args:
@@ -279,7 +279,7 @@ def pi_sid(entries, positions):
     start = None
     width = 0
     for i in range(len(entries)):
-        if entries[i].name == "sid":
+        if entries[i].comment and "sid" in entries[i].comment[0].entries.keys() and entries[i].comment[0].entries["sid"]:
             start = int(positions[i] / 8)
             width = positions[i + 1] - positions[i]
     return start, width

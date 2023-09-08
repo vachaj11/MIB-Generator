@@ -8,6 +8,6 @@ A set of python scripts that create a SCOS 2000[^1] MIB database from inputted C
 
 The code is hosted on [Github](https://github.com/vachaj11/MIB-Generator) and releases are published on [PyPI](https://pypi.org/project/mib-generator).
 
-For instruction on installation/building and usage or more general information about the project see the documentation hosted on [Read The Docs](https://mib-generator.readthedocs.io/en/latest/index.html).
+For instruction on installation/building and usage or more general information about the project see the documentation hosted on [Read The Docs](https://mib-generator.readthedocs.io/en/latest/index.html) ([in pdf](https://mib-generator.readthedocs.io/_/downloads/en/latest/pdf/)).
 
 [^1]: Satellite Mission Control System developed by the European Space Agency.
