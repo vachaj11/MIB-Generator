@@ -46,7 +46,9 @@ def generation_hub(
             type :obj:`mib_generator.construction.calib.verification`.
         Tc_head (construction.TC_packet.TC_header): A header included in all TC-commands.
         cfg (list): List of names of the MIB tables to be generated. Otherwise a default list stated in the config file is used.
-
+    
+    Returns:
+        dict: A dictionary holding all the generated mib tables (in form of Python 2D lists) with their names as keys.
     """
     if cfg is None:
         file_path = os.path.join(
@@ -93,6 +95,18 @@ def generation_hub(
         else:
             warn.raises("WGG2", i)
 
+    return tables
+    
+
+def save_tables(tables):
+    """Reformat and save mib tables in the passed dictionary.
+    
+    Goes through the passed dictionary holding mib tables and for each first reformats it into an appropriate ASCII string and then
+    saves it to the specified folder with all mib tables.
+    
+    Args:
+        tables (dict): A dictionary containing mib tables in the form of 2D Python lists as values with their names as keys.
+    """
     for i in tables:
         mib = gm.list_to_mib(tables[i])
         gm.save_mib(mib, i)

@@ -6,6 +6,7 @@ raise them. (This is made this centralised so that the raising method can be eas
 Attributes:
     warnings (dict): A dictionary containing the text definitions of all the possible warnings.
     errors (dict): A dictionary containing the text definitions of all the possible errors.
+    display (None or some object): Defines (or holds the object) where the warnings should be raise.
 """
 
 warnings = {
@@ -34,12 +35,24 @@ errors = {
     "EPM1": "Falied loading json5 comment: {}",
 }
 
+display = None
+
+def disp_update(var):
+    """Update the :attr:`display` global variable in this module to the specified value.
+    
+    This quite ugly method (or approach) serves the purpose of specifying to the method that takes care of raising warnings, that
+    the warnings shouldn't be printed to terminal but rather added to the object's text (the passed object is expected to be some GUI console).
+    
+    Args:
+        var (object such as PySide6.QtWidgets.QTextEdit): The object to be assigned to the :attr:`display` global variable.
+    """
+    globals()["display"] = var
 
 def raises(ID, *data):
     """Raise warning/error with the given ID.
 
     This method looks up a warning/error text for a given passed ID, formats it with other passed parameters and
-    then displays it (for now printing it into console).
+    then displays it - either to terminal if the global attribute :attr:`display` is ``None`` or to the object that this attribute holds..
 
     Args:
         ID (str): The ID identifying the warning/error of format 3 capital letters + one-digit number.
@@ -55,4 +68,7 @@ def raises(ID, *data):
             stri = "Error:\t" + errors[ID].format(*data)
         else:
             stri = "Error:\tUnspecified error with ID {} encountered.".format(ID)
-    print(stri)
+    if not display:
+        print(stri)
+    else:
+        display.append(stri)

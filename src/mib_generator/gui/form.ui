@@ -27,11 +27,11 @@
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
-           <string>Input</string>
+           <string>Paths</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
@@ -43,14 +43,14 @@
               <item>
                <widget class="QToolBox" name="toolBox">
                 <property name="currentIndex">
-                 <number>3</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="page_17">
                  <property name="geometry">
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>404</width>
+                   <width>407</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -95,7 +95,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>404</width>
+                   <width>407</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -140,7 +140,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>404</width>
+                   <width>407</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -185,7 +185,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>404</width>
+                   <width>407</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -218,6 +218,9 @@
                   </item>
                   <item>
                    <widget class="QPushButton" name="TcTmbutton">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
                     <property name="text">
                      <string>Browse files</string>
                     </property>
@@ -252,7 +255,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>404</width>
+                   <width>407</width>
                    <height>98</height>
                   </rect>
                  </property>
@@ -303,7 +306,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>404</width>
+                   <width>407</width>
                    <height>98</height>
                   </rect>
                  </property>
@@ -437,8 +440,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>404</width>
-                   <height>173</height>
+                   <width>140</width>
+                   <height>142</height>
                   </rect>
                  </property>
                  <attribute name="label">
@@ -476,7 +479,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>404</width>
+                   <width>407</width>
                    <height>173</height>
                   </rect>
                  </property>
@@ -538,17 +541,10 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="TmHstatus">
-                  <property name="text">
-                   <string>O</string>
-                  </property>
-                  <property name="textFormat">
-                   <enum>Qt::MarkdownText</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QPushButton" name="TmHview">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>View</string>
                   </property>
@@ -574,17 +570,10 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="TmCstatus">
-                  <property name="text">
-                   <string>O</string>
-                  </property>
-                  <property name="textFormat">
-                   <enum>Qt::MarkdownText</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QPushButton" name="TmCview">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>View</string>
                   </property>
@@ -610,19 +599,12 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="TcHstatus">
-                  <property name="text">
-                   <string>X</string>
-                  </property>
-                  <property name="textFormat">
-                   <enum>Qt::MarkdownText</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QPushButton" name="TcHview">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
-                   <string>Error</string>
+                   <string>View</string>
                   </property>
                  </widget>
                 </item>
@@ -646,19 +628,12 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="TcTmHstatus">
-                  <property name="text">
-                   <string>X</string>
+                 <widget class="QPushButton" name="TcTmHview">
+                  <property name="enabled">
+                   <bool>false</bool>
                   </property>
-                  <property name="textFormat">
-                   <enum>Qt::MarkdownText</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="TcTmview">
                   <property name="text">
-                   <string>Error</string>
+                   <string>View</string>
                   </property>
                   <property name="checkable">
                    <bool>false</bool>
@@ -726,7 +701,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QPushButton" name="pushButton_33">
+           <widget class="QPushButton" name="compute_all">
             <property name="text">
              <string>Compute
 all</string>
@@ -751,6 +726,9 @@ all</string>
                 </item>
                 <item>
                  <widget class="QPushButton" name="Tcbuild">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Interpret
 TC</string>
@@ -785,6 +763,9 @@ TC</string>
                 </item>
                 <item>
                  <widget class="QPushButton" name="Tmbuild">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Interpret
 TM</string>
@@ -825,6 +806,9 @@ TM</string>
                 </item>
                 <item>
                  <widget class="QPushButton" name="mibgen">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Generate MIB</string>
                   </property>
@@ -858,6 +842,9 @@ TM</string>
                 </item>
                 <item>
                  <widget class="QPushButton" name="docgen">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Generate .docx.</string>
                   </property>
@@ -897,6 +884,9 @@ TM</string>
                 </item>
                 <item>
                  <widget class="QPushButton" name="mibsave">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Save MIB</string>
                   </property>
@@ -930,6 +920,9 @@ TM</string>
                 </item>
                 <item>
                  <widget class="QPushButton" name="docsave">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Save .docx</string>
                   </property>

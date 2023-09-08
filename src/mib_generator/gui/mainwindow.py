@@ -1,7 +1,24 @@
 # This Python file uses the following encoding: utf-8
-import sys
+import sys, os
 
 from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtCore import Slot
+
+file_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(file_path)
+
+import mib_generator.construction.calib as calib
+import mib_generator.construction.TC_packet as tc_packet
+import mib_generator.construction.TC_packet_methods as tc_packet_methods
+import mib_generator.construction.TM_packet as tm_packet
+import mib_generator.construction.TM_packet_methods as tm_packet_methods
+import mib_generator.data.warn as warn
+import mib_generator.generation.gener as gener
+import mib_generator.generation.gener_doc as generd
+import mib_generator.parsing.load as load
+import mib_generator.temp.temp as temp
+import mib_generator.utilities.visualiser as visualiser
+import mib_generator.data.warn as warn
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -12,8 +29,152 @@ from ui_form import Ui_MainWindow
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setWindowTitle("MIB Generator")
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setWindowTitle("MIB Generator")
+
+        warn.disp_update(self.ui.console)
+        self.tms = None
+        self.TmHead = None
+        self.tcs = None
+        self.TcHead = None
+        self.cal = None #{"mcfs": [], "txfs": [], "cafs": [], "lgfs": []}
+        self.dec = None
+        self.ver = None
+        self.tables = {}
+        self.docum = None
+
+        self.ui.parsebutton.clicked.connect(self.parse)
+        self.ui.TmHview.clicked.connect(self.TmHshow)
+        self.ui.TcHview.clicked.connect(self.TcHshow)
+        self.ui.TmCview.clicked.connect(self.TmCshow)
+        self.ui.TcTmHview.clicked.connect(self.TcTmHshow)
+        self.ui.Tmbuild.clicked.connect(self.Tminter)
+        self.ui.Tcbuild.clicked.connect(self.Tcinter)
+        self.ui.mibgen.clicked.connect(self.MIBgen)
+        self.ui.docgen.clicked.connect(self.DOCgen)
+        self.ui.mibsave.clicked.connect(self.MIBsave)
+        self.ui.docsave.clicked.connect(self.DOCsave)
+        self.ui.compute_all.clicked.connect(self.compute)
+
+
+    @Slot()
+    def compute(self):
+        self.ui.parsebutton.click()
+        self.ui.Tmbuild.click()
+        self.ui.Tcbuild.click()
+        self.ui.mibgen.click()
+        self.ui.docgen.click()
+        self.ui.mibsave.click()
+        self.ui.docsave.click()
+
+    @Slot()
+    def parse(self):
+            load.load_all()
+            if load.TmH:
+                self.ui.TmHview.setEnabled(True)
+                self.ui.TmHview.setText("View")
+            else:
+                self.ui.TmHview.setEnabled(False)
+                self.ui.TmHview.setText("Error")
+            if load.TcH:
+                self.ui.TcHview.setEnabled(True)
+                self.ui.TcHview.setText("View")
+                self.ui.Tcbuild.setEnabled(True)
+            else:
+                self.ui.TcHview.setEnabled(False)
+                self.ui.TcHview.setText("Error")
+                self.ui.Tcbuild.setEnabled(False)
+            if load.TmC:
+                self.ui.TmCview.setEnabled(True)
+                self.ui.TmCview.setText("View")
+            else:
+                self.ui.TmCview.setEnabled(False)
+                self.ui.TmCview.setText("Error")
+            if load.TcTmH:
+                self.ui.TcTmHview.setEnabled(True)
+                self.ui.TcTmHview.setText("View")
+            else:
+                self.ui.TcTmHview.setEnabled(False)
+                self.ui.TcTmHview.setText("Error")
+            if load.TmH and load.TmC:
+                self.ui.Tmbuild.setEnabled(True)
+            else:
+                self.ui.Tmbuild.setEnabled(False)
+
+    @Slot()
+    def TmHshow(self):
+        self.prewTmH = visualiser.MainWindow(load.TmH)
+        self.prewTmH.show()
+
+    @Slot()
+    def TcHshow(self):
+        self.prewTcH = visualiser.MainWindow(load.TcH)
+        self.prewTcH.show()
+
+    @Slot()
+    def TmCshow(self):
+        self.prewTmC = visualiser.MainWindow(load.TmC)
+        self.prewTmC.show()
+
+    @Slot()
+    def TcTmHshow(self):
+        self.prewTcTmH = visualiser.MainWindow(load.TcTmH)
+        self.prewTcTmH.show()
+
+    @Slot()
+    def Tminter(self):
+        cal1 = calib.calib_extract(load.TmH.comments)
+        cal2 = calib.calib_extract(load.TcTmH.comments)
+        self.cal = {i: cal1[i] + cal2[i] for i in cal1}
+        self.TmHead = tm_packet.TM_header(load.TmH)
+        self.tms = []
+        for i in load.TmC.structures[1].elements:
+            matched = tm_packet_methods.header_search(i.entries[".type"])
+            for k in matched:
+                pack = tm_packet.TM_packet(i, k, self.TmHead)
+                calib.cur_update(pack, self.cal)
+                self.tms.append(pack)
+        self.ui.mibgen.setEnabled(True)
+        self.ui.docgen.setEnabled(True)
+
+    @Slot()
+    def Tcinter(self):
+        dec1 = calib.decal_extract(load.TcH.comments)
+        dec2 = calib.decal_extract(load.TcTmH.comments)
+        self.dec = dec1 + dec2
+        ver1 = calib.verif_extract(load.TcH.comments)
+        ver2 = calib.verif_extract(load.TcTmH.comments)
+        self.ver = ver1 + ver2
+        self.TcHead = tc_packet.TC_header(tc_packet_methods.find_header(load.TcH))
+        packets = tc_packet_methods.packet_search(load.TcH)
+        self.tcs = []
+        for i in packets:
+            comm = tc_packet.TC_packet(i, self.TcHead)
+            calib.cpc_update(comm, self.dec)
+            calib.cvs_update(comm, self.ver)
+            self.tcs.append(comm)
+        self.ui.mibgen.setEnabled(True)
+        self.ui.docgen.setEnabled(True)
+
+    @Slot()
+    def MIBgen(self):
+        self.tables = gener.generation_hub(self.tms, self.tcs, self.cal, self.dec, self.ver, self.TcHead)
+        self.ui.mibsave.setEnabled(True)
+
+    @Slot()
+    def DOCgen(self):
+        self.docum = generd.gen_doc(self.tms, self.tcs)
+        self.ui.docsave.setEnabled(True)
+
+    @Slot()
+    def MIBsave(self):
+        gener.save_tables(self.tables)
+
+    @Slot()
+    def DOCsave(self):
+        self.docum.save(load.out_doc)
 
 
 if __name__ == "__main__":
