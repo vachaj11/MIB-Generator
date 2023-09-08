@@ -3,6 +3,10 @@
 import os
 import shutil
 
+import json5
+
+import mib_generator.data.warn as warn
+
 
 def move_conf(dire=None):
     """Transfer the config files from the specified directory to runtime location.
@@ -27,3 +31,35 @@ def move_conf(dire=None):
     else:
         source_c = os.path.join(data, "config.json5")
     shutil.copy(source_c, here)
+    
+def update_paths(diction):
+    file_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)), "temp", "paths.json5"
+    )
+    try:
+        fil = open(file_path, "r")
+        leg_data = json5.load(fil)
+        fil.close()
+    except:
+        leg_data = {}
+    for i in diction:
+        if os.path.isfile(diction[i]) or os.path.isdir(diction[i]):
+            pass
+        else:
+            if i in leg_data.keys():
+                F = os.path.isfile(leg_data[i])
+                D = os.path.isdir(leg_data[i])
+                if F or D:
+                    warn.raises("WTT1",diction[i], i, leg_data[i])
+                    diction[i] = leg_data[i]
+                else:
+                    warn.raises("WTT2", diction[i], i)
+            else:
+                warn.raises("WTT2", diction[i], i)
+    
+    fil = open(file_path, "w")
+    fil.write("// This file stores various paths to source/output files\n")
+    fil.write(json5.dumps(diction))
+    fil.close()
+    return diction
+            

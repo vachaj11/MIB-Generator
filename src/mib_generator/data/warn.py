@@ -27,6 +27,8 @@ warnings = {
     "WMM1": "PySide6 not found. Please install it in order to show the parsed files",
     "WPL1": "Failed to construct the list of available enumerations.",
     "WPM1": "Invalid logic encountered when parsing preprocessor directives.",
+    "WTT1": "The path {} for file {} does not exist, using previous value {}.",
+    "WTT2": "The path {} for file {} does not exist (and there is no valid previous value to use in its place).",
 }
 
 errors = {

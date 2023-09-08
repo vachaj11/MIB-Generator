@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
         self.toolBox.setObjectName(u"toolBox")
         self.page_17 = QWidget()
         self.page_17.setObjectName(u"page_17")
-        self.page_17.setGeometry(QRect(0, 0, 407, 97))
+        self.page_17.setGeometry(QRect(0, -15, 393, 97))
         self.verticalLayout_23 = QVBoxLayout(self.page_17)
         self.verticalLayout_23.setObjectName(u"verticalLayout_23")
         self.label_30 = QLabel(self.page_17)
@@ -79,7 +79,7 @@ class Ui_MainWindow(object):
         self.toolBox.addItem(self.page_17, u"Tm .h file")
         self.page_18 = QWidget()
         self.page_18.setObjectName(u"page_18")
-        self.page_18.setGeometry(QRect(0, 0, 407, 97))
+        self.page_18.setGeometry(QRect(0, 0, 393, 97))
         self.verticalLayout_24 = QVBoxLayout(self.page_18)
         self.verticalLayout_24.setObjectName(u"verticalLayout_24")
         self.label_31 = QLabel(self.page_18)
@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
         self.toolBox.addItem(self.page_18, u"Tm .c file")
         self.page_19 = QWidget()
         self.page_19.setObjectName(u"page_19")
-        self.page_19.setGeometry(QRect(0, 0, 407, 97))
+        self.page_19.setGeometry(QRect(0, 0, 393, 97))
         self.verticalLayout_25 = QVBoxLayout(self.page_19)
         self.verticalLayout_25.setObjectName(u"verticalLayout_25")
         self.label_32 = QLabel(self.page_19)
@@ -125,7 +125,7 @@ class Ui_MainWindow(object):
         self.toolBox.addItem(self.page_19, u"Tc .h file")
         self.page_20 = QWidget()
         self.page_20.setObjectName(u"page_20")
-        self.page_20.setGeometry(QRect(0, 0, 407, 97))
+        self.page_20.setGeometry(QRect(0, 0, 393, 97))
         self.verticalLayout_26 = QVBoxLayout(self.page_20)
         self.verticalLayout_26.setObjectName(u"verticalLayout_26")
         self.label_33 = QLabel(self.page_20)
@@ -135,16 +135,16 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_26.addWidget(self.label_33)
 
-        self.TcTmfield = QLineEdit(self.page_20)
-        self.TcTmfield.setObjectName(u"TcTmfield")
+        self.TcTmHfield = QLineEdit(self.page_20)
+        self.TcTmHfield.setObjectName(u"TcTmHfield")
 
-        self.verticalLayout_26.addWidget(self.TcTmfield)
+        self.verticalLayout_26.addWidget(self.TcTmHfield)
 
-        self.TcTmbutton = QPushButton(self.page_20)
-        self.TcTmbutton.setObjectName(u"TcTmbutton")
-        self.TcTmbutton.setEnabled(True)
+        self.TcTmHbutton = QPushButton(self.page_20)
+        self.TcTmHbutton.setObjectName(u"TcTmHbutton")
+        self.TcTmHbutton.setEnabled(True)
 
-        self.verticalLayout_26.addWidget(self.TcTmbutton)
+        self.verticalLayout_26.addWidget(self.TcTmHbutton)
 
         self.toolBox.addItem(self.page_20, u"TcTm .h file")
 
@@ -166,7 +166,7 @@ class Ui_MainWindow(object):
         self.toolBox_3.setSizePolicy(sizePolicy2)
         self.page_11 = QWidget()
         self.page_11.setObjectName(u"page_11")
-        self.page_11.setGeometry(QRect(0, 0, 407, 98))
+        self.page_11.setGeometry(QRect(0, 0, 393, 97))
         self.verticalLayout_19 = QVBoxLayout(self.page_11)
         self.verticalLayout_19.setObjectName(u"verticalLayout_19")
         self.label_24 = QLabel(self.page_11)
@@ -194,7 +194,7 @@ class Ui_MainWindow(object):
         self.toolBox_3.addItem(self.page_11, u"MIB")
         self.page_12 = QWidget()
         self.page_12.setObjectName(u"page_12")
-        self.page_12.setGeometry(QRect(0, 0, 407, 98))
+        self.page_12.setGeometry(QRect(0, -15, 393, 97))
         self.verticalLayout_20 = QVBoxLayout(self.page_12)
         self.verticalLayout_20.setObjectName(u"verticalLayout_20")
         self.label_25 = QLabel(self.page_12)
@@ -222,6 +222,11 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout.addWidget(self.groupBox_3)
+
+        self.pathsbutton = QPushButton(self.tab)
+        self.pathsbutton.setObjectName(u"pathsbutton")
+
+        self.verticalLayout.addWidget(self.pathsbutton)
 
         self.tabWidget.addTab(self.tab, "")
         self.tab_6 = QWidget()
@@ -658,9 +663,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
-        self.toolBox.setCurrentIndex(0)
-        self.toolBox_3.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(1)
+        self.toolBox.setCurrentIndex(3)
+        self.toolBox_3.setCurrentIndex(0)
         self.toolBox_2.setCurrentIndex(1)
         self.parsebutton.setDefault(False)
 
@@ -687,9 +692,9 @@ class Ui_MainWindow(object):
         self.TcHbutton.setText(QCoreApplication.translate("MainWindow", u"Browse files", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_19), QCoreApplication.translate("MainWindow", u"Tc .h file", None))
         self.label_33.setText(QCoreApplication.translate("MainWindow", u"File path:", None))
-        self.TcTmfield.setText("")
-        self.TcTmfield.setPlaceholderText(QCoreApplication.translate("MainWindow", u"path to file", None))
-        self.TcTmbutton.setText(QCoreApplication.translate("MainWindow", u"Browse files", None))
+        self.TcTmHfield.setText("")
+        self.TcTmHfield.setPlaceholderText(QCoreApplication.translate("MainWindow", u"path to file", None))
+        self.TcTmHbutton.setText(QCoreApplication.translate("MainWindow", u"Browse files", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_20), QCoreApplication.translate("MainWindow", u"TcTm .h file", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"Output", None))
         self.label_24.setText(QCoreApplication.translate("MainWindow", u"Directory path:", None))
@@ -701,6 +706,7 @@ class Ui_MainWindow(object):
         self.outdocfield.setPlaceholderText(QCoreApplication.translate("MainWindow", u"path to file", None))
         self.outdocbutton.setText(QCoreApplication.translate("MainWindow", u"Browse files", None))
         self.toolBox_3.setItemText(self.toolBox_3.indexOf(self.page_12), QCoreApplication.translate("MainWindow", u".docx", None))
+        self.pathsbutton.setText(QCoreApplication.translate("MainWindow", u"Use", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Paths", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("MainWindow", u"Config and paths file", None))
         self.label_34.setText(QCoreApplication.translate("MainWindow", u"Config directory path", None))

@@ -43,7 +43,6 @@ def get_paths():
         file = open(file_path, "r")
         paths = json5.load(file)
         file.close()
-
         globals()["TmC_path"] = paths["TmFile"]
         globals()["TmH_path"] = paths["TmHeader"]
         globals()["TcH_path"] = paths["TcHeader"]

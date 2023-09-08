@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import sys, os
 
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PySide6.QtCore import Slot
 
 file_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -57,7 +57,14 @@ class MainWindow(QMainWindow):
         self.ui.mibsave.clicked.connect(self.MIBsave)
         self.ui.docsave.clicked.connect(self.DOCsave)
         self.ui.compute_all.clicked.connect(self.compute)
-
+        self.ui.TmHbutton.clicked.connect(lambda: self.Cfile(self.ui.TmHfield))
+        self.ui.TcHbutton.clicked.connect(lambda: self.Cfile(self.ui.TcHfield))
+        self.ui.TmCbutton.clicked.connect(lambda: self.Cfile(self.ui.TmCfield))
+        self.ui.TcTmHbutton.clicked.connect(lambda: self.Cfile(self.ui.TcTmHfield))
+        self.ui.outdirbutton.clicked.connect(lambda: self.direc(self.ui.outdirfield))
+        self.ui.outdocbutton.clicked.connect(self.Dfile)
+        self.ui.configbutton.clicked.connect(lambda:self.direc(self.ui.configfield))
+        self.ui.pathsbutton.clicked.connect(self.use_paths)
 
     @Slot()
     def compute(self):
@@ -175,6 +182,56 @@ class MainWindow(QMainWindow):
     @Slot()
     def DOCsave(self):
         self.docum.save(load.out_doc)
+
+    @Slot()
+    def Cfile(self, field):
+        ftype = "C files (*.c *.h)"
+        base = os.path.dirname(field.text())
+        file = QFileDialog.getOpenFileName(self, "Choose file", base, ftype)
+        if file[0] != '':
+            field.setText(file[0])
+
+    @Slot()
+    def direc(self, field):
+        base = os.path.dirname(field.text())
+        capt = "Choose a directory"
+        file = QFileDialog.getExistingDirectory(self, capt, base)
+        if file != '':
+            field.setText(file)
+
+    @Slot()
+    def Dfile(self):
+        ftype = "Microsoft Word files (*.docx)"
+        base = os.path.dirname(self.ui.outdocfield.text())
+        file = QFileDialog.getSaveFileName(self, "Choose file", base, ftype)
+        if file[0] != '':
+            self.ui.outdocfield.setText(file[0])
+
+    @Slot()
+    def use_paths(self):
+        dic = {
+            "TmHeader": self.ui.TmHfield.text(),
+            "TcTmHeader": self.ui.TcTmHfield.text(),
+            "TmFile": self.ui.TmCfield.text(),
+            "TcHeader": self.ui.TcHfield.text(),
+            "OutDir": self.ui.outdirfield.text(),
+            "OutDoc": self.ui.outdocfield.text(),
+        }
+        dictn = temp.update_paths(dic)
+        load.get_paths()
+        self.dist_paths(dictn)
+
+
+    def dist_paths(self, dic):
+        try:
+            self.ui.TmHfield.setText(dic["TmHeader"])
+            self.ui.TcTmHfield.setText(dic["TcTmHeader"])
+            self.ui.TmCfield.setText(dic["TmFile"])
+            self.ui.TcHfiled.setText(dic["TcHeader"])
+            self.ui.outdirfield.setText(dic["OutDir"])
+            self.ui.outdocfield.setText(dic["OutDoc"])
+        except:
+            self.ui.console.append("WARN.:\tThe list of files to be distributed into all the fields isn't complete.")
 
 
 if __name__ == "__main__":
