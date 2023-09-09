@@ -27,13 +27,13 @@ warnings = {
     "WMM1": "PySide6 not found. Please install it in order to show the parsed files",
     "WPL1": "Failed to construct the list of available enumerations.",
     "WPM1": "Invalid logic encountered when parsing preprocessor directives.",
-    "WTT1": "The path {} for file {} does not exist, using previous value {}.",
+    "WTT1": "The path {} for file {} does not exist, consider using previous value {}.",
     "WTT2": "The path {} for file {} does not exist (and there is no valid previous value to use in its place).",
     "WUU1": "The directory {} to which the config files are to be saved doesn't exist."
 }
 
 errors = {
-    "EPL1": "Failed to locate one of the C files.",
+    "EPL1": "Failed to load (some of) the input/output paths.",
     "EPL2": "Failed to load the {} C file.",
     "EPM1": "Falied loading json5 comment: {}",
 }
@@ -66,7 +66,7 @@ def raises(ID, *data):
             stri = "Warn.:\t" + warnings[ID].format(*data)
         else:
             stri = "Warn.:\tUnspecified warning with ID {} encountered.".format(ID)
-    else:
+    elif ID[:1] in {"e", "E"}:
         if ID in errors.keys():
             stri = "Error:\t" + errors[ID].format(*data)
         else:

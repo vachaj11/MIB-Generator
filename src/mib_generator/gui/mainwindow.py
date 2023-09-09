@@ -72,6 +72,12 @@ class MainWindow(QMainWindow):
         self.ui.mibbutton.clicked.connect(self.mib_use)
         self.ui.prebutton.clicked.connect(self.pre_set)
 
+        try:
+            self.ui.configdefault.click()
+            self.ui.configload.click()
+        except:
+            pass
+
     @Slot()
     def compute(self):
         self.ui.parsebutton.click()
@@ -254,6 +260,7 @@ class MainWindow(QMainWindow):
     def mib_use(self):
         gm.update_json("mib", self.ui.mibfield.toPlainText())
         
+    @Slot()
     def pre_set(self):
         gm.update_json("def", self.ui.prefield.toPlainText())
 
@@ -271,9 +278,11 @@ class MainWindow(QMainWindow):
         if "OutDoc" in dic.keys():
             self.ui.outdocfield.setText(dic["OutDoc"])
 
-
-if __name__ == "__main__":
+def gui_run():
     app = QApplication(sys.argv)
     widget = MainWindow()
     widget.show()
     sys.exit(app.exec())
+
+if __name__ == "__main__":
+    gui_run()

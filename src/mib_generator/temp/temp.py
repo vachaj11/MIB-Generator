@@ -58,7 +58,6 @@ def update_paths(diction):
                 D = os.path.isdir(leg_data[i])
                 if F or D:
                     warn.raises("WTT1",diction[i], i, leg_data[i])
-                    diction[i] = leg_data[i]
                 else:
                     warn.raises("WTT2", diction[i], i)
             else:
