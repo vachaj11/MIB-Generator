@@ -14,7 +14,7 @@ import mib_generator.parsing.load as load
 
 
 def gen_doc(Tm_packets=[], Tc_packets=[]):
-    """Create and save a ``.docx`` document which sketches out what entries are in each of the Tm and Tc packets in the passed
+    """Create a ``.docx`` document which sketches out what entries are in each of the Tm and Tc packets in the passed
     list.
 
     This method goes through all passed Tm and Tc packets and for each adds an entry to the created ``.docx`` document
@@ -87,7 +87,6 @@ def gen_doc(Tm_packets=[], Tc_packets=[]):
             for k in range(4):
                 row[k].vertical_alignment = WD_ALIGN_VERTICAL.CENTER
         document.add_paragraph()
-    document.save(load.out_doc)
     return document
 
 

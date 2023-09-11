@@ -106,10 +106,12 @@ def main(
             tc_lis.append(comm)
 
         if generate:
-            gener.generation_hub(tm_lis, tc_lis, cal, dec, ver, TcHead)
+            tables = gener.generation_hub(tm_lis, tc_lis, cal, dec, ver, TcHead)
+            gener.save_tables(tables)
 
         if generate_t:
-            generd.gen_doc(tm_lis, tc_lis)
+            docum = generd.gen_doc(tm_lis, tc_lis)
+            docum.save(load.out_doc)
     if visual:
         try:
             visualiser.main([load.TmH, load.TcTmH, load.TmC, load.TcH])
