@@ -216,26 +216,35 @@ def preproc_eval(variab):
         return bool(input("Is " + variab + "? (skip for False) "))
 
 
-def preproc_filter(stri):
+def preproc_filter(stri_o, stri_c):
     """Filter out what parts of the C-code should be further considered based on preprocessor directives.
 
-    First, this function looks for blocks pre-processor logic using the :obj:`preproc_parse` function. It then
+    First, this function looks for blocks pre-processor logic using the :obj:`preproc_parse` function. It then evaluates
     the condition associated with this logic with :obj:`preproc_eval` and depending on the result, decides what
     parts of the string should be deleted (replaced by equal number of spaces). Finally it performs this replacement.
+    
+    The preprocessor logic is determined based on the passed string with the code (``stri_o``), but the deliting 
+    is applied also to the string with comment (``stri_c``).
 
     Args:
-        stri (str): The text to be filtered on the basis of pre-processor logic.
+        stri_o (str): The text with C-code to be filtered on the basis of pre-processor logic.
+        stri_c (str): The text with comments to be filtered on the basis of pre-processor logic.
+        
 
     Returns:
-        str: The text with the pre-processor logic applied.
+        tuple: A tuple containing:
+        
+            * *str* - The string with C-code with the pre-processor logic applied.
+            * *str* - The string with comments with the pre-processor logic applied.
     """
-    blocks = preproc_parse(stri)
-    filt = stri
+    blocks = preproc_parse(stri_o)
+    filt_o = stri_o
+    filt_c = stri_c
     delete = []
     for i in blocks:
-        condition = stri[i[0] : i[1]].split()[1]
+        condition = stri_o[i[0] : i[1]].split()[1]
         evalu = preproc_eval(condition)
-        if stri[i[0] : i[1]].split()[0] == "#ifndef":
+        if stri_o[i[0] : i[1]].split()[0] == "#ifndef":
             evalu = not evalu
         if not evalu:
             delete.append([i[0], i[1]])
@@ -250,13 +259,14 @@ def preproc_filter(stri):
                 delete.append([i[2], i[2] + 6])
             else:
                 delete.append([i[1], i[1] + 6])
-            if stri[i[0] : i[1]].startswith("#ifdef"):
+            if stri_o[i[0] : i[1]].startswith("#ifdef"):
                 delete.append([i[0], i[0] + 6])
             else:
                 delete.append([i[0], i[0] + 7])
     for i in delete:
-        filt = filt[: i[0]] + " " * (i[1] - i[0]) + filt[i[1] :]
-    return filt
+        filt_o = filt_o[: i[0]] + " " * (i[1] - i[0]) + filt_o[i[1] :]
+        filt_c = filt_c[: i[0]] + " " * (i[1] - i[0]) + filt_c[i[1] :]
+    return filt_o, filt_c
 
 
 def com_parse(comm):

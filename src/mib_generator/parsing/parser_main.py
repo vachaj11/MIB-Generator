@@ -32,7 +32,8 @@ class file:
         lines (list): List of positions of line starts.
         text_o (str): File text with only code (without comments).
         text_c (str): File text with only comments (without code).
-        text_f (str): File (with code) after sorting out the pre-processor logic.
+        text_of (str): File (with code) after sorting out the pre-processor logic.
+        text_cf (str): File (with comments) after sorting out the pre-processor logic.
         structures (list): List of Python representations of C-objects found in the file.
 
             The Python representations are child classes of either :obj:`mib_generator.parsing.par_cfile.instance_og`
@@ -47,12 +48,12 @@ class file:
         self.max_position = len(stri)
         self.lines = parm.line_index(stri)
         self.text_o, self.text_c = parm.split_comment(stri)
-        self.text_f = parm.preproc_filter(self.text_o)
+        self.text_of, self.text_cf = parm.preproc_filter(self.text_o, self.text_c)
         if header:
-            self.structures = parh.str_parse(self.text_f)
+            self.structures = parh.str_parse(self.text_of)
         else:
-            self.structures = parc.str_parse(self.text_f)
-        self.comments = parm.com_parse(self.text_c)
+            self.structures = parc.str_parse(self.text_of)
+        self.comments = parm.com_parse(self.text_cf)
         self.link = self.linker()
 
     def linker(self):
