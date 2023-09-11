@@ -1,2 +1,5 @@
 sphinx-rtd-theme
 Pygments
+PySide6
+json5
+python-docx
