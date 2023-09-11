@@ -1,4 +1,8 @@
-"""This module holds method/s which take care of transferring the correct config files into the runtime directory.
+"""This module holds method/s which take care of transferring the config files between directories and getting their data.
+
+At runtime, the whole program works with config files which are stored in the :obj:`mib_generator.temp` sub-package/file, which
+means that before all of the generation processes happen, the config files from the default directory (:obj:`mib_generator.data`)  
+have to be moved there, which is one of the jobs of this module, the others being the same inversed, loading of config data, etc.
 """
 import os
 import shutil
@@ -33,6 +37,14 @@ def move_conf(dire=None):
     shutil.copy(source_c, here)
     
 def evom_conf(dire):
+    """Cope the runtime config files to the specified directory.
+    
+    This module is passed a directory location, it check whether it exists and if yes, copies the current
+    runtime config files to there.
+    
+    Args:
+        dire (str): A path to directory where the config files are to be copied.
+    """
     here = os.path.dirname(__file__)
     temp = os.path.join(os.path.dirname(here), "temp")
     if os.path.isdir(dire):
@@ -40,6 +52,18 @@ def evom_conf(dire):
         shutil.copy(os.path.join(temp, "paths.json5"),os.path.join(dire, "paths.json5"))
     
 def update_paths(diction):
+    """Update paths in the ``"paths.json5"`` config file to the passed values.
+    
+    Goes through each entry in the passed dictionary and if it recognises it as valid configuration path,
+    it saves it to the runtime config file. If it is given a path to file which doesn't exists, it raises
+    a warning but saves it nonetheless.
+    
+    Args:
+        diction (dict): A dictionary containing paths to the input/output files/directories.
+        
+    Returns:
+        dict: A dictionary of the values saved. (currently the same as the inputted dictionary)
+    """
     file_path = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), "temp", "paths.json5"
     )
@@ -70,6 +94,14 @@ def update_paths(diction):
     return diction
     
 def fetch_paths():
+    """Get paths dictionary from the runtime config file.
+    
+    Loads the paths config file in the runtime directory (the :obj:`mib_generator.temp` sub-package) and
+    extracts the paths to input/output files from it as a dictionary.
+    
+    Returns:
+        dict: A dictionary containing the paths to input/output files/directories.
+    """
     file_path = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), "temp", "paths.json5"
     )

@@ -30,8 +30,9 @@ Welcome to MIB Generator's documentation!
    Construction sub-package <mib_generator.construction>
    Generation sub-package <mib_generator.generation>
    Data sub-package <mib_generator.data>
-   Utilities sub-package <mib_generator.utilities>
    Temp sub-package <mib_generator.temp>
+   Utilities sub-package <mib_generator.utilities>
+   GUI sub-package <mib_generator.gui>
 
 Indices
 =======

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>893</width>
-    <height>780</height>
+    <height>812</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,6 +26,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
         <widget class="QTabWidget" name="tabWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="currentIndex">
           <number>0</number>
          </property>
@@ -42,6 +48,12 @@
              <layout class="QVBoxLayout" name="verticalLayout_34">
               <item>
                <widget class="QToolBox" name="toolBox">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="currentIndex">
                  <number>0</number>
                 </property>
@@ -50,7 +62,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>389</width>
+                   <width>403</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -95,7 +107,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>389</width>
+                   <width>403</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -140,7 +152,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>389</width>
+                   <width>403</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -185,7 +197,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>389</width>
+                   <width>403</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -242,7 +254,7 @@
               <item>
                <widget class="QToolBox" name="toolBox_3">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -255,7 +267,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>389</width>
+                   <width>403</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -306,7 +318,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>389</width>
+                   <width>403</width>
                    <height>97</height>
                   </rect>
                  </property>
@@ -455,15 +467,61 @@ files in the directory above</string>
               <item>
                <widget class="QToolBox" name="toolBox_2">
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
-                <widget class="QWidget" name="page_21">
+                <widget class="QWidget" name="page_22">
                  <property name="geometry">
                   <rect>
                    <x>0</x>
                    <y>0</y>
                    <width>403</width>
-                   <height>173</height>
+                   <height>205</height>
+                  </rect>
+                 </property>
+                 <attribute name="label">
+                  <string>MIB generation config</string>
+                 </attribute>
+                 <layout class="QVBoxLayout" name="verticalLayout_32">
+                  <item>
+                   <widget class="QLabel" name="label_37">
+                    <property name="text">
+                     <string>Formatted as json5 array:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPlainTextEdit" name="mibfield">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="sizeAdjustPolicy">
+                     <enum>QAbstractScrollArea::AdjustToContents</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="mibbutton">
+                    <property name="toolTip">
+                     <string>write the information above
+to the runtime config files</string>
+                    </property>
+                    <property name="text">
+                     <string>Use</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="page_21">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>218</width>
+                   <height>142</height>
                   </rect>
                  </property>
                  <attribute name="label">
@@ -479,6 +537,15 @@ files in the directory above</string>
                   </item>
                   <item>
                    <widget class="QPlainTextEdit" name="prefield">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="sizeAdjustPolicy">
+                     <enum>QAbstractScrollArea::AdjustToContents</enum>
+                    </property>
                     <property name="plainText">
                      <string/>
                     </property>
@@ -489,42 +556,6 @@ files in the directory above</string>
                   </item>
                   <item>
                    <widget class="QPushButton" name="prebutton">
-                    <property name="toolTip">
-                     <string>write the information above
-to the runtime config files</string>
-                    </property>
-                    <property name="text">
-                     <string>Use</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-                <widget class="QWidget" name="page_22">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>403</width>
-                   <height>173</height>
-                  </rect>
-                 </property>
-                 <attribute name="label">
-                  <string>MIB generation config</string>
-                 </attribute>
-                 <layout class="QVBoxLayout" name="verticalLayout_32">
-                  <item>
-                   <widget class="QLabel" name="label_37">
-                    <property name="text">
-                     <string>Formatted as json5 array:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPlainTextEdit" name="mibfield"/>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="mibbutton">
                     <property name="toolTip">
                      <string>write the information above
 to the runtime config files</string>
@@ -556,6 +587,9 @@ to the runtime config files</string>
               <bold>false</bold>
               <strikeout>false</strikeout>
              </font>
+            </property>
+            <property name="toolTip">
+             <string>push the all buttons around in the clockwise order</string>
             </property>
             <property name="text">
              <string>Compute
@@ -1008,7 +1042,7 @@ TM</string>
     <item>
      <widget class="QTextBrowser" name="console">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>

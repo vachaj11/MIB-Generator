@@ -53,4 +53,4 @@ more generatlly: ::
 
 or without installation: ::
 
-	$ python3 src/mib_generator/gui/mainwindow.py
+	$ python3 src/mib_generator/gui/gui.py
