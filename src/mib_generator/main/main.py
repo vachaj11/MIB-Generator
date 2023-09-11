@@ -84,9 +84,9 @@ def main(
         cal = {i: cal1[i] + cal2[i] for i in cal1}
         TmHead = tm_packet.TM_header(load.TmH)
         for i in load.TmC.structures[1].elements:
-            matched = tm_packet_methods.header_search(i.entries[".type"])
+            matched = tm_packet_methods.header_search(i.entries[".type"], load.TmH)
             for k in matched:
-                pack = tm_packet.TM_packet(i, k, TmHead)
+                pack = tm_packet.TM_packet(i, k[1], TmHead, k[0])
                 calib.cur_update(pack, cal)
                 tm_lis.append(pack)
 
@@ -100,7 +100,7 @@ def main(
         TcHead = tc_packet.TC_header(tc_packet_methods.find_header(load.TcH))
         packets = tc_packet_methods.packet_search(load.TcH)
         for i in packets:
-            comm = tc_packet.TC_packet(i, TcHead)
+            comm = tc_packet.TC_packet(i[1], TcHead, i[0])
             calib.cpc_update(comm, dec)
             calib.cvs_update(comm, ver)
             tc_lis.append(comm)

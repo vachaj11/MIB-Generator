@@ -238,9 +238,9 @@ class MainWindow(QMainWindow):
             self.TmHead = tm_packet.TM_header(load.TmH)
             self.tms = []
             for i in load.TmC.structures[1].elements:
-                matched = tm_packet_methods.header_search(i.entries[".type"])
+                matched = tm_packet_methods.header_search(i.entries[".type"], load.TmH)
                 for k in matched:
-                    pack = tm_packet.TM_packet(i, k, self.TmHead)
+                    pack = tm_packet.TM_packet(i, k[1], self.TmHead, k[0])
                     calib.cur_update(pack, self.cal)
                     self.tms.append(pack)
             self.ui.mibgen.setEnabled(True)
@@ -270,7 +270,7 @@ class MainWindow(QMainWindow):
             packets = tc_packet_methods.packet_search(load.TcH)
             self.tcs = []
             for i in packets:
-                comm = tc_packet.TC_packet(i, self.TcHead)
+                comm = tc_packet.TC_packet(i[1], self.TcHead, i[0])
                 calib.cpc_update(comm, self.dec)
                 calib.cvs_update(comm, self.ver)
                 self.tcs.append(comm)

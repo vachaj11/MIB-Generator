@@ -70,7 +70,7 @@ hopefully it will be sufficient to provide some examples.
    a declaration of a packet structure. For instance here is defined a packet of type ``"TM_DISC"``: ::
    
 	/*{ packet: "TM", pack_type: "TM_DISC", "base_par_index": 59200, prefix: "LWT",
-	    text_id: "LWY_SCI0002", spid: 75032, desc: "TM Acceptance success", Mnemonic: "ACK_jez" }*/
+	    text_id: "LWY_SCI0002", spid: 75032, desc: "TM Acceptance success", Mnemonic: "ACK_jez", use_structure: "TmDiscFull" }*/
 	struct PACKED TmDiscFull
 	{
 	    uint16_t sid; /*{ sid: true, enum: "sci_sids", desc: "DISC_B2_FULL",  const_value: "SID_SCI_DISC_FULL" }*/
@@ -94,6 +94,8 @@ hopefully it will be sufficient to provide some examples.
    	#. ``spid`` - Spid of this packet.
    	#. ``desc`` - Description of the purpose/task of this packet.
    	#. ``Mnemonic`` - Used for more systematic naming scheme. So far not implemented.
+   	#. ``use_structure`` - Allows for explicit specification of the ``struct`` to be used as a structure declaration for this packet. It is redundant
+   	   here since the ``struct`` ``"TmDiscFull"`` directly follows the comment.
    	
    Comments are also used for each of the entries/parameters to states their additional properties. Here:
    
@@ -189,7 +191,7 @@ can be recognised in this file:
 	
 2. Command definition. This mostly conforms to what was said about the TM packet definitions above. Example Tc command defined with ``struct`` can be: ::
 
-	/*{ packet: "TC", service: 3, sub: 6, "base_par_index": 66400, prefix: "LWP",
+	/*{ packet: "TC", service: 3, sub: 6, "base_par_index": 66400, prefix: "LWP", use_struct: "TcHkDisable",
 	    text_id: "LWC00306", desc: "TC Disable HK", Mnemonic: "ACK_jez", cvs: [17001] }*/
 	struct TcHkDisable
 	{

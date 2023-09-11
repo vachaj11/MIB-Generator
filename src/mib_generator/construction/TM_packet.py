@@ -65,12 +65,16 @@ class TM_packet:
         h_structure (parsing.par_header.struct): An object corresponding to a description of this packet found in the
             :obj:`mib_generator.parsing.load.TmH` file (i.e. the telemetry ``.h`` file).
         header (TM_header): The header structure included in the packet.
+        h_comment (parsing.par_methods.comment): A comment found in the :obj:`parsing.parsing.load.TmH` file which holds meta-information
+            about the packet.
 
     Attributes:
         structure (parsing.par_cfile.struct): An object corresponding to a description of this packet found in the
             :obj:`mib_generator.parsing.load.TmC` file (i.e. the telemetry ``.c`` file).
-        h_structure (parsing.par_header.struct): An object corresponding to a description of this packet found in the
+        h_structure (parsing.par_header.struct): An object corresponding to the structure of this packet found in the
             :obj:`mib_generator.parsing.load.TmH` file (i.e. the telemetry ``.h`` file).
+        h_comment (parsing.par_methods.comment): A comment found in the :obj:`parsing.parsing.load.TmH` file which holds meta-information
+            about the packet.
         header (TM_header): The header structure included in the packet.
         entries (list): List of entries found inside the TM packet. Each is an instance of :obj:`mib_generator.parsing.par_header.misc_r`.
         var_entries (list): List of entries which are subject to variable packet definition. For every such entry, the index
@@ -87,10 +91,11 @@ class TM_packet:
         vpd (list): List of dictionaries each one corresponding to one line in MIB vpd table.
     """
 
-    def __init__(self, structure, h_structure, header):
+    def __init__(self, structure, h_structure, header, h_comment):
         self.structure = structure
         self.header = header
         self.h_structure = h_structure
+        self.h_comment = h_comment
         self.entries = pm.h_analysis(self.h_structure)
         self.var_entries = pm.var_get(self.entries)
         self.size, self.positions = pm.count_size(self.entries)
@@ -127,11 +132,11 @@ class TM_packet:
             diction["PID_PI1_VAL"] = "-1"
         # diction["PID_PI2_VAL"] =
         try:
-            diction["PID_SPID"] = self.h_structure.comment[-1].entries["spid"]
+            diction["PID_SPID"] = self.h_comment.entries["spid"]
         except:
             diction["PID_SPID"] = ""
         try:
-            diction["PID_DESCR"] = self.h_structure.comment[-1].entries["desc"]
+            diction["PID_DESCR"] = self.h_comment.entries["desc"]
         except:
             diction["PID_DESCR"] = ""
         # diction["PID_UNIT"] =
@@ -175,8 +180,8 @@ class TM_packet:
             diction["PIC_PI1_OFF"] = -1
             diction["PIC_PI1_WID"] = 0
         try:
-            diction["PIC_PI2_OFF"] = self.h_structure.comment[-1].entries["PI2"][0]
-            diction["PIC_PI2_WID"] = self.h_structure.comment[-1].entries["PI2"][1]
+            diction["PIC_PI2_OFF"] = self.h_comment.entries["PI2"][0]
+            diction["PIC_PI2_WID"] = self.h_comment.entries["PI2"][1]
         except:
             diction["PIC_PI2_OFF"] = -1
             diction["PIC_PI2_WID"] = 0
@@ -196,7 +201,7 @@ class TM_packet:
         diction = {}
         diction["TPCF_SPID"] = self.pid["PID_SPID"]
         try:
-            diction["TPCF_NAME"] = self.h_structure.comment[-1].entries["text_id"]
+            diction["TPCF_NAME"] = self.h_comment.entries["text_id"]
         except:
             diction["TPCF_NAME"] = ""
         # diction["TPCF_SIZE"] =
@@ -219,10 +224,10 @@ class TM_packet:
             size = int(self.positions[i + 1] - self.positions[i])
             try:
                 no = "{:X}".format(
-                    int(str(self.h_structure.comment[-1].entries["base_par_index"]), 16)
+                    int(str(self.h_comment.entries["base_par_index"]), 16)
                     + i
                 )
-                diction["PCF_NAME"] = self.h_structure.comment[-1].entries[
+                diction["PCF_NAME"] = self.h_comment.entries[
                     "prefix"
                 ] + str(no)
             except:

@@ -45,16 +45,29 @@ def packet_search(file):
         file (:obj:`mib_generator.parsing.parser_main.file`): File (in Python representation) which is searched for the command definitions.
 
     Returns:
-        list: List of command definition structures found in the file. Each an instance of :obj:`mib_generator.parsing.par_header.struct`
+        list: List of pairs of command definition [comments, structures] found in the file. Each an instance of 
+        [:obj:`mib_generator.parsing.par_methods.comment`, :obj:`mib_generator.parsing.par_header.struct`].
     """
     packets = []
-    for i in file.structures:
-        if (
-            i.type == "struct"
-            and i.comment
-            and "packet" in i.comment[-1].entries.keys()
-        ):
-            packets.append(i)
+    for i in file.comments:
+        if {"packet", "text_id"} < i.entries.keys():
+            packets.append([i])
+            if "use_structure" in i.entries.keys():
+                for l in file.structures:
+                    if i.entries["use_structure"] == l.name:
+                        packets[-1].append(l)
+                if len(packets[-1]) == 1:
+                    warn.raises("WCT3", i.entries["use_structure"], i.entries["text_id"])
+                    packets.pop(-1)
+                elif len(packets[-1]) > 2:
+                    warn.raises("WCT4", i.entries["use_structure"], i.entries["text_id"])
+                    packets[-1] = packets[-1][:2]
+            elif i.structure.type == "struct":
+                packets[-1].append(i.structure)
+            else:
+                warn.raises("WCT5", i.entries["text_id"])
+                packets.pop(-1)
+            
     return packets
 
 

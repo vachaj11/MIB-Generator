@@ -150,10 +150,14 @@ class TC_packet:
         h_structure (parsing.par_header.struct):  An object corresponding to a description of this command found in the
             :obj:`mib_generator.parsing.load.TcH` file (i.e. the TC ``.h`` file).
         header (TC_header): A TC-header included at the start of the packet in which the command in question is send.
+        h_comment (parsing.par_methods.comment): A comment found in the :obj:`parsing.parsing.load.TcH` file which holds meta-information
+            about the command.
 
     Attributes:
         h_structure (parsing.par_header.struct):  An object corresponding to a description of this command found in the
             :obj:`mib_generator.parsing.load.TcH` file (i.e. the TC ``.h`` file).
+        h_comment (parsing.par_methods.comment): A comment found in the :obj:`parsing.parsing.load.TcH` file which holds meta-information
+            about the command.
         header (TC_header): A TC-header included at the start of the packet in which the command in question is send.
         h_entries (list): List of entries that relate to the header found inside the command definition. Each is an instance of
             :obj:`mib_generator.parsing.par_header.misc_r`.
@@ -175,8 +179,9 @@ class TC_packet:
         cvp (list): List of dictionaries each one corresponding to one line in MIB cvp table.
     """
 
-    def __init__(self, h_structure, header):
+    def __init__(self, h_structure, header, h_comment):
         self.h_structure = h_structure
+        self.h_comment = h_comment
         self.header = header
         self.h_entries, self.entries = pm.h_analysis(self.h_structure)
         self.size, self.positions = pm.count_size(self.entries)
@@ -201,23 +206,23 @@ class TC_packet:
         """
         diction = {}
         try:
-            diction["CCF_CNAME"] = self.h_structure.comment[-1].entries["text_id"]
+            diction["CCF_CNAME"] = self.h_comment.entries["text_id"]
         except:
             diction["CCF_CNAME"] = ""
         try:
-            diction["CCF_DESCR"] = self.h_structure.comment[-1].entries["desc"]
+            diction["CCF_DESCR"] = self.h_comment.entries["desc"]
         except:
             diction["CCF_DESCR"] = ""
         try:
-            diction["CCF_DESCR2"] = self.h_structure.comment[-1].entries["Mnemonic"]
+            diction["CCF_DESCR2"] = self.h_comment.entries["Mnemonic"]
         except:
             diction["CCF_DESCR2"] = ""
         # diction["CCF_CTYPE"] = ""
         # diction["CCF_CRITICAL"] = ""
         diction["CCF_PKTID"] = self.header.tcp["TCP_ID"]
         try:
-            diction["CCF_TYPE"] = self.h_structure.comment[-1].entries["service"]
-            diction["CCF_STYPE"] = self.h_structure.comment[-1].entries["sub"]
+            diction["CCF_TYPE"] = self.h_comment.entries["service"]
+            diction["CCF_STYPE"] = self.h_comment.entries["sub"]
         except:
             diction["CCF_TYPE"] = ""
             diction["CCF_STYPE"] = ""
@@ -262,12 +267,12 @@ class TC_packet:
                 try:
                     no = "{:X}".format(
                         int(
-                            str(self.h_structure.comment[-1].entries["base_par_index"]),
+                            str(self.h_comment.entries["base_par_index"]),
                             16,
                         )
                         + i
                     )
-                    diction["CPC_PNAME"] = self.h_structure.comment[-1].entries[
+                    diction["CPC_PNAME"] = self.h_comment.entries[
                         "prefix"
                     ] + str(no)
                 except:
@@ -456,10 +461,10 @@ class TC_packet:
         """
         if (
             self.h_structure.comment
-            and "cvs" in self.h_structure.comment[-1].entries.keys()
+            and "cvs" in self.h_comment.entries.keys()
         ):
             entrydict = []
-            for i in self.h_structure.comment[-1].entries["cvs"]:
+            for i in self.h_comment.entries["cvs"]:
                 diction = {}
                 diction["CVP_TASK"] = self.ccf["CCF_CNAME"]
                 diction["CVP_TYPE"] = "C"

@@ -121,34 +121,51 @@ def categfromptc(ptc):
     return categ
 
 
-def header_search(typ):
+def header_search(typ, file):
     """Search for corresponding header structures of the packet based on information in the comments.
 
-    Given the name of the packet as it appears in the TM ``.c`` file, this method searches among structures
+    Given the name of the packet as it appears in the TM ``.c`` file, this method searches among comments
     in :obj:`mib_generator.parsing.load.TmH` (the TM ``.h`` file) for a corresponding packet/packets description (list of parameters, etc).
     More packet definitions can correspond to a single type (they then differ in additional packet identifiers) and hence
     more than one such structures can be found sometimes.
+    
+    The comment with the header declaration does not also have to always have a structure directly associated to it (i.e. bellow it), in which
+    it is expected that it includes a ``"use_structure"`` key which refers to some C-structure which is such structure.
 
     Args:
         typ (str): The "type" entry of the packet definition in the ``.c`` TM file.
+        file (parsing.par_main.file): A file in which the header structure is to be searched for.
 
     Returns:
-        list: A list of structures which are packet descriptions for the given packet "type".
+        list: A list of pairs of [comments, structures] which are packet descriptions for the given packet "type".
     """
-    hstruct = []
-    for i in load.TmH.structures:
-        if i.type == "struct" and i.comment:
-            uni = {}
-            for l in i.comment:
-                uni.update(l.entries)
-            if "pack_type" in uni.keys() and uni["pack_type"] == typ:
-                hstruct.append(i)
+    comments = []
+    for i in file.comments:
+        if i.entries and "pack_type" in i.entries.keys() and i.entries["pack_type"] == typ:
+            comments.append([i])
+            if "use_structure" in i.entries.keys():
+                for l in file.structures:
+                    if l.type == "struct" and l.name == i.entries["use_structure"]:
+                        comments[-1].append(l)
+                if len(comments[-1]) == 1:
+                    warn.raises("WCM3", i.entries["use_structure"], typ)
+                    comments.pop(-1)
+                elif len(comments[-1])>2:
+                    warn.raises("WCM4", i.entries["use_structure"], typ)
+                    comments[-1] = comments[-1][:2]
+            elif i.structure.type == "struct":
+                comments[-1].append(i.structure)
+            else:
+                warn.raises("WCM5", typ)
+                comments.pop(-1)
+                
+            
     # legacy approach
     # if typ in load.enumerations.keys() and not hstruct:
     #    hstruct.append(load.enumerations[typ])
-    if not hstruct:
+    if not comments:
         warn.raises("WCM2", typ)
-    return hstruct
+    return comments
 
 
 def h_analysis(h_struct):
