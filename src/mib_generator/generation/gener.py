@@ -4,12 +4,10 @@ Methods in this module generate MIB databases from their representations previou
 :obj:`mib_generator.construction` package/modules and run finals checks on the results to ensure that the outputted tables/MIB files 
 adhere to the requirements on the type, length, uniqueness and "mandatoriness".
 """
-import os
-
-import json5
 
 import mib_generator.data.warn as warn
 import mib_generator.generation.gener_methods as gm
+import mib_generator.parsing.load as load
 
 
 def generation_hub(
@@ -51,12 +49,7 @@ def generation_hub(
         dict: A dictionary holding all the generated mib tables (in form of Python 2D lists) with their names as keys.
     """
     if cfg is None:
-        file_path = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), "temp", "config.json5"
-        )
-        fil = open(file_path, "r")
-        to_be = json5.load(fil)["mib"]
-        fil.close()
+        to_be = load.conf["mib"]
     else:
         to_be = cfg
 

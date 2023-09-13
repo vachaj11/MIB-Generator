@@ -465,69 +465,22 @@ files in the directory above</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_28">
               <item>
-               <widget class="QToolBox" name="toolBox_2">
+               <widget class="QTabWidget" name="tabWidget_2">
                 <property name="currentIndex">
                  <number>0</number>
                 </property>
-                <widget class="QWidget" name="page_22">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>403</width>
-                   <height>205</height>
-                  </rect>
-                 </property>
-                 <attribute name="label">
-                  <string>MIB generation config</string>
-                 </attribute>
-                 <layout class="QVBoxLayout" name="verticalLayout_32">
-                  <item>
-                   <widget class="QLabel" name="label_37">
-                    <property name="text">
-                     <string>Formatted as json5 array:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPlainTextEdit" name="mibfield">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="sizeAdjustPolicy">
-                     <enum>QAbstractScrollArea::AdjustToContents</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="mibbutton">
-                    <property name="toolTip">
-                     <string>write the information above
-to the runtime config files</string>
-                    </property>
-                    <property name="text">
-                     <string>Use</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-                <widget class="QWidget" name="page_21">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>218</width>
-                   <height>142</height>
-                  </rect>
-                 </property>
-                 <attribute name="label">
-                  <string>Parsing preprocessor config</string>
+                <widget class="QWidget" name="Page_2" native="true">
+                 <attribute name="title">
+                  <string>Preprocessing</string>
                  </attribute>
                  <layout class="QVBoxLayout" name="verticalLayout_31">
+                  <item>
+                   <widget class="QLabel" name="label">
+                    <property name="text">
+                     <string>What variables are seen as &quot;defined&quot; by preprocessor.</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item>
                    <widget class="QLabel" name="label_36">
                     <property name="text">
@@ -556,6 +509,102 @@ to the runtime config files</string>
                   </item>
                   <item>
                    <widget class="QPushButton" name="prebutton">
+                    <property name="toolTip">
+                     <string>write the information above
+to the runtime config files</string>
+                    </property>
+                    <property name="text">
+                     <string>Use</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="tab_2">
+                 <attribute name="title">
+                  <string>Param. name</string>
+                 </attribute>
+                 <layout class="QVBoxLayout" name="verticalLayout_2">
+                  <item>
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string>How should names of Tm/Tc packet parameters look.</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_46">
+                    <property name="text">
+                     <string>Formatted as json5 dictonary:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPlainTextEdit" name="namfield">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="sizeAdjustPolicy">
+                     <enum>QAbstractScrollArea::AdjustToContents</enum>
+                    </property>
+                    <property name="plainText">
+                     <string/>
+                    </property>
+                    <property name="placeholderText">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="nambutton">
+                    <property name="toolTip">
+                     <string>write the information above
+to the runtime config files</string>
+                    </property>
+                    <property name="text">
+                     <string>Use</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="Page_1" native="true">
+                 <attribute name="title">
+                  <string>Generation</string>
+                 </attribute>
+                 <layout class="QVBoxLayout" name="verticalLayout_32">
+                  <item>
+                   <widget class="QLabel" name="label_3">
+                    <property name="text">
+                     <string>What MIB tables should be generated.</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_37">
+                    <property name="text">
+                     <string>Formatted as json5 array:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPlainTextEdit" name="mibfield">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="sizeAdjustPolicy">
+                     <enum>QAbstractScrollArea::AdjustToContents</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="mibbutton">
                     <property name="toolTip">
                      <string>write the information above
 to the runtime config files</string>

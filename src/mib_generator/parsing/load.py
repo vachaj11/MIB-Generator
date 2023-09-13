@@ -28,6 +28,8 @@ TcTmH_path = ""
 out_dir = ""
 out_doc = ""
 
+conf = ""
+
 TmH = None
 TcH = None
 TcTmH = None
@@ -57,6 +59,17 @@ def get_paths():
         globals()["out_doc"] = paths["OutDoc"]
     except:
         warn.raises("EPL1")
+
+def get_conf():
+    try:
+        file_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "temp", "config.json5"
+        )
+        fil = open(file_path, "r")
+        globals()["conf"] = json5.load(fil)
+        fil.close()
+    except:
+        globals()[""] = {}
 
 def parse_all():
     """Parse the inputted C-files and save the output.
@@ -134,9 +147,11 @@ def load_all():
     This method (replacing previous simple initialisation of this module) runs other methods, which 
     
         1. Load the paths to input C-files.
+        2. Load the configuration settings.
         2. Parse files at these paths.
         3. Create evaluation dictionary from these parsed files.
     """
     get_paths()
+    get_conf()
     parse_all()
     enum_stuff()

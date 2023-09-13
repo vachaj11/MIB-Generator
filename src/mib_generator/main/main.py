@@ -69,6 +69,7 @@ def main(
     if config:
         update.update_config_d(custom_dir)
         update.update_config_m(custom_dir)
+        update.update_config_n(custom_dir)
 
     temp.move_conf(custom_dir)
 

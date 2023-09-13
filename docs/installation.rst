@@ -53,8 +53,8 @@ The set of scripts can also be used directly without any building and packet ins
 
 	$ git clone https://github.com/vachaj11/MIB-Generator.git
 
-Before running the cloned code, you will have to manually install the prerequisite python libraries, which are ``json5`` and ``PySide6`` (optional, used only for the GUI). Install them using (assuming a standard Python3 environment): ::
+Before running the cloned code, you will have to manually install the prerequisite python libraries, which are ``json5``, ``python-docx`` and ``PySide6`` (optional, used only for the GUI). Install them using (assuming a standard Python3 environment): ::
 
-	$ python3 -m pip install json5 PySide6
+	$ python3 -m pip install json5 python-docx PySide6
 
 You should then be able to directly run any script found in the package, subpackages and modules in the ``./src`` directory.

@@ -191,7 +191,7 @@ can be recognised in this file:
 	
 2. Command definition. This mostly conforms to what was said about the TM packet definitions above. Example Tc command defined with ``struct`` can be: ::
 
-	/*{ packet: "TC", service: 3, sub: 6, "base_par_index": 66400, prefix: "LWP", use_struct: "TcHkDisable",
+	/*{ packet: "TC", service: 3, sub: 6, "base_par_index": 66400, prefix: "LWP", use_structure: "TcHkDisable",
 	    text_id: "LWC00306", desc: "TC Disable HK", Mnemonic: "ACK_jez", cvs: [17001] }*/
 	struct TcHkDisable
 	{

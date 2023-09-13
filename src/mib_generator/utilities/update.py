@@ -297,3 +297,144 @@ def update_config_m(directory=None):
     fil.write(json5.dumps(leg_fil))
     fil.close()
     print("======")
+    
+def update_config_n(directory=None):
+    """Run a series of queries asking user to specify parameter name creation configuration parameters.
+
+    This method allows the user to specify configuration parameters to be used at the parameter construction step (i.e.
+    what form should the names of the parameters take. There are four parameters which define these settings and the user
+    is asked about the value of each of them which he can either change or leave the previous.
+
+    All of this happens with respect to either a config file specified through the passed ``directory`` parameter or
+    w.r.t. the default config file which is located in :obj:`mib_generator.data`.
+
+    Args:
+        directory (str): String with the location of the directory in which the config file to be modified is located.
+    """
+    if not directory:
+        file_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "data", "config.json5"
+        )
+    else:
+        file_path = os.path.join(directory, "config.json5")
+    if os.path.isfile(file_path):
+        fil = open(file_path, "r")
+        leg_fil = json5.load(fil)
+        fil.close()
+        if "nam" in leg_fil.keys():
+            leg_data = leg_fil["nam"]
+        else:
+            leg_data = {}
+    else:
+        leg_data = {}
+        
+    data = {}
+    print("To change a construction config parameter:")
+    print("Write anything to save it as the parameter's value.")
+    print("(assuming it is appropriatelly string or int)")
+    print('Write nothing (press Enter) to keep the previous value.')
+    print('Write "---" to save "" as the parameter\'s value (where appropriate).')
+    print("------")
+    print('Parameter - Numerical index length in "PCF_NAME".')
+    print('(integer < 6 expected)')
+    try:
+        print('Current value is: '+str(leg_data["pcf"]))
+        pre = leg_data["pcf"]
+    except:
+        print('There is no current value.')
+        pre = None
+    fin = False
+    while not fin:
+        x = input("Set a value for this parameter: ")
+        if not x:
+            out = pre
+        else:
+            try:
+                out = int(x)
+            except:
+                out = None
+        if out in range(6):
+            data["pcf"] = out
+            fin = True
+        else:
+            print("Invalid value entered.")
+    print("------")
+    print('Parameter - Numerical index length in "CPC_PNAME".')
+    print('(integer < 6 expected)')
+    try:
+        print('Current value is: '+str(leg_data["cpc"]))
+        pre = leg_data["cpc"]
+    except:
+        print('There is no current value.')
+        pre = None
+    fin = False
+    while not fin:
+        x = input("Set a value for this parameter: ")
+        if not x:
+            out = pre
+        else:
+            try:
+                out = int(x)
+            except:
+                out = None
+        if out in range(6):
+            data["cpc"] = out
+            fin = True
+        else:
+            print("Invalid value entered.")
+    print("------")
+    print('Parameter - Default "nature" value for "PCF_NAME".')
+    print('(str with len() < 2 expected)')
+    try:
+        print('Current value is: '+str(leg_data["nat_pcf"]))
+        pre = leg_data["nat_pcf"]
+    except:
+        print('There is no current value.')
+        pre = None
+    fin = False
+    while not fin:
+        x = input("Set a value for this parameter: ")
+        if not x:
+            out = pre
+        else:
+            if x == "---":
+                out = ""
+            else:
+                out = x
+        if len(out) < 2:
+            data["nat_pcf"] = out
+            fin = True
+        else:
+            print("Invalid value entered.")
+    print("------")
+    print('Parameter - Default "nature" value for "CPC_PNAME".')
+    print('(str with len() < 2 expected)')
+    try:
+        print('Current value is: '+str(leg_data["nat_cpc"]))
+        pre = leg_data["nat_cpc"]
+    except:
+        print('There is no current value.')
+        pre = None
+    fin = False
+    while not fin:
+        x = input("Set a value for this parameter: ")
+        if not x:
+            out = pre
+        else:
+            if x == "---":
+                out = ""
+            else:
+                out = x
+        if len(out) < 2:
+            data["nat_cpc"] = out
+            fin = True
+        else:
+            print("Invalid value entered.")
+    print("------")
+    fil = open(file_path, "w")
+    fil.write("// This file stores various definitions used mainly by the parser\n")
+    leg_fil["nam"] = data
+    fil.write(json5.dumps(leg_fil))
+    fil.close()
+    print("======")
+    

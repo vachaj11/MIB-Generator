@@ -5,6 +5,9 @@ concerned with value evaluation, bite counting, type identification etc. I.e. mo
 """
 from copy import copy
 
+import json5
+import os
+
 import mib_generator.data.longdata as longdata
 import mib_generator.data.warn as warn
 import mib_generator.parsing.load as load

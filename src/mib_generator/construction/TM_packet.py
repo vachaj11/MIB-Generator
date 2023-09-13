@@ -7,6 +7,7 @@ correspond to it.
 """
 import mib_generator.construction.TM_packet_methods as pm
 import mib_generator.data.warn as warn
+import mib_generator.parsing.load as load
 
 
 class TM_header:
@@ -214,23 +215,45 @@ class TM_packet:
         the key being the name of the column and value the entry to be filled in). Here one "MIB row" is created for each entry/parameter
         in :attr:`entries` and for each row most of the information is taken from the comment attached to the line at which the C-object
         describing the entry is found in the original C-files.
+        
+        Also, before entries for any parameter are calculated, a simple check is run inspecting whether the ``"base_par_index"`` defined
+        in the packet-level comment corresponds in length to the length of the numerical part of the parameter names to be generated (
+        this is defined in the config file). If not, a warning is raised.
 
         Returns:
             list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`pcf`.
         """
         entrydict = []
+        try:
+            if load.conf["nam"]["pcf"] < self.h_comment.entries["base_par_index"]:
+                warn.raises("WCMA", self.tpcf["TPCF_NAME"])
+        except:
+            pass
         for i in range(len(self.entries)):
             diction = {}
             size = int(self.positions[i + 1] - self.positions[i])
             try:
-                no = "{:X}".format(
-                    int(str(self.h_comment.entries["base_par_index"]), 16)
-                    + i
-                )
+                #all of this is for creation of the parameter name based on config settings.
+                if "nam" in load.conf.keys():
+                    conf = load.conf["nam"]
+                    no = "{:X}".format(
+                        int(str(self.h_comment.entries["base_par_index"])[:conf["pcf"]], 16)
+                        + i
+                    )
+                    if self.entries[i].comment and "nature" in self.entries[i].comment[-1].entries.keys():
+                        nat = self.entries[i].comment[-1].entries["nature"][:1]
+                    else:
+                        nat = conf["nat_pcf"]
+                else:
+                    no = str("{:X}".format(
+                        int(str(self.h_comment.entries["base_par_index"]), 16)
+                        + i))
+                    nat = ""
                 diction["PCF_NAME"] = self.h_comment.entries[
                     "prefix"
-                ] + str(no)
-            except:
+                ] + no + nat
+            except Exception as p:
+                print(p)
                 diction["PCF_NAME"] = ""
             try:
                 diction["PCF_DESCR"] = self.entries[i].comment[-1].entries["desc"]

@@ -6,6 +6,7 @@ form any possible information that could be found relating to that command inclu
 correspond to it.
 """
 import mib_generator.construction.TC_packet_methods as pm
+import mib_generator.data.warn as warn
 import mib_generator.parsing.load as load
 
 
@@ -244,7 +245,7 @@ class TC_packet:
     def cpc_listdict(self):
         """Define elements for entries in cpc table.
 
-        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the pcpc table (with
+        Creates a list of dictionaries in each of which a key-value pair corresponds to entry in one column of the cpc table (with
         the key being the name of the column and value the entry to be filled in). Here for each parameter in the header, one row
         (i.e. one entry in the list) is created, entries in which are extracted from comments around the given parameter, calculated
         from type/general information, etc... It should be mentioned that not all entries in :attr:`etnries` are parameters since they
@@ -255,26 +256,44 @@ class TC_packet:
         placeholder name (rather than predefined one) to be put into the ``"CPC_PRFREF"`` entry and then generate the range check tables
         as an attribute of this command class :attr:`prf` and :attr:`prv` (rather then as an external object as is the case with all
         other calibrations).
+        
+        Also, before entries for any parameter are calculated, a simple check is run inspecting whether the ``"base_par_index"`` defined
+        in the packet-level comment corresponds in length to the length of the numerical part of the parameter names to be generated (
+        this is defined in the config file). If not, a warning is raised.
 
         Returns:
             list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`cpc`.
         """
         entrydict = []
+        try:
+            if load.conf["nam"]["cpc"] < self.h_comment.entries["base_par_index"]:
+                warn.raises("WCTA", self.ccf["CCF_CNAME"])
+        except:
+            pass
         for i in range(len(self.entries)):
             if self.parameters[i] >= 0:
                 diction = {}
                 size = int(self.positions[i + 1] - self.positions[i])
                 try:
-                    no = "{:X}".format(
-                        int(
-                            str(self.h_comment.entries["base_par_index"]),
-                            16,
+                #all of this is for creation of the parameter name based on config settings.
+                    if "nam" in load.conf.keys():
+                        conf = load.conf["nam"]
+                        no = "{:X}".format(
+                            int(str(self.h_comment.entries["base_par_index"])[:conf["cpc"]], 16)
+                            + i
                         )
-                        + i
-                    )
+                        if self.entries[i].comment and "nature" in self.entries[i].comment[-1].entries.keys():
+                            nat = self.entries[i].comment[-1].entries["nature"][:1]
+                        else:
+                            nat = conf["nat_cpc"]
+                    else:
+                        no = str("{:X}".format(
+                            int(str(self.h_comment.entries["base_par_index"]), 16)
+                            + i))
+                        nat = ""
                     diction["CPC_PNAME"] = self.h_comment.entries[
                         "prefix"
-                    ] + str(no)
+                    ] + no + nat
                 except:
                     diction["CPC_PNAME"] = ""
                 try:

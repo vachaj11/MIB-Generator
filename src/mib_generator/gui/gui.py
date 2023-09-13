@@ -8,6 +8,8 @@ in PySide6).
 import os
 import sys
 
+import json5
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow
 
@@ -23,7 +25,6 @@ import mib_generator.construction.TM_packet_methods as tm_packet_methods
 import mib_generator.data.warn as warn
 import mib_generator.generation.gener as gener
 import mib_generator.generation.gener_doc as generd
-import mib_generator.gui.gui_methods as gm
 import mib_generator.parsing.load as load
 import mib_generator.temp.temp as temp
 import mib_generator.utilities.visualiser as visualiser
@@ -31,7 +32,7 @@ from mib_generator.gui.ui_form import Ui_MainWindow
 
 # Important:
 # You need to run the following command (in the GUI directory) to generate the ui_form.py file
-#     pyside6-uic form.ui -o ui_form.py, or
+#     pyside6-uic form.ui -o ui_form.py
 
 
 class MainWindow(QMainWindow):
@@ -107,7 +108,8 @@ class MainWindow(QMainWindow):
         self.ui.configload.clicked.connect(self.load_config)
         self.ui.configsave.clicked.connect(self.save_config)
         self.ui.mibbutton.clicked.connect(self.mib_use)
-        self.ui.prebutton.clicked.connect(self.pre_set)
+        self.ui.prebutton.clicked.connect(self.pre_use)
+        self.ui.nambutton.clicked.connect(self.nam_use)
 
         try:
             self.ui.configdefault.click()
@@ -434,9 +436,11 @@ class MainWindow(QMainWindow):
             if os.path.isdir(self.ui.configfield.text()):
                 temp.move_conf(self.ui.configfield.text())
                 load.get_paths()
+                load.get_conf()
                 self.dist_paths(temp.fetch_paths())
-                self.ui.mibfield.setPlainText(gm.conf_to_json("mib"))
-                self.ui.prefield.setPlainText(gm.conf_to_json("def"))
+                self.ui.mibfield.setPlainText(json5.dumps(load.conf["mib"]))
+                self.ui.prefield.setPlainText(json5.dumps(load.conf["def"]))
+                self.ui.namfield.setPlainText(json5.dumps(load.conf["nam"]))
                 warn.raises("CGU4")
             else:
                 warn.raises("WGU1", self.ui.configfield.text())
@@ -468,20 +472,36 @@ class MainWindow(QMainWindow):
         them to the runtime config files.
         """
         try:
-            gm.update_json("mib", self.ui.mibfield.toPlainText())
+            temp.update_json("mib", self.ui.mibfield.toPlainText())
+            load.get_conf()
             warn.raises("CGU3")
         except:
             warn.raises("EGU3")
 
     @Slot()
-    def pre_set(self):
+    def pre_use(self):
         """Use the config settings for pre-processor parsing.
 
         This method saves the config setting for per-processor parsing (filled out in the GUI input field) by copying
         them to the runtime config files.
         """
         try:
-            gm.update_json("def", self.ui.prefield.toPlainText())
+            temp.update_json("def", self.ui.prefield.toPlainText())
+            load.get_conf()
+            warn.raises("CGU3")
+        except:
+            warn.raises("EGU3")
+            
+    @Slot()
+    def nam_use(self):
+        """Use the config settings for parameter name creation.
+
+        This method saves the config setting for parameter name creation (filled out in the GUI input field) by copying
+        them to the runtime config files.
+        """
+        try:
+            temp.update_json("nam", self.ui.namfield.toPlainText())
+            load.get_conf()
             warn.raises("CGU3")
         except:
             warn.raises("EGU3")

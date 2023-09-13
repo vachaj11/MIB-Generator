@@ -3,11 +3,11 @@
 This module holds various methods used for parsing of the header and normal C files and their
 subsequent interpretation into corresponding python objects.
 """
-import os
 
 import json5
 
 import mib_generator.data.warn as warn
+import mib_generator.parsing.load as load
 
 
 def clean(stri, tokens):
@@ -204,12 +204,7 @@ def preproc_eval(variab):
         bool: Truth-value of the condition.
 
     """
-    file_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)), "temp", "config.json5"
-    )
-    file = open(file_path, "r")
-    config = json5.load(file)["def"]
-    file.close()
+    config = load.conf["def"]
     if variab in config.keys():
         return bool(config[variab])
     else:

@@ -113,6 +113,7 @@ def exclude_repetition(table, typ):
                     and "".join(bare_table[x]) != ""
                 ):
                     redundance.add(y)
+    redundance = sorted(redundance)
     if redundance:
         stradd = "\n\tThe content of these rows is:"
         for i in redundance:

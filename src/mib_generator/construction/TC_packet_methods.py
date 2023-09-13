@@ -11,7 +11,7 @@ from mib_generator.construction.TM_packet_methods import (
     categfromptc,
     count_size,
     evalu,
-    getptcpcf,
+    getptcpcf, 
 )
 
 
@@ -111,7 +111,7 @@ def h_analysis(h_struct):
                                 from_struct = [copy(x) for x in h_analysis(l)[1]]
                     else:
                         from_struct = [copy(x) for x in h_analysis(i.form)[1]]
-                if i.name not in {"SpwHead", "TcHead"}:
+                if i.name not in {"spwHead", "tcHead"}:
                     entries = entries + from_struct
                 else:
                     entries_head = entries_head + from_struct

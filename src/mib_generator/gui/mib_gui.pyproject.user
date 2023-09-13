@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 9.0.2, 2023-09-10T18:45:00. -->
+<!-- Written by QtCreator 9.0.2, 2023-09-13T16:33:36. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -141,13 +141,15 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">mainwindow.py</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./home/vachaj11/Downloads/untitled/mainwindow.py</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/vachaj11/Downloads/untitled/mainwindow.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">gui.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./home/vachaj11/Documents/MIB/mib-generator/src/mib_generator/gui/gui.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/vachaj11/Documents/MIB/mib-generator/src/mib_generator/gui/gui.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/vachaj11/Documents/MIB/mib-generator/src/mib_generator/gui/gui.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/vachaj11/Documents/MIB/mib-generator/src/mib_generator/gui</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

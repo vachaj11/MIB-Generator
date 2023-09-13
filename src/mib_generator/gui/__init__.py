@@ -8,7 +8,6 @@ hence follow the format of Qt Creator project. The GUI is however not completely
 The modules/files here are:
 
     * :obj:`gui` - A module holding the declaration and logic of the GUI as well as its initialisation function.
-    * :obj:`gui_methods` - A module holding various side methods utilised by the main GUI.
     * ``form.ui`` - An XML file holding description of all objects in the GUI, their layout, connections, etc.
     * :obj:`ui_form` - A module holding description of the GUI as Python objects. Automatically generated from
       the ``form.ui`` file.

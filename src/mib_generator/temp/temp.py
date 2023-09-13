@@ -112,4 +112,26 @@ def fetch_paths():
     except:
         leg_data = {}
     return leg_data
+    
+def update_json(typ, data):
+    """Update the runtime config file with the passed parameter.
+
+    This method takes a config parameter with value ``data`` and of type/name ``typ``, loads the runtime
+    config file, incorporates this parameter to it and then saves it again.
+
+    Args:
+        typ (str): The type/name of the config parameter to be saved.
+        data (str): A json5 representation of the contents of the parameter to be saved.
+    """
+    file_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)), "temp", "config.json5"
+    )
+    fil = open(file_path, "r")
+    dic = json5.load(fil)
+    fil.close()
+    pdata = json5.loads(data)
+    fil = open(file_path, "w")
+    dic[typ] = pdata
+    json5.dump(dic, fil)
+    fil.close()
             
