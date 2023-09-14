@@ -7,10 +7,14 @@ method here is :obj:`extr_values` which serves the purpose creating a global eva
 values from all header enums, macros, etc...
 
 Attributes:
-    TmH (parsing.parser_main.file): Holds the Python parsed representation of the Tm-header C-file.
-    TcH (parsing.parser_main.file): Holds the Python parsed representation of the Tc-header C-file.
-    TcTmH (parsing.parser_main.file): Holds the Python parsed representation of the TcTm-header C-file.
-    TmC (parsing.parser_main.file): Holds the Python parsed representation of the Tm (normal) C-file.
+    TmH (list): Holds the Python parsed representation of the Tm-header C-files. Each of type 
+        :obj:`mib_generator.parsing.parser_main.file`
+    TcH (list): Holds the Python parsed representation of the Tc-header C-files. Each of type 
+        :obj:`mib_generator.parsing.parser_main.file`
+    TcTmH (list): Holds the Python parsed representation of the TcTm-header C-files. Each of type 
+        :obj:`mib_generator.parsing.parser_main.file`
+    TmC (list): Holds the Python parsed representation of the Tm (normal) C-files. Each of type 
+        :obj:`mib_generator.parsing.parser_main.file`
     enumerations (dict): A dictionary containing all possible usable evaluations/enumerations sourced 
         form enums, macros, etc... found in all 3 of the parsed header files.
 """
@@ -51,10 +55,14 @@ def get_paths():
         file = open(file_path, "r")
         paths = json5.load(file)
         file.close()
-        globals()["TmC_path"] = paths["TmFile"]
-        globals()["TmH_path"] = paths["TmHeader"]
-        globals()["TcH_path"] = paths["TcHeader"]
-        globals()["TcTmH_path"] = paths["TcTmHeader"]
+        tmc = paths["TmFile"]
+        globals()["TmC_path"] = tmc if type(tmc) is list else [tmc]
+        tmh = paths["TmHeader"]
+        globals()["TmH_path"] = tmh if type(tmh) is list else [tmh]
+        tch = paths["TcHeader"]
+        globals()["TcH_path"] = tch if type(tch) is list else [tch]
+        tctmh = paths["TcTmHeader"]
+        globals()["TcTmH_path"] = tctmh if type(tctmh) is list else [tctmh]
         globals()["out_dir"] = paths["OutDir"]
         globals()["out_doc"] = paths["OutDoc"]
     except:
@@ -79,19 +87,19 @@ def parse_all():
     various other global attributes of this module, so they can be easily accessed.
     """
     try:
-        globals()["TmH"] = par.main(TmH_path)
+        globals()["TmH"] = [par.main(i) for i in TmH_path]
     except:
         warn.raises("EPL2", "Tm .h")
     try:
-        globals()["TcH"] = par.main(TcH_path)
+        globals()["TcH"] = [par.main(i) for i in TcH_path]
     except:
         warn.raises("EPL2", "Tc .h")
     try:
-        globals()["TcTmH"] = par.main(TcTmH_path)
+        globals()["TcTmH"] = [par.main(i) for i in TcTmH_path]
     except:
         warn.raises("EPL2", "TcTm .h")
     try:
-        globals()["TmC"] = par.main(TmC_path)
+        globals()["TmC"] = [par.main(i) for i in TmC_path]
     except:
         warn.raises("EPL2", "Tm .c")
 
@@ -110,21 +118,22 @@ def enum_stuff():
     except:
         warn.raises("WPL1")
 
-def extr_values(file):
-    """Create a dictionary from constants, ``enum`` correspondences, etc... in the given file.
+def extr_values(files):
+    """Create a dictionary from constants, ``enum`` correspondences, etc... in the given files.
 
-    Goes through all objects in the parsed file and for each ``enum`` and macro, appends the name-value
+    Goes through all objects in the parsed files and for each ``enum`` and macro, appends the name-value
     pairs present to a dictionary (which represents the "global" evaluation in the file).
 
     Args:
-        file (parsing.parser_main.file): File from which the evaluation dictionary is to be extracted.
+        files (list): Files from which the evaluation dictionary is to be extracted. Each of type 
+            :obj:`mib_generator.parsing.parser_main.file`
 
     Returns:
         dict: A dictionary with all possible "global" evaluation found in the given file.
     """
     lis = {}
-    if file:
-        for x in file.structures:
+    if files:
+        for x in [a for file in files for a in file.structures]:
             if x.type == "enum":
                 lis.update(x.entries)
             if x.type == "define":

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>893</width>
-    <height>812</height>
+    <height>890</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,7 +47,7 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_34">
               <item>
-               <widget class="QToolBox" name="toolBox">
+               <widget class="QTabWidget" name="tabWidget">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -57,17 +57,9 @@
                 <property name="currentIndex">
                  <number>0</number>
                 </property>
-                <widget class="QWidget" name="page_17">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>403</width>
-                   <height>97</height>
-                  </rect>
-                 </property>
-                 <attribute name="label">
-                  <string>Tm .h file</string>
+                <widget class="QWidget" name="tabWidgetPage1">
+                 <attribute name="title">
+                  <string>Tm .h</string>
                  </attribute>
                  <layout class="QVBoxLayout" name="verticalLayout_23">
                   <item>
@@ -79,17 +71,21 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>File path:</string>
+                     <string>File paths:</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="TmHfield">
+                   <widget class="QLabel" name="label_4">
                     <property name="text">
-                     <string/>
+                     <string>(entries separated by &quot;;&quot;, whitespace characters ignored)</string>
                     </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPlainTextEdit" name="TmHfield">
                     <property name="placeholderText">
-                     <string>path to file</string>
+                     <string>path to files</string>
                     </property>
                    </widget>
                   </item>
@@ -102,17 +98,9 @@
                   </item>
                  </layout>
                 </widget>
-                <widget class="QWidget" name="page_18">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>403</width>
-                   <height>97</height>
-                  </rect>
-                 </property>
-                 <attribute name="label">
-                  <string>Tm .c file</string>
+                <widget class="QWidget" name="tabWidgetPage2">
+                 <attribute name="title">
+                  <string>Tm .c</string>
                  </attribute>
                  <layout class="QVBoxLayout" name="verticalLayout_24">
                   <item>
@@ -129,12 +117,16 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="TmCfield">
+                   <widget class="QLabel" name="label_8">
                     <property name="text">
-                     <string/>
+                     <string>(entries separated by &quot;;&quot;, whitespace characters ignored)</string>
                     </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPlainTextEdit" name="TmCfield">
                     <property name="placeholderText">
-                     <string>path to file</string>
+                     <string>path to files</string>
                     </property>
                    </widget>
                   </item>
@@ -147,17 +139,9 @@
                   </item>
                  </layout>
                 </widget>
-                <widget class="QWidget" name="page_19">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>403</width>
-                   <height>97</height>
-                  </rect>
-                 </property>
-                 <attribute name="label">
-                  <string>Tc .h file</string>
+                <widget class="QWidget" name="tabWidgetPage3">
+                 <attribute name="title">
+                  <string>Tc .h</string>
                  </attribute>
                  <layout class="QVBoxLayout" name="verticalLayout_25">
                   <item>
@@ -174,12 +158,16 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="TcHfield">
+                   <widget class="QLabel" name="label_10">
                     <property name="text">
-                     <string/>
+                     <string>(entries separated by &quot;;&quot;, whitespace characters ignored)</string>
                     </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPlainTextEdit" name="TcHfield">
                     <property name="placeholderText">
-                     <string>path to file</string>
+                     <string>path to files</string>
                     </property>
                    </widget>
                   </item>
@@ -192,17 +180,9 @@
                   </item>
                  </layout>
                 </widget>
-                <widget class="QWidget" name="page_20">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>403</width>
-                   <height>97</height>
-                  </rect>
-                 </property>
-                 <attribute name="label">
-                  <string>TcTm .h file</string>
+                <widget class="QWidget" name="tabWidgetPage4">
+                 <attribute name="title">
+                  <string>TcTm .h</string>
                  </attribute>
                  <layout class="QVBoxLayout" name="verticalLayout_26">
                   <item>
@@ -219,12 +199,19 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="TcTmHfield">
+                   <widget class="QLabel" name="label_12">
                     <property name="text">
+                     <string>(entries separated by &quot;;&quot;, whitespace characters ignored)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPlainTextEdit" name="TcTmHfield">
+                    <property name="plainText">
                      <string/>
                     </property>
                     <property name="placeholderText">
-                     <string>path to file</string>
+                     <string>path to files</string>
                     </property>
                    </widget>
                   </item>
@@ -252,7 +239,7 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_36">
               <item>
-               <widget class="QToolBox" name="toolBox_3">
+               <widget class="QTabWidget" name="tabWidget_3">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -262,16 +249,8 @@
                 <property name="currentIndex">
                  <number>0</number>
                 </property>
-                <widget class="QWidget" name="page_11">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>403</width>
-                   <height>97</height>
-                  </rect>
-                 </property>
-                 <attribute name="label">
+                <widget class="QWidget" name="tabWidget_3Page1">
+                 <attribute name="title">
                   <string>MIB</string>
                  </attribute>
                  <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -313,16 +292,8 @@
                   </item>
                  </layout>
                 </widget>
-                <widget class="QWidget" name="page_12">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>403</width>
-                   <height>97</height>
-                  </rect>
-                 </property>
-                 <attribute name="label">
+                <widget class="QWidget" name="tabWidget_3Page2">
+                 <attribute name="title">
                   <string>.docx</string>
                  </attribute>
                  <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -469,7 +440,7 @@ files in the directory above</string>
                 <property name="currentIndex">
                  <number>0</number>
                 </property>
-                <widget class="QWidget" name="Page_2" native="true">
+                <widget class="QWidget" name="Page_2">
                  <attribute name="title">
                   <string>Preprocessing</string>
                  </attribute>
@@ -484,7 +455,7 @@ files in the directory above</string>
                   <item>
                    <widget class="QLabel" name="label_36">
                     <property name="text">
-                     <string>Formatted as json5 dictonary:</string>
+                     <string>(entries separated by &quot;;&quot;, whitespace characters ignored)</string>
                     </property>
                    </widget>
                   </item>
@@ -535,7 +506,7 @@ to the runtime config files</string>
                   <item>
                    <widget class="QLabel" name="label_46">
                     <property name="text">
-                     <string>Formatted as json5 dictonary:</string>
+                     <string>(entries separated by &quot;;&quot;, whitespace characters ignored)</string>
                     </property>
                    </widget>
                   </item>
@@ -571,7 +542,7 @@ to the runtime config files</string>
                   </item>
                  </layout>
                 </widget>
-                <widget class="QWidget" name="Page_1" native="true">
+                <widget class="QWidget" name="Page_1">
                  <attribute name="title">
                   <string>Generation</string>
                  </attribute>
@@ -586,7 +557,7 @@ to the runtime config files</string>
                   <item>
                    <widget class="QLabel" name="label_37">
                     <property name="text">
-                     <string>Formatted as json5 array:</string>
+                     <string>(entries separated by &quot;;&quot;, whitespace characters ignored)</string>
                     </property>
                    </widget>
                   </item>

@@ -18,7 +18,8 @@ class TM_header:
     and analysed:
 
     Args:
-        file (parsing.parser_main.file): A parsed representation of the file in which the header is to be found.
+        files (list): List of parsed representation of files (each of type :obj:`mib_generation.parsing.parser_main.file`)
+        in which the header is to be found.
 
     Attributes:
         structure (parsing.par_header.struct): The structure found in the header file (in its Python representation)
@@ -29,23 +30,24 @@ class TM_header:
             offset from the header start.
     """
 
-    def __init__(self, file):
-        self.structure = self.find_header(file)
+    def __init__(self, files):
+        self.structure = self.find_header(files)
         self.entries = pm.h_analysis(self.structure)
         self.size, self.positions = pm.count_size(self.entries)
 
-    def find_header(self, file):
+    def find_header(self, files):
         """Find structure which describes the TM header.
 
         Based on its name, find a structure which corresponds to the TM header. Otherwise return a warning.
 
         Args:
-            file (:obj:`mib_generator.parsing.parser_main.file`): File (in Python representation) which is searched for the header.
+            files (list): Files (in Python representation of type :obj:`mib_generator.parsing.parser_main.file`) 
+            which are searched for the header.
 
         Returns:
-            :obj:`mib_generator.parsing.par_header.struct`: The structure identifies as the header.
+            :obj:`mib_generator.parsing.par_header.struct`: The structure identified as the header.
         """
-        for i in file.structures:
+        for i in [a for file in files for a in file.structures]:
             methods = i.__dir__()
             if "name" in methods and i.name == "TmHead":
                 return i
@@ -237,7 +239,7 @@ class TM_packet:
                 if "nam" in load.conf.keys():
                     conf = load.conf["nam"]
                     no = "{:X}".format(
-                        int(str(self.h_comment.entries["base_par_index"])[:conf["pcf"]], 16)
+                        int(str(self.h_comment.entries["base_par_index"])[:int(conf["pcf"])], 16)
                         + i
                     )
                     if self.entries[i].comment and "nature" in self.entries[i].comment[-1].entries.keys():

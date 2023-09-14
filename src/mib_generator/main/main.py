@@ -76,15 +76,14 @@ def main(
     tm_lis = []
     tc_lis = []
     load.load_all()
-
     if not parseonly:
         # creating TM-packets
 
-        cal1 = calib.calib_extract(load.TmH.comments)
-        cal2 = calib.calib_extract(load.TcTmH.comments)
+        cal1 = calib.calib_extract([a for file in load.TmH for a in file.comments])
+        cal2 = calib.calib_extract([a for file in load.TcTmH for a in file.comments])
         cal = {i: cal1[i] + cal2[i] for i in cal1}
         TmHead = tm_packet.TM_header(load.TmH)
-        for i in load.TmC.structures[1].elements:
+        for i in load.TmC[0].structures[1].elements:
             matched = tm_packet_methods.header_search(i.entries[".type"], load.TmH)
             for k in matched:
                 pack = tm_packet.TM_packet(i, k[1], TmHead, k[0])
@@ -92,11 +91,11 @@ def main(
                 tm_lis.append(pack)
 
         # creating TC-packets
-        dec1 = calib.decal_extract(load.TcH.comments)
-        dec2 = calib.decal_extract(load.TcTmH.comments)
+        dec1 = calib.decal_extract([a for file in load.TcH for a in file.comments])
+        dec2 = calib.decal_extract([a for file in load.TcTmH for a in file.comments])
         dec = dec1 + dec2
-        ver1 = calib.verif_extract(load.TcH.comments)
-        ver2 = calib.verif_extract(load.TcTmH.comments)
+        ver1 = calib.verif_extract([a for file in load.TcH for a in file.comments])
+        ver2 = calib.verif_extract([a for file in load.TcTmH for a in file.comments])
         ver = ver1 + ver2
         TcHead = tc_packet.TC_header(tc_packet_methods.find_header(load.TcH))
         packets = tc_packet_methods.packet_search(load.TcH)
@@ -115,7 +114,7 @@ def main(
             docum.save(load.out_doc)
     if visual:
         try:
-            visualiser.main([load.TmH, load.TcTmH, load.TmC, load.TcH])
+            visualiser.main(load.TmH + load.TcTmH + load.TmC + load.TcH)
         except ModuleNotFoundError:
             warn.raises("WMM1")
     return True

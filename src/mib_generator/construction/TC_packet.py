@@ -215,7 +215,12 @@ class TC_packet:
         except:
             diction["CCF_DESCR"] = ""
         try:
-            diction["CCF_DESCR2"] = self.h_comment.entries["Mnemonic"]
+            if "Mnemonic" in self.h_comment.entries.keys():
+                diction["CCF_DESCR2"] = self.h_comment.entries["Mnemonic"]
+            elif "mnemonic" in self.h_comment.entries.keys():
+                diction["CCF_DESCR2"] = self.h_comment.entries["mnemonic"]
+            else:
+                diction["CCF_DESCR2"] = ""
         except:
             diction["CCF_DESCR2"] = ""
         # diction["CCF_CTYPE"] = ""
@@ -227,7 +232,10 @@ class TC_packet:
         except:
             diction["CCF_TYPE"] = ""
             diction["CCF_STYPE"] = ""
-        # diction["CCF_APID"] = ""
+        try:
+            diction["CCF_APID"] = self.h_comment.entries["apid"]
+        except:
+            diction["CCF_APID"] = ""
         diction["CCF_NPARS"] = len(self.entries)
         # diction["CCF_PLAN"] = ""
         # diction["CCF_EXEC"] = ""
@@ -279,7 +287,7 @@ class TC_packet:
                     if "nam" in load.conf.keys():
                         conf = load.conf["nam"]
                         no = "{:X}".format(
-                            int(str(self.h_comment.entries["base_par_index"])[:conf["cpc"]], 16)
+                            int(str(self.h_comment.entries["base_par_index"])[:int(conf["cpc"])], 16)
                             + i
                         )
                         if self.entries[i].comment and "nature" in self.entries[i].comment[-1].entries.keys():
@@ -344,7 +352,12 @@ class TC_packet:
                 # diction["CPC_CORR"] = ""
                 # diction["CPC_OBTID"] = ""
                 try:
-                    diction["CPC_DESCR2"] = self.entries[i].comment[-1].entries["Mnemonic"]
+                    if "Mnemonic" in self.entries[i].comment[-1].entries.keys():
+                        diction["CPC_DESCR2"] = self.entries[i].comment[-1].entries["Mnemonic"]
+                    elif "mnemonic" in self.entries[i].comment[-1].entries.keys():
+                        diction["CPC_DESCR2"] = self.entries[i].comment[-1].entries["mnemonic"]
+                    else:
+                        diction["CPC_DESCR2"] = ""
                 except:
                     diction["CPC_DESCR2"] = ""
                 # diction["CPC_ENDIAN"] = ""

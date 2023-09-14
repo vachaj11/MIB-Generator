@@ -28,7 +28,8 @@ def apidnum(name):
         int: Value of the apid reference.
     """
     num = load.enumerations[name]
-    lis = next((x for x in load.TmC.structures if x.name == "apidNum"), None)
+    tmcs = [a for file in load.TmC for a in file.structures]
+    lis = next((x for x in tmcs if x.name == "apidNum"), None)
     link = {}
     for i in lis.elements:
         link[str(load.enumerations[i.position[1:-1]])] = int(i.value)
@@ -124,11 +125,11 @@ def categfromptc(ptc):
     return categ
 
 
-def header_search(typ, file):
+def header_search(typ, files):
     """Search for corresponding header structures of the packet based on information in the comments.
 
     Given the name of the packet as it appears in the TM ``.c`` file, this method searches among comments
-    in :obj:`mib_generator.parsing.load.TmH` (the TM ``.h`` file) for a corresponding packet/packets description (list of parameters, etc).
+    in :obj:`mib_generator.parsing.load.TmH` (the TM ``.h`` files) for a corresponding packet/packets description (list of parameters, etc).
     More packet definitions can correspond to a single type (they then differ in additional packet identifiers) and hence
     more than one such structures can be found sometimes.
     
@@ -137,17 +138,18 @@ def header_search(typ, file):
 
     Args:
         typ (str): The "type" entry of the packet definition in the ``.c`` TM file.
-        file (parsing.par_main.file): A file in which the header structure is to be searched for.
+        files (list): A list of files (of type :obj:`mib_generator.parsing.par_main.file`) in which the header structure
+        is to be searched for.
 
     Returns:
         list: A list of pairs of [comments, structures] which are packet descriptions for the given packet "type".
     """
     comments = []
-    for i in file.comments:
+    for i in [a for file in files for a in file.comments]:
         if i.entries and "pack_type" in i.entries.keys() and i.entries["pack_type"] == typ:
             comments.append([i])
             if "use_structure" in i.entries.keys():
-                for l in file.structures:
+                for l in [a for file in files for a in file.structures]:
                     if l.type == "struct" and l.name == i.entries["use_structure"]:
                         comments[-1].append(l)
                 if len(comments[-1]) == 1:
@@ -162,10 +164,6 @@ def header_search(typ, file):
                 warn.raises("WCM5", typ)
                 comments.pop(-1)
                 
-            
-    # legacy approach
-    # if typ in load.enumerations.keys() and not hstruct:
-    #    hstruct.append(load.enumerations[typ])
     if not comments:
         warn.raises("WCM2", typ)
     return comments
@@ -210,7 +208,9 @@ def h_analysis(h_struct):
                 for k in range(occurences):
                     if type(i.form) is str:
                         name = i.form
-                        for l in load.TmH.structures + load.TcTmH.structures:
+                        tmhs = [a for file in load.TmH for a in file.structures]
+                        tctmhs = [a for file in load.TcTmH for a in file.structures]
+                        for l in tmhs + tctmhs:
                             if l.name == name:
                                 from_struct = [copy(x) for x in h_analysis(l)]
                     else:

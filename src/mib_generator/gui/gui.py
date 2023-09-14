@@ -183,8 +183,10 @@ class MainWindow(QMainWindow):
         Opens new window with visual representation of what the parser found/interpreted inside the ``Tm .h`` file.
         """
         try:
-            self.prewTmH = visualiser.MainWindow(load.TmH)
-            self.prewTmH.show()
+            self.prewTmH = []
+            for i in load.TmH:
+                self.prewTmH.append(visualiser.MainWindow(i))
+                self.prewTmH[-1].show()
         except:
             warn.raises("EGUD", "Tm .h")
 
@@ -195,8 +197,10 @@ class MainWindow(QMainWindow):
         Opens new window with visual representation of what the parser found/interpreted inside the ``Tc .h`` file.
         """
         try:
-            self.prewTcH = visualiser.MainWindow(load.TcH)
-            self.prewTcH.show()
+            self.prewTcH = []
+            for i in load.TcH:
+                self.prewTcH.append(visualiser.MainWindow(i))
+                self.prewTcH[-1].show()
         except:
             warn.raises("EGUD", "Tc .h")
 
@@ -207,8 +211,10 @@ class MainWindow(QMainWindow):
         Opens new window with visual representation of what the parser found/interpreted inside the ``Tm .c`` file.
         """
         try:
-            self.prewTmC = visualiser.MainWindow(load.TmC)
-            self.prewTmC.show()
+            self.prewTmC = []
+            for i in load.TmC:
+                self.prewTmC.append(visualiser.MainWindow(i))
+                self.prewTmC[-1].show()
         except:
             warn.raises("EGUD", "Tm .c")
 
@@ -219,8 +225,10 @@ class MainWindow(QMainWindow):
         Opens new window with visual representation of what the parser found/interpreted inside the ``TcTm .h`` file.
         """
         try:
-            self.prewTcTmH = visualiser.MainWindow(load.TcTmH)
-            self.prewTcTmH.show()
+            self.prewTcTmH = []
+            for i in load.TcTmH:
+                self.prewTcTmH.append(visualiser.MainWindow(i))
+                self.prewTcTmH[-1].show()
         except:
             warn.raises("EGUD", "TcTm .h")
 
@@ -234,12 +242,12 @@ class MainWindow(QMainWindow):
         It also enables buttons for subsequent computation if everything runs correctly.
         """
         try:
-            cal1 = calib.calib_extract(load.TmH.comments)
-            cal2 = calib.calib_extract(load.TcTmH.comments)
+            cal1 = calib.calib_extract([a for file in load.TmH for a in file.comments])
+            cal2 = calib.calib_extract([a for file in load.TcTmH for a in file.comments])
             self.cal = {i: cal1[i] + cal2[i] for i in cal1}
             self.TmHead = tm_packet.TM_header(load.TmH)
             self.tms = []
-            for i in load.TmC.structures[1].elements:
+            for i in load.TmC[0].structures[1].elements:
                 matched = tm_packet_methods.header_search(i.entries[".type"], load.TmH)
                 for k in matched:
                     pack = tm_packet.TM_packet(i, k[1], self.TmHead, k[0])
@@ -262,11 +270,11 @@ class MainWindow(QMainWindow):
         runs correctly.
         """
         try:
-            dec1 = calib.decal_extract(load.TcH.comments)
-            dec2 = calib.decal_extract(load.TcTmH.comments)
+            dec1 = calib.decal_extract([a for file in load.TcH for a in file.comments])
+            dec2 = calib.decal_extract([a for file in load.TcTmH for a in file.comments])
             self.dec = dec1 + dec2
-            ver1 = calib.verif_extract(load.TcH.comments)
-            ver2 = calib.verif_extract(load.TcTmH.comments)
+            ver1 = calib.verif_extract([a for file in load.TcH for a in file.comments])
+            ver2 = calib.verif_extract([a for file in load.TcTmH for a in file.comments])
             self.ver = ver1 + ver2
             self.TcHead = tc_packet.TC_header(tc_packet_methods.find_header(load.TcH))
             packets = tc_packet_methods.packet_search(load.TcH)
@@ -343,19 +351,19 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def Cfile(self, field):
-        """Open a dialog for choosing a file and use the output.
+        """Open a dialog for choosing files and use the output.
 
-        Opens a system dialog for choosing file and lets the user choose an input ``.c/.h`` file  through
-        it. It then assigns the path to the chosen location to the passed text field.
+        Opens a system dialog for choosing files and lets the user choose an input ``.c/.h`` files  through
+        it. It then assigns the paths to the chosen locations to the passed text field.
 
         Args:
             field (PySide6.QtWidgets.QPlainTextEdit): A text window to which the outputted location is to be filled.
         """
         ftype = "C files (*.c *.h)"
-        base = os.path.dirname(field.text())
-        file = QFileDialog.getOpenFileName(self, "Choose file", base, ftype)
+        base = os.path.dirname(field.toPlainText())
+        file = QFileDialog.getOpenFileNames(self, "Choose files", base, ftype)
         if file[0] != "":
-            field.setText(file[0])
+            field.setPlainText(self.to_field(file[0]))
 
     @Slot()
     def direc(self, field):
@@ -396,10 +404,10 @@ class MainWindow(QMainWindow):
         """
         try:
             dic = {
-                "TmHeader": self.ui.TmHfield.text(),
-                "TcTmHeader": self.ui.TcTmHfield.text(),
-                "TmFile": self.ui.TmCfield.text(),
-                "TcHeader": self.ui.TcHfield.text(),
+                "TmHeader": self.clean(self.ui.TmHfield.toPlainText()).split(";"),
+                "TcTmHeader": self.clean(self.ui.TcTmHfield.toPlainText()).split(";"),
+                "TmFile": self.clean(self.ui.TmCfield.toPlainText()).split(";"),
+                "TcHeader": self.clean(self.ui.TcHfield.toPlainText()).split(";"),
                 "OutDir": self.ui.outdirfield.text(),
                 "OutDoc": self.ui.outdocfield.text(),
             }
@@ -438,13 +446,13 @@ class MainWindow(QMainWindow):
                 load.get_paths()
                 load.get_conf()
                 self.dist_paths(temp.fetch_paths())
-                self.ui.mibfield.setPlainText(json5.dumps(load.conf["mib"]))
-                self.ui.prefield.setPlainText(json5.dumps(load.conf["def"]))
-                self.ui.namfield.setPlainText(json5.dumps(load.conf["nam"]))
+                self.ui.mibfield.setPlainText("; ".join([str(e) for e in load.conf["mib"]]))
+                self.ui.prefield.setPlainText(";\n".join([": ".join([str(e) for e in i]) for i in load.conf["def"].items()]))
+                self.ui.namfield.setPlainText(";\n".join([": ".join([str(e) for e in i]) for i in load.conf["nam"].items()]))
                 warn.raises("CGU4")
             else:
                 warn.raises("WGU1", self.ui.configfield.text())
-        except:
+        except Exception as x:
             warn.raises("EGU4")
 
     @Slot()
@@ -472,7 +480,8 @@ class MainWindow(QMainWindow):
         them to the runtime config files.
         """
         try:
-            temp.update_json("mib", self.ui.mibfield.toPlainText())
+            stri = self.clean(self.ui.mibfield.toPlainText())
+            temp.update_json("mib", stri.split(";"))
             load.get_conf()
             warn.raises("CGU3")
         except:
@@ -486,7 +495,9 @@ class MainWindow(QMainWindow):
         them to the runtime config files.
         """
         try:
-            temp.update_json("def", self.ui.prefield.toPlainText())
+            lis = self.clean(self.ui.prefield.toPlainText()).split(";")
+            dic = {i.split(":")[0]:self.evalu(i.split(":")[1]) for i in lis if len(i.split(":")) == 2}
+            temp.update_json("def", dic)
             load.get_conf()
             warn.raises("CGU3")
         except:
@@ -500,7 +511,9 @@ class MainWindow(QMainWindow):
         them to the runtime config files.
         """
         try:
-            temp.update_json("nam", self.ui.namfield.toPlainText())
+            lis = self.clean(self.ui.namfield.toPlainText()).split(";")
+            dic = {i.split(":")[0]:i.split(":")[1] for i in lis if len(i.split(":")) == 2}
+            temp.update_json("nam", dic)
             load.get_conf()
             warn.raises("CGU3")
         except:
@@ -513,17 +526,67 @@ class MainWindow(QMainWindow):
         input text across the GUI.
         """
         if "TmHeader" in dic.keys():
-            self.ui.TmHfield.setText(dic["TmHeader"])
+            self.ui.TmHfield.setPlainText(self.to_field(dic["TmHeader"]))
         if "TcTmHeader" in dic.keys():
-            self.ui.TcTmHfield.setText(dic["TcTmHeader"])
+            self.ui.TcTmHfield.setPlainText(self.to_field(dic["TcTmHeader"]))
         if "TmFile" in dic.keys():
-            self.ui.TmCfield.setText(dic["TmFile"])
+            self.ui.TmCfield.setPlainText(self.to_field(dic["TmFile"]))
         if "TcHeader" in dic.keys():
-            self.ui.TcHfield.setText(dic["TcHeader"])
+            self.ui.TcHfield.setPlainText(self.to_field(dic["TcHeader"]))
         if "OutDir" in dic.keys():
             self.ui.outdirfield.setText(dic["OutDir"])
         if "OutDoc" in dic.keys():
             self.ui.outdocfield.setText(dic["OutDoc"])
+
+    def to_field(self, stri):
+        """Convert the passed string/list to an easily readable format.
+        
+        Takes an inputted string/list and based on its outlook formats it so that it is easily readable/editable by the
+        user (cleans it of redundant whitespaces, adds separators, new lines).
+        
+        Args:
+            stri (str or object): An object/string to be reformatted.
+            
+        Returns:
+            str: The reformatted string.
+        """
+        if str(stri)[0] == "[":
+            return self.clean(str(stri)[1:-1]).replace(",",";\n")
+        else:
+            return self.clean(str(stri)).replace(",",";\n")
+
+    def clean(self, stri, tok = {" ","\n", "\t","'",'"'}):
+        """Clean the passed string of the passed tokens.
+        
+        Replaces all tokens in the passed strings with nothing (deletes them). By default with no tokens passed, deletes
+        all whitespace characters in the string.
+        
+        Args:
+            stri (str): String which is to be cleaned.
+            tok (set): Set of tokens to be deleted from the string.
+            
+        Returns:
+            str: The string after cleaning.
+        """
+        for i in tok:
+            stri = stri.replace(i,"")
+        return stri
+
+    def evalu(self, stri):
+        """Evaluates string for boolean values.
+        
+        Just simple case matching of string to a boolean values.
+        
+        Args:
+            stri (str): The string to be evaluated.
+            
+        Returns:
+            bool: The result of evaluation.
+        """
+        if stri in {"False", "false", "None", "0"}:
+            return False
+        else:
+            return True
 
 
 def gui_run():

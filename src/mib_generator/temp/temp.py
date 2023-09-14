@@ -73,19 +73,23 @@ def update_paths(diction):
         fil.close()
     except:
         leg_data = {}
-    for i in diction:
-        if os.path.isfile(diction[i]) or os.path.isdir(diction[i]):
-            pass
-        else:
-            if i in leg_data.keys():
-                F = os.path.isfile(leg_data[i])
-                D = os.path.isdir(leg_data[i])
-                if F or D:
-                    warn.raises("WTT1",diction[i], i, leg_data[i])
+    try:
+        for l in diction:
+            for i in diction[l]:
+                if os.path.isfile(i) or os.path.isdir(i):
+                    pass
                 else:
-                    warn.raises("WTT2", diction[i], i)
-            else:
-                warn.raises("WTT2", diction[i], i)
+                    if l in leg_data.keys() and len(leg_data[l])>= diction[l].index(i):
+                        F = os.path.isfile(leg_data[l][i])
+                        D = os.path.isdir(leg_data[l][i])
+                        if F or D:
+                            warn.raises("WTT1",diction[l][i], l, leg_data[l][i])
+                        else:
+                            warn.raises("WTT2", diction[l][i], l)
+                    else:
+                        warn.raises("WTT2", diction[l][i], l)
+    except:
+        pass
     
     fil = open(file_path, "w")
     fil.write("// This file stores various paths to source/output files\n")
@@ -121,7 +125,7 @@ def update_json(typ, data):
 
     Args:
         typ (str): The type/name of the config parameter to be saved.
-        data (str): A json5 representation of the contents of the parameter to be saved.
+        data (str): The contents of the parameter to be saved.
     """
     file_path = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), "temp", "config.json5"
@@ -129,9 +133,8 @@ def update_json(typ, data):
     fil = open(file_path, "r")
     dic = json5.load(fil)
     fil.close()
-    pdata = json5.loads(data)
     fil = open(file_path, "w")
-    dic[typ] = pdata
+    dic[typ] = data
     json5.dump(dic, fil)
     fil.close()
             

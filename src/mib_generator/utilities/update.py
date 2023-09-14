@@ -44,60 +44,76 @@ def update_path(directory=None):
     print("The current absolute path is: " + os.getcwd())
     print("------")
     while not valid_TmH:
+        pre_val = leg_data["TmHeader"]
+        if type(pre_val) is list:
+            pre_val = pre_val[0]
         print("State relative or absolute path to Tm Header file.")
-        print("Currently this path is: " + str(leg_data["TmHeader"]))
+        print("(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)")
+        print("Currently this path is: " + pre_val)
         print("(press Enter if you want to keep this value)")
         path = input("Path: ")
-        if path == "" and os.path.isfile(leg_data["TmHeader"]):
-            data["TmHeader"] = leg_data["TmHeader"]
+        if path == "" and os.path.isfile(pre_val):
+            data["TmHeader"] = [pre_val]
             valid_TmH = True
         elif os.path.isfile(path):
-            data["TmHeader"] = os.path.abspath(path)
+            data["TmHeader"] = [os.path.abspath(path)]
             valid_TmH = True
         else:
             print("Error:\tFailed to find the specified file, try again.")
         print("------")
     valid_TcTmH = False
     while not valid_TcTmH:
+        pre_val = leg_data["TcTmHeader"]
+        if type(pre_val) is list:
+            pre_val = pre_val[0]
         print("State relative or absolute path to TcTm Header file.")
-        print("Currently this path is: " + str(leg_data["TcTmHeader"]))
+        print("(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)")
+        print("Currently this path is: " + pre_val)
         print("(press Enter if you want to keep this value)")
         path = input("Path: ")
-        if path == "" and os.path.isfile(leg_data["TcTmHeader"]):
-            data["TcTmHeader"] = leg_data["TcTmHeader"]
+        if path == "" and os.path.isfile(pre_val):
+            data["TcTmHeader"] = [pre_val]
             valid_TcTmH = True
         elif os.path.isfile(path):
-            data["TcTmHeader"] = os.path.abspath(path)
+            data["TcTmHeader"] = [os.path.abspath(path)]
             valid_TcTmH = True
         else:
             print("Error:\tFailed to find the specified file, try again.")
         print("------")
     valid_TmC = False
     while not valid_TmC:
+        pre_val = leg_data["TmFile"]
+        if type(pre_val) is list:
+            pre_val = pre_val[0]
         print("State relative or absolute path to Tm C file.")
-        print("Currently this path is: " + str(leg_data["TmFile"]))
+        print("(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)")
+        print("Currently this path is: " + pre_val)
         print("(press Enter if you want to keep this value)")
         path = input("Path: ")
-        if path == "" and os.path.isfile(leg_data["TmFile"]):
-            data["TmFile"] = leg_data["TmFile"]
+        if path == "" and os.path.isfile(pre_val):
+            data["TmFile"] = [pre_val]
             valid_TmC = True
         elif os.path.isfile(path):
-            data["TmFile"] = os.path.abspath(path)
+            data["TmFile"] = [os.path.abspath(path)]
             valid_TmC = True
         else:
             print("Error:\tFailed to find the specified file, try again.")
         print("------")
     valid_TcH = False
     while not valid_TcH:
+        pre_val = leg_data["TcHeader"]
+        if type(pre_val) is list:
+            pre_val = pre_val[0]
         print("State relative or absolute path to Tc Header file.")
-        print("Currently this path is: " + str(leg_data["TcHeader"]))
+        print("(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)")
+        print("Currently this path is: " + pre_val)
         print("(press Enter if you want to keep this value)")
         path = input("Path: ")
-        if path == "" and os.path.isfile(leg_data["TcHeader"]):
-            data["TcHeader"] = leg_data["TcHeader"]
+        if path == "" and os.path.isfile(pre_val):
+            data["TcHeader"] = [pre_val]
             valid_TcH = True
         elif os.path.isfile(path):
-            data["TcHeader"] = os.path.abspath(path)
+            data["TcHeader"] = [os.path.abspath(path)]
             valid_TcH = True
         else:
             print("Error:\tFailed to find the specified file, try again.")

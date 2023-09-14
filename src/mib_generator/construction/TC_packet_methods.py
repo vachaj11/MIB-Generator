@@ -15,45 +15,47 @@ from mib_generator.construction.TM_packet_methods import (
 )
 
 
-def find_header(file):
-    """Find structure in this file which describes a TC header.
+def find_header(files):
+    """Find structure in the passed files which describes a TC header.
 
     Based on its name, find a structure which corresponds to a TC header. Otherwise return a warning.
 
     Args:
-        file (parsing.parser_main.file): File (in Python representation) which is searched for the header.
+        files (list): List of files (in Python representation of type :obj:`mib_generator.parsing.parser_main.file`
+        ) which is searched for the header.
 
     Returns:
         parsing.par_cfile.struct: The structure identifies as the header.
     """
-    for i in file.structures:
+    for i in [a for file in files for a in file.structures]:
         if "name" in i.__dir__() and i.name == "TcHead":
             return i
     warn.raises("WCT1")
 
 
-def packet_search(file):
-    """Extract individual TC-command definitions from TC-header file.
+def packet_search(files):
+    """Extract individual TC-command definitions from TC-header files.
 
-    Search the inputted file for TC-command definition using their preceding description comments and return
+    Search the inputted files for TC-command definition using their preceding description comments and return
     them in a list.
 
     This is needed because unlike for TM-packets where the list of all packets is predefined in the TM ``.c`` file,
     here all packets' definitions have to be found in the first place.
 
     Args:
-        file (:obj:`mib_generator.parsing.parser_main.file`): File (in Python representation) which is searched for the command definitions.
+        files (list): List of files (in Python representation of type :obj:`mib_generator.parsing.parser_main.file`) 
+        which are searched for the command definitions.
 
     Returns:
         list: List of pairs of command definition [comments, structures] found in the file. Each an instance of 
         [:obj:`mib_generator.parsing.par_methods.comment`, :obj:`mib_generator.parsing.par_header.struct`].
     """
     packets = []
-    for i in file.comments:
+    for i in [a for file in files for a in file.comments]:
         if {"packet", "text_id"} < i.entries.keys():
             packets.append([i])
             if "use_structure" in i.entries.keys():
-                for l in file.structures:
+                for l in [a for file in files for a in file.structures]:
                     if i.entries["use_structure"] == l.name:
                         packets[-1].append(l)
                 if len(packets[-1]) == 1:
@@ -106,7 +108,9 @@ def h_analysis(h_struct):
                 for k in range(occurences):
                     if type(i.form) is str:
                         name = i.form
-                        for l in load.TcH.structures + load.TcTmH.structures:
+                        tchs = [a for file in load.TcH for a in file.structures]
+                        tctmhs = [a for file in load.TcTmH for a in file.structures]
+                        for l in tchs + tctmhs:
                             if l.name == name:
                                 from_struct = [copy(x) for x in h_analysis(l)[1]]
                     else:
