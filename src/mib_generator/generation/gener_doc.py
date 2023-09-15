@@ -8,7 +8,7 @@ from docx import Document
 from docx.enum.table import WD_ALIGN_VERTICAL
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
-from docx.shared import Inches
+from docx.shared import Inches, Cm
 
 import mib_generator.parsing.load as load
 
@@ -30,20 +30,46 @@ def gen_doc(Tm_packets=[], Tc_packets=[]):
     """
     document = Document()
     if Tm_packets:
-        document.add_heading("TM packets", 0)
+        document.add_heading("Telemetry packets", 1)
     for i in Tm_packets:
-        h = document.add_paragraph("")
+        h = document.add_heading("", 2)
         try:
-            name = i.h_structure.comment[-1].entries["pack_type"]
+            t = str(i.pid["PID_TYPE"])
+            st = str(i.pid["PID_STYPE"])
+            if int(i.pid["PID_PI1_VAL"]) > 0:
+                si = ",SID="+str(i.pid["PID_PI1_VAL"])
+            else:
+                si = ""
+            desc = i.pid["PID_DESCR"]
         except:
-            name = i.h_structure.name
-        h.add_run(name + ": " + i.pid["PID_DESCR"]).italic = True
+            t = "?"
+            st = "?"
+            si = ""
+            desc = "____"
+        h.add_run("TM["+t+","+st+si+"] "+desc).italic = True
+        try:
+            document.add_paragraph("APID: "+str(i.pid["PID_APID"]), style = "List Bullet")
+        except:
+            document.add_paragraph("APID: ?", style = "List Bullet")
+        try:
+            document.add_paragraph("MIB name: "+ i.tpcf["TPCF_NAME"], style = "List Bullet")
+        except:
+            document.add_paragraph("MIB name: ?", style = "List Bullet")
+        try:
+            document.add_paragraph("MIB SPID: "+ str(i.pid["PID_SPID"]), style = "List Bullet")
+        except:
+            document.add_paragraph("MIB SPID: ?", style = "List Bullet")
         table = document.add_table(rows=1, cols=4)
         table.style = "Table Grid"
+        table.autofit = True
         table.rows[0].cells[0].paragraphs[0].add_run("Byte").bold = True
         table.rows[0].cells[1].paragraphs[0].add_run("ID").bold = True
         table.rows[0].cells[2].paragraphs[0].add_run("Size in bites").bold = True
         table.rows[0].cells[3].paragraphs[0].add_run("Description").bold = True
+        table.columns[0].width = Cm(3.2)
+        table.columns[1].width = Cm(3.2)
+        table.columns[2].width = Cm(3.2)
+        table.columns[3].width = Cm(5.9)
         for l in range(4):
             table.rows[0].cells[l]._tc.get_or_add_tcPr().append(
                 parse_xml(r'<w:shd {} w:fill="C7D9F1"/>'.format(nsdecls("w")))
@@ -59,17 +85,42 @@ def gen_doc(Tm_packets=[], Tc_packets=[]):
                 row[k].vertical_alignment = WD_ALIGN_VERTICAL.CENTER
         document.add_paragraph()
     if Tc_packets:
-        document.add_heading("TC packets", 0)
+        document.add_heading("Telecommand packets", 1)
     for i in Tc_packets:
-        h = document.add_paragraph("")
-        h.add_run(i.ccf["CCF_DESCR2"]).italic = True
+        h = document.add_heading("", 2)
+        try:
+            t = str(i.ccf["CCF_TYPE"])
+            st = str(i.ccf["CCF_STYPE"])
+            desc = i.ccf["CCF_DESCR"]
+        except:
+            t = "?"
+            st = "?"
+            desc = "____"
+        h.add_run("TC["+t+","+st+"] "+desc).italic = True
+        try:
+            if str(i.ccf["CCF_APID"]):
+                document.add_paragraph("APID: "+str(i.ccf["CCF_APID"]), style = "List Bullet")
+            else:
+                document.add_paragraph("APID: ?", style = "List Bullet")                
+        except:
+            document.add_paragraph("APID: ?", style = "List Bullet")
+        try:
+            document.add_paragraph("MIB name: "+ str(i.ccf["CCF_CNAME"]), style = "List Bullet")
+        except:
+            document.add_paragraph("MIB name: ?", style = "List Bullet")
         table = document.add_table(rows=1, cols=5)
         table.style = "Table Grid"
+        table.autofit = True
         table.rows[0].cells[0].paragraphs[0].add_run("Byte").bold = True
         table.rows[0].cells[1].paragraphs[0].add_run("ID").bold = True
         table.rows[0].cells[2].paragraphs[0].add_run("Size in bites").bold = True
         table.rows[0].cells[3].paragraphs[0].add_run("Type").bold = True
         table.rows[0].cells[4].paragraphs[0].add_run("Description").bold = True
+        table.columns[0].width = Cm(2.7)
+        table.columns[1].width = Cm(2.7)
+        table.columns[2].width = Cm(2.7)
+        table.columns[3].width = Cm(2.7)
+        table.columns[4].width = Cm(4.8)
         for l in range(5):
             table.rows[0].cells[l]._tc.get_or_add_tcPr().append(
                 parse_xml(r'<w:shd {} w:fill="C7D9F1"/>'.format(nsdecls("w")))
@@ -111,3 +162,4 @@ def to_bytes(bits):
         return str(byt) + " (+ " + str(bit) + " bit)"
     else:
         return str(byt) + " (+ " + str(bit) + " bits)"
+        
