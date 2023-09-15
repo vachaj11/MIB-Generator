@@ -9,7 +9,6 @@ import os
 import sys
 
 import json5
-
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow
 
@@ -243,7 +242,9 @@ class MainWindow(QMainWindow):
         """
         try:
             cal1 = calib.calib_extract([a for file in load.TmH for a in file.comments])
-            cal2 = calib.calib_extract([a for file in load.TcTmH for a in file.comments])
+            cal2 = calib.calib_extract(
+                [a for file in load.TcTmH for a in file.comments]
+            )
             self.cal = {i: cal1[i] + cal2[i] for i in cal1}
             self.TmHead = tm_packet.TM_header(load.TmH)
             self.tms = []
@@ -271,10 +272,14 @@ class MainWindow(QMainWindow):
         """
         try:
             dec1 = calib.decal_extract([a for file in load.TcH for a in file.comments])
-            dec2 = calib.decal_extract([a for file in load.TcTmH for a in file.comments])
+            dec2 = calib.decal_extract(
+                [a for file in load.TcTmH for a in file.comments]
+            )
             self.dec = dec1 + dec2
             ver1 = calib.verif_extract([a for file in load.TcH for a in file.comments])
-            ver2 = calib.verif_extract([a for file in load.TcTmH for a in file.comments])
+            ver2 = calib.verif_extract(
+                [a for file in load.TcTmH for a in file.comments]
+            )
             self.ver = ver1 + ver2
             self.TcHead = tc_packet.TC_header(tc_packet_methods.find_header(load.TcH))
             packets = tc_packet_methods.packet_search(load.TcH)
@@ -446,9 +451,25 @@ class MainWindow(QMainWindow):
                 load.get_paths()
                 load.get_conf()
                 self.dist_paths(temp.fetch_paths())
-                self.ui.mibfield.setPlainText("; ".join([str(e) for e in load.conf["mib"]]))
-                self.ui.prefield.setPlainText(";\n".join([": ".join([str(e) for e in i]) for i in load.conf["def"].items()]))
-                self.ui.namfield.setPlainText(";\n".join([": ".join([str(e) for e in i]) for i in load.conf["nam"].items()]))
+                self.ui.mibfield.setPlainText(
+                    "; ".join([str(e) for e in load.conf["mib"]])
+                )
+                self.ui.prefield.setPlainText(
+                    ";\n".join(
+                        [
+                            ": ".join([str(e) for e in i])
+                            for i in load.conf["def"].items()
+                        ]
+                    )
+                )
+                self.ui.namfield.setPlainText(
+                    ";\n".join(
+                        [
+                            ": ".join([str(e) for e in i])
+                            for i in load.conf["nam"].items()
+                        ]
+                    )
+                )
                 warn.raises("CGU4")
             else:
                 warn.raises("WGU1", self.ui.configfield.text())
@@ -496,13 +517,17 @@ class MainWindow(QMainWindow):
         """
         try:
             lis = self.clean(self.ui.prefield.toPlainText()).split(";")
-            dic = {i.split(":")[0]:self.evalu(i.split(":")[1]) for i in lis if len(i.split(":")) == 2}
+            dic = {
+                i.split(":")[0]: self.evalu(i.split(":")[1])
+                for i in lis
+                if len(i.split(":")) == 2
+            }
             temp.update_json("def", dic)
             load.get_conf()
             warn.raises("CGU3")
         except:
             warn.raises("EGU3")
-            
+
     @Slot()
     def nam_use(self):
         """Use the config settings for parameter name creation.
@@ -512,7 +537,9 @@ class MainWindow(QMainWindow):
         """
         try:
             lis = self.clean(self.ui.namfield.toPlainText()).split(";")
-            dic = {i.split(":")[0]:i.split(":")[1] for i in lis if len(i.split(":")) == 2}
+            dic = {
+                i.split(":")[0]: i.split(":")[1] for i in lis if len(i.split(":")) == 2
+            }
             temp.update_json("nam", dic)
             load.get_conf()
             warn.raises("CGU3")
@@ -540,46 +567,46 @@ class MainWindow(QMainWindow):
 
     def to_field(self, stri):
         """Convert the passed string/list to an easily readable format.
-        
+
         Takes an inputted string/list and based on its outlook formats it so that it is easily readable/editable by the
         user (cleans it of redundant whitespaces, adds separators, new lines).
-        
+
         Args:
             stri (str or object): An object/string to be reformatted.
-            
+
         Returns:
             str: The reformatted string.
         """
         if str(stri)[0] == "[":
-            return self.clean(str(stri)[1:-1]).replace(",",";\n")
+            return self.clean(str(stri)[1:-1]).replace(",", ";\n")
         else:
-            return self.clean(str(stri)).replace(",",";\n")
+            return self.clean(str(stri)).replace(",", ";\n")
 
-    def clean(self, stri, tok = {" ","\n", "\t","'",'"'}):
+    def clean(self, stri, tok={" ", "\n", "\t", "'", '"'}):
         """Clean the passed string of the passed tokens.
-        
+
         Replaces all tokens in the passed strings with nothing (deletes them). By default with no tokens passed, deletes
         all whitespace characters in the string.
-        
+
         Args:
             stri (str): String which is to be cleaned.
             tok (set): Set of tokens to be deleted from the string.
-            
+
         Returns:
             str: The string after cleaning.
         """
         for i in tok:
-            stri = stri.replace(i,"")
+            stri = stri.replace(i, "")
         return stri
 
     def evalu(self, stri):
         """Evaluates string for boolean values.
-        
+
         Just simple case matching of string to a boolean values.
-        
+
         Args:
             stri (str): The string to be evaluated.
-            
+
         Returns:
             bool: The result of evaluation.
         """

@@ -8,7 +8,7 @@ from docx import Document
 from docx.enum.table import WD_ALIGN_VERTICAL
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
-from docx.shared import Inches, Cm
+from docx.shared import Cm, Inches
 
 import mib_generator.parsing.load as load
 
@@ -37,7 +37,7 @@ def gen_doc(Tm_packets=[], Tc_packets=[]):
             t = str(i.pid["PID_TYPE"])
             st = str(i.pid["PID_STYPE"])
             if int(i.pid["PID_PI1_VAL"]) > 0:
-                si = ",SID="+str(i.pid["PID_PI1_VAL"])
+                si = ",SID=" + str(i.pid["PID_PI1_VAL"])
             else:
                 si = ""
             desc = i.pid["PID_DESCR"]
@@ -46,19 +46,25 @@ def gen_doc(Tm_packets=[], Tc_packets=[]):
             st = "?"
             si = ""
             desc = "____"
-        h.add_run("TM["+t+","+st+si+"] "+desc).italic = True
+        h.add_run("TM[" + t + "," + st + si + "] " + desc).italic = True
         try:
-            document.add_paragraph("APID: "+str(i.pid["PID_APID"]), style = "List Bullet")
+            document.add_paragraph(
+                "APID: " + str(i.pid["PID_APID"]), style="List Bullet"
+            )
         except:
-            document.add_paragraph("APID: ?", style = "List Bullet")
+            document.add_paragraph("APID: ?", style="List Bullet")
         try:
-            document.add_paragraph("MIB name: "+ i.tpcf["TPCF_NAME"], style = "List Bullet")
+            document.add_paragraph(
+                "MIB name: " + i.tpcf["TPCF_NAME"], style="List Bullet"
+            )
         except:
-            document.add_paragraph("MIB name: ?", style = "List Bullet")
+            document.add_paragraph("MIB name: ?", style="List Bullet")
         try:
-            document.add_paragraph("MIB SPID: "+ str(i.pid["PID_SPID"]), style = "List Bullet")
+            document.add_paragraph(
+                "MIB SPID: " + str(i.pid["PID_SPID"]), style="List Bullet"
+            )
         except:
-            document.add_paragraph("MIB SPID: ?", style = "List Bullet")
+            document.add_paragraph("MIB SPID: ?", style="List Bullet")
         table = document.add_table(rows=1, cols=4)
         table.style = "Table Grid"
         table.autofit = True
@@ -96,18 +102,22 @@ def gen_doc(Tm_packets=[], Tc_packets=[]):
             t = "?"
             st = "?"
             desc = "____"
-        h.add_run("TC["+t+","+st+"] "+desc).italic = True
+        h.add_run("TC[" + t + "," + st + "] " + desc).italic = True
         try:
             if str(i.ccf["CCF_APID"]):
-                document.add_paragraph("APID: "+str(i.ccf["CCF_APID"]), style = "List Bullet")
+                document.add_paragraph(
+                    "APID: " + str(i.ccf["CCF_APID"]), style="List Bullet"
+                )
             else:
-                document.add_paragraph("APID: ?", style = "List Bullet")                
+                document.add_paragraph("APID: ?", style="List Bullet")
         except:
-            document.add_paragraph("APID: ?", style = "List Bullet")
+            document.add_paragraph("APID: ?", style="List Bullet")
         try:
-            document.add_paragraph("MIB name: "+ str(i.ccf["CCF_CNAME"]), style = "List Bullet")
+            document.add_paragraph(
+                "MIB name: " + str(i.ccf["CCF_CNAME"]), style="List Bullet"
+            )
         except:
-            document.add_paragraph("MIB name: ?", style = "List Bullet")
+            document.add_paragraph("MIB name: ?", style="List Bullet")
         table = document.add_table(rows=1, cols=5)
         table.style = "Table Grid"
         table.autofit = True
@@ -162,4 +172,3 @@ def to_bytes(bits):
         return str(byt) + " (+ " + str(bit) + " bit)"
     else:
         return str(byt) + " (+ " + str(bit) + " bits)"
-        

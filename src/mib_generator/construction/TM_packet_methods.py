@@ -3,10 +3,10 @@
 This module holds methods that help with formatting of parsed data into monitoring packet characteristics. They are usually
 concerned with value evaluation, bite counting, type identification etc. I.e. mostly kind of housekeeping jobs.
 """
+import os
 from copy import copy
 
 import json5
-import os
 
 import mib_generator.data.longdata as longdata
 import mib_generator.data.warn as warn
@@ -132,7 +132,7 @@ def header_search(typ, files):
     in :obj:`mib_generator.parsing.load.TmH` (the TM ``.h`` files) for a corresponding packet/packets description (list of parameters, etc).
     More packet definitions can correspond to a single type (they then differ in additional packet identifiers) and hence
     more than one such structures can be found sometimes.
-    
+
     The comment with the header declaration does not also have to always have a structure directly associated to it (i.e. bellow it), in which
     it is expected that it includes a ``"use_structure"`` key which refers to some C-structure which is such structure.
 
@@ -146,7 +146,11 @@ def header_search(typ, files):
     """
     comments = []
     for i in [a for file in files for a in file.comments]:
-        if i.entries and "pack_type" in i.entries.keys() and i.entries["pack_type"] == typ:
+        if (
+            i.entries
+            and "pack_type" in i.entries.keys()
+            and i.entries["pack_type"] == typ
+        ):
             comments.append([i])
             if "use_structure" in i.entries.keys():
                 for l in [a for file in files for a in file.structures]:
@@ -155,7 +159,7 @@ def header_search(typ, files):
                 if len(comments[-1]) == 1:
                     warn.raises("WCM3", i.entries["use_structure"], typ)
                     comments.pop(-1)
-                elif len(comments[-1])>2:
+                elif len(comments[-1]) > 2:
                     warn.raises("WCM4", i.entries["use_structure"], typ)
                     comments[-1] = comments[-1][:2]
             elif i.structure.type == "struct":
@@ -163,7 +167,7 @@ def header_search(typ, files):
             else:
                 warn.raises("WCM5", typ)
                 comments.pop(-1)
-                
+
     if not comments:
         warn.raises("WCM2", typ)
     return comments
@@ -299,7 +303,11 @@ def pi_sid(entries, positions):
     start = None
     width = 0
     for i in range(len(entries)):
-        if entries[i].comment and "sid" in entries[i].comment[0].entries.keys() and entries[i].comment[0].entries["sid"]:
+        if (
+            entries[i].comment
+            and "sid" in entries[i].comment[0].entries.keys()
+            and entries[i].comment[0].entries["sid"]
+        ):
             start = int(positions[i] / 8)
             width = positions[i + 1] - positions[i]
     return start, width

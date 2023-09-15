@@ -11,7 +11,7 @@ from mib_generator.construction.TM_packet_methods import (
     categfromptc,
     count_size,
     evalu,
-    getptcpcf, 
+    getptcpcf,
 )
 
 
@@ -43,11 +43,11 @@ def packet_search(files):
     here all packets' definitions have to be found in the first place.
 
     Args:
-        files (list): List of files (in Python representation of type :obj:`mib_generator.parsing.parser_main.file`) 
+        files (list): List of files (in Python representation of type :obj:`mib_generator.parsing.parser_main.file`)
         which are searched for the command definitions.
 
     Returns:
-        list: List of pairs of command definition [comments, structures] found in the file. Each an instance of 
+        list: List of pairs of command definition [comments, structures] found in the file. Each an instance of
         [:obj:`mib_generator.parsing.par_methods.comment`, :obj:`mib_generator.parsing.par_header.struct`].
     """
     packets = []
@@ -59,17 +59,21 @@ def packet_search(files):
                     if i.entries["use_structure"] == l.name:
                         packets[-1].append(l)
                 if len(packets[-1]) == 1:
-                    warn.raises("WCT3", i.entries["use_structure"], i.entries["text_id"])
+                    warn.raises(
+                        "WCT3", i.entries["use_structure"], i.entries["text_id"]
+                    )
                     packets.pop(-1)
                 elif len(packets[-1]) > 2:
-                    warn.raises("WCT4", i.entries["use_structure"], i.entries["text_id"])
+                    warn.raises(
+                        "WCT4", i.entries["use_structure"], i.entries["text_id"]
+                    )
                     packets[-1] = packets[-1][:2]
             elif i.structure.type == "struct":
                 packets[-1].append(i.structure)
             else:
                 warn.raises("WCT5", i.entries["text_id"])
                 packets.pop(-1)
-            
+
     return packets
 
 

@@ -217,18 +217,18 @@ def preproc_filter(stri_o, stri_c):
     First, this function looks for blocks pre-processor logic using the :obj:`preproc_parse` function. It then evaluates
     the condition associated with this logic with :obj:`preproc_eval` and depending on the result, decides what
     parts of the string should be deleted (replaced by equal number of spaces). Finally it performs this replacement.
-    
-    The preprocessor logic is determined based on the passed string with the code (``stri_o``), but the deliting 
+
+    The preprocessor logic is determined based on the passed string with the code (``stri_o``), but the deliting
     is applied also to the string with comment (``stri_c``).
 
     Args:
         stri_o (str): The text with C-code to be filtered on the basis of pre-processor logic.
         stri_c (str): The text with comments to be filtered on the basis of pre-processor logic.
-        
+
 
     Returns:
         tuple: A tuple containing:
-        
+
             * *str* - The string with C-code with the pre-processor logic applied.
             * *str* - The string with comments with the pre-processor logic applied.
     """

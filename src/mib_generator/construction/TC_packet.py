@@ -264,7 +264,7 @@ class TC_packet:
         placeholder name (rather than predefined one) to be put into the ``"CPC_PRFREF"`` entry and then generate the range check tables
         as an attribute of this command class :attr:`prf` and :attr:`prv` (rather then as an external object as is the case with all
         other calibrations).
-        
+
         Also, before entries for any parameter are calculated, a simple check is run inspecting whether the ``"base_par_index"`` defined
         in the packet-level comment corresponds in length to the length of the numerical part of the parameter names to be generated (
         this is defined in the config file). If not, a warning is raised.
@@ -283,25 +283,34 @@ class TC_packet:
                 diction = {}
                 size = int(self.positions[i + 1] - self.positions[i])
                 try:
-                #all of this is for creation of the parameter name based on config settings.
+                    # all of this is for creation of the parameter name based on config settings.
                     if "nam" in load.conf.keys():
                         conf = load.conf["nam"]
                         no = "{:X}".format(
-                            int(str(self.h_comment.entries["base_par_index"])[:int(conf["cpc"])], 16)
+                            int(
+                                str(self.h_comment.entries["base_par_index"])[
+                                    : int(conf["cpc"])
+                                ],
+                                16,
+                            )
                             + i
                         )
-                        if self.entries[i].comment and "nature" in self.entries[i].comment[-1].entries.keys():
+                        if (
+                            self.entries[i].comment
+                            and "nature" in self.entries[i].comment[-1].entries.keys()
+                        ):
                             nat = self.entries[i].comment[-1].entries["nature"][:1]
                         else:
                             nat = conf["nat_cpc"]
                     else:
-                        no = str("{:X}".format(
-                            int(str(self.h_comment.entries["base_par_index"]), 16)
-                            + i))
+                        no = str(
+                            "{:X}".format(
+                                int(str(self.h_comment.entries["base_par_index"]), 16)
+                                + i
+                            )
+                        )
                         nat = ""
-                    diction["CPC_PNAME"] = self.h_comment.entries[
-                        "prefix"
-                    ] + no + nat
+                    diction["CPC_PNAME"] = self.h_comment.entries["prefix"] + no + nat
                 except:
                     diction["CPC_PNAME"] = ""
                 try:
@@ -353,9 +362,13 @@ class TC_packet:
                 # diction["CPC_OBTID"] = ""
                 try:
                     if "Mnemonic" in self.entries[i].comment[-1].entries.keys():
-                        diction["CPC_DESCR2"] = self.entries[i].comment[-1].entries["Mnemonic"]
+                        diction["CPC_DESCR2"] = (
+                            self.entries[i].comment[-1].entries["Mnemonic"]
+                        )
                     elif "mnemonic" in self.entries[i].comment[-1].entries.keys():
-                        diction["CPC_DESCR2"] = self.entries[i].comment[-1].entries["mnemonic"]
+                        diction["CPC_DESCR2"] = (
+                            self.entries[i].comment[-1].entries["mnemonic"]
+                        )
                     else:
                         diction["CPC_DESCR2"] = ""
                 except:
@@ -491,10 +504,7 @@ class TC_packet:
         Returns:
             list: List of dictionaries which are to be lines in the MIB table. Assigned to :attr:`cvp`.
         """
-        if (
-            self.h_structure.comment
-            and "cvs" in self.h_comment.entries.keys()
-        ):
+        if self.h_structure.comment and "cvs" in self.h_comment.entries.keys():
             entrydict = []
             for i in self.h_comment.entries["cvs"]:
                 diction = {}

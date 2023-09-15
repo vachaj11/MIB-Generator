@@ -39,7 +39,7 @@ warnings = {
     "WPM1": "Invalid logic encountered when parsing preprocessor directives.",
     "WTT1": "The path {} for file {} does not exist, consider using previous value {}.",
     "WTT2": "The path {} for file {} does not exist (and there is no valid previous value to use in its place).",
-    "WGU1": "The directory {} to which the config files are to be saved doesn't exist."
+    "WGU1": "The directory {} to which the config files are to be saved doesn't exist.",
 }
 
 errors = {
@@ -78,16 +78,18 @@ complete = {
 
 display = None
 
+
 def disp_update(var):
     """Update the :attr:`display` global variable in this module to the specified value.
-    
+
     This quite ugly method (or approach) serves the purpose of specifying to the method that takes care of raising warnings, that
     the warnings shouldn't be printed to terminal but rather added to the object's text (the passed object is expected to be some GUI console).
-    
+
     Args:
         var (object such as PySide6.QtWidgets.QTextEdit): The object to be assigned to the :attr:`display` global variable.
     """
     globals()["display"] = var
+
 
 def raises(ID, *data):
     """Raise warning/error with the given ID.
@@ -113,9 +115,13 @@ def raises(ID, *data):
         if ID in complete.keys():
             stri = "Compl.:\t" + complete[ID].format(*data)
         else:
-            stri = "Compl.:\tUnspecified completion message with ID {} encountered.".format(ID)
+            stri = "Compl.:\tUnspecified completion message with ID {} encountered.".format(
+                ID
+            )
     else:
-        stri = "Warn.:\tWarning/Error/Completion message with unknown ID {} encountered.".format(ID)
+        stri = "Warn.:\tWarning/Error/Completion message with unknown ID {} encountered.".format(
+            ID
+        )
     if not display:
         print(stri)
     else:

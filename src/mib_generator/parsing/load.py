@@ -41,12 +41,13 @@ TmC = None
 
 enumerations = {}
 
+
 def get_paths():
     """Load paths from the temporary config files.
-    
-    This method looks up paths to each of the input files in the config files in the runtime config directory. 
-    It then saves these paths as global attributes of the :obj:`mib_generator.parsing.load` module, so they can 
-    be easily accessed to other methods in the whole program. 
+
+    This method looks up paths to each of the input files in the config files in the runtime config directory.
+    It then saves these paths as global attributes of the :obj:`mib_generator.parsing.load` module, so they can
+    be easily accessed to other methods in the whole program.
     """
     try:
         file_path = os.path.join(
@@ -68,6 +69,7 @@ def get_paths():
     except:
         warn.raises("EPL1")
 
+
 def get_conf():
     try:
         file_path = os.path.join(
@@ -79,9 +81,10 @@ def get_conf():
     except:
         globals()[""] = {}
 
+
 def parse_all():
     """Parse the inputted C-files and save the output.
-    
+
     This method uses the :obj:`mib_generator.parsing.parser_main` module to parse contents of the files specified
     at the paths given by global attributes of this module. It then assigns the outputs of the parsing process to
     various other global attributes of this module, so they can be easily accessed.
@@ -103,9 +106,10 @@ def parse_all():
     except:
         warn.raises("EPL2", "Tm .c")
 
+
 def enum_stuff():
     """Create a dictionary that includes all the possible evaluations from the input files.
-    
+
     For each of the inputted (and processed) C-files, this method extracts an evaluation (dictionary
     including all possible variable substitutions, from e.g. `enum` objects.) and then joins all of
     these dictionaries to one and assigns it to a global variable so it can be easily accessed.
@@ -118,6 +122,7 @@ def enum_stuff():
     except:
         warn.raises("WPL1")
 
+
 def extr_values(files):
     """Create a dictionary from constants, ``enum`` correspondences, etc... in the given files.
 
@@ -125,7 +130,7 @@ def extr_values(files):
     pairs present to a dictionary (which represents the "global" evaluation in the file).
 
     Args:
-        files (list): Files from which the evaluation dictionary is to be extracted. Each of type 
+        files (list): Files from which the evaluation dictionary is to be extracted. Each of type
             :obj:`mib_generator.parsing.parser_main.file`
 
     Returns:
@@ -149,12 +154,13 @@ def extr_values(files):
                 if value is not None:
                     lis[name] = value
     return lis
-    
+
+
 def load_all():
     """Run all initialisation and parsing methods.
-    
-    This method (replacing previous simple initialisation of this module) runs other methods, which 
-    
+
+    This method (replacing previous simple initialisation of this module) runs other methods, which
+
         1. Load the paths to input C-files.
         2. Load the configuration settings.
         2. Parse files at these paths.

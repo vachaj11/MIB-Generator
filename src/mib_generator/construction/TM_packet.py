@@ -41,7 +41,7 @@ class TM_header:
         Based on its name, find a structure which corresponds to the TM header. Otherwise return a warning.
 
         Args:
-            files (list): Files (in Python representation of type :obj:`mib_generator.parsing.parser_main.file`) 
+            files (list): Files (in Python representation of type :obj:`mib_generator.parsing.parser_main.file`)
             which are searched for the header.
 
         Returns:
@@ -217,7 +217,7 @@ class TM_packet:
         the key being the name of the column and value the entry to be filled in). Here one "MIB row" is created for each entry/parameter
         in :attr:`entries` and for each row most of the information is taken from the comment attached to the line at which the C-object
         describing the entry is found in the original C-files.
-        
+
         Also, before entries for any parameter are calculated, a simple check is run inspecting whether the ``"base_par_index"`` defined
         in the packet-level comment corresponds in length to the length of the numerical part of the parameter names to be generated (
         this is defined in the config file). If not, a warning is raised.
@@ -235,25 +235,33 @@ class TM_packet:
             diction = {}
             size = int(self.positions[i + 1] - self.positions[i])
             try:
-                #all of this is for creation of the parameter name based on config settings.
+                # all of this is for creation of the parameter name based on config settings.
                 if "nam" in load.conf.keys():
                     conf = load.conf["nam"]
                     no = "{:X}".format(
-                        int(str(self.h_comment.entries["base_par_index"])[:int(conf["pcf"])], 16)
+                        int(
+                            str(self.h_comment.entries["base_par_index"])[
+                                : int(conf["pcf"])
+                            ],
+                            16,
+                        )
                         + i
                     )
-                    if self.entries[i].comment and "nature" in self.entries[i].comment[-1].entries.keys():
+                    if (
+                        self.entries[i].comment
+                        and "nature" in self.entries[i].comment[-1].entries.keys()
+                    ):
                         nat = self.entries[i].comment[-1].entries["nature"][:1]
                     else:
                         nat = conf["nat_pcf"]
                 else:
-                    no = str("{:X}".format(
-                        int(str(self.h_comment.entries["base_par_index"]), 16)
-                        + i))
+                    no = str(
+                        "{:X}".format(
+                            int(str(self.h_comment.entries["base_par_index"]), 16) + i
+                        )
+                    )
                     nat = ""
-                diction["PCF_NAME"] = self.h_comment.entries[
-                    "prefix"
-                ] + no + nat
+                diction["PCF_NAME"] = self.h_comment.entries["prefix"] + no + nat
             except Exception as p:
                 print(p)
                 diction["PCF_NAME"] = ""

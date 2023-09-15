@@ -48,7 +48,9 @@ def update_path(directory=None):
         if type(pre_val) is list:
             pre_val = pre_val[0]
         print("State relative or absolute path to Tm Header file.")
-        print("(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)")
+        print(
+            "(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)"
+        )
         print("Currently this path is: " + pre_val)
         print("(press Enter if you want to keep this value)")
         path = input("Path: ")
@@ -67,7 +69,9 @@ def update_path(directory=None):
         if type(pre_val) is list:
             pre_val = pre_val[0]
         print("State relative or absolute path to TcTm Header file.")
-        print("(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)")
+        print(
+            "(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)"
+        )
         print("Currently this path is: " + pre_val)
         print("(press Enter if you want to keep this value)")
         path = input("Path: ")
@@ -86,7 +90,9 @@ def update_path(directory=None):
         if type(pre_val) is list:
             pre_val = pre_val[0]
         print("State relative or absolute path to Tm C file.")
-        print("(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)")
+        print(
+            "(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)"
+        )
         print("Currently this path is: " + pre_val)
         print("(press Enter if you want to keep this value)")
         path = input("Path: ")
@@ -105,7 +111,9 @@ def update_path(directory=None):
         if type(pre_val) is list:
             pre_val = pre_val[0]
         print("State relative or absolute path to Tc Header file.")
-        print("(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)")
+        print(
+            "(Inputting multiple paths for one file is not supported in the UI script, use the GUI for that purpose)"
+        )
         print("Currently this path is: " + pre_val)
         print("(press Enter if you want to keep this value)")
         path = input("Path: ")
@@ -313,7 +321,8 @@ def update_config_m(directory=None):
     fil.write(json5.dumps(leg_fil))
     fil.close()
     print("======")
-    
+
+
 def update_config_n(directory=None):
     """Run a series of queries asking user to specify parameter name creation configuration parameters.
 
@@ -343,21 +352,21 @@ def update_config_n(directory=None):
             leg_data = {}
     else:
         leg_data = {}
-        
+
     data = {}
     print("To change a construction config parameter:")
     print("Write anything to save it as the parameter's value.")
     print("(assuming it is appropriatelly string or int)")
-    print('Write nothing (press Enter) to keep the previous value.')
+    print("Write nothing (press Enter) to keep the previous value.")
     print('Write "---" to save "" as the parameter\'s value (where appropriate).')
     print("------")
     print('Parameter - Numerical index length in "PCF_NAME".')
-    print('(integer < 6 expected)')
+    print("(integer < 6 expected)")
     try:
-        print('Current value is: '+str(leg_data["pcf"]))
+        print("Current value is: " + str(leg_data["pcf"]))
         pre = leg_data["pcf"]
     except:
-        print('There is no current value.')
+        print("There is no current value.")
         pre = None
     fin = False
     while not fin:
@@ -376,12 +385,12 @@ def update_config_n(directory=None):
             print("Invalid value entered.")
     print("------")
     print('Parameter - Numerical index length in "CPC_PNAME".')
-    print('(integer < 6 expected)')
+    print("(integer < 6 expected)")
     try:
-        print('Current value is: '+str(leg_data["cpc"]))
+        print("Current value is: " + str(leg_data["cpc"]))
         pre = leg_data["cpc"]
     except:
-        print('There is no current value.')
+        print("There is no current value.")
         pre = None
     fin = False
     while not fin:
@@ -400,12 +409,12 @@ def update_config_n(directory=None):
             print("Invalid value entered.")
     print("------")
     print('Parameter - Default "nature" value for "PCF_NAME".')
-    print('(str with len() < 2 expected)')
+    print("(str with len() < 2 expected)")
     try:
-        print('Current value is: '+str(leg_data["nat_pcf"]))
+        print("Current value is: " + str(leg_data["nat_pcf"]))
         pre = leg_data["nat_pcf"]
     except:
-        print('There is no current value.')
+        print("There is no current value.")
         pre = None
     fin = False
     while not fin:
@@ -424,12 +433,12 @@ def update_config_n(directory=None):
             print("Invalid value entered.")
     print("------")
     print('Parameter - Default "nature" value for "CPC_PNAME".')
-    print('(str with len() < 2 expected)')
+    print("(str with len() < 2 expected)")
     try:
-        print('Current value is: '+str(leg_data["nat_cpc"]))
+        print("Current value is: " + str(leg_data["nat_cpc"]))
         pre = leg_data["nat_cpc"]
     except:
-        print('There is no current value.')
+        print("There is no current value.")
         pre = None
     fin = False
     while not fin:
@@ -453,4 +462,3 @@ def update_config_n(directory=None):
     fil.write(json5.dumps(leg_fil))
     fil.close()
     print("======")
-    

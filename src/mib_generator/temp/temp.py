@@ -35,32 +35,38 @@ def move_conf(dire=None):
     else:
         source_c = os.path.join(data, "config.json5")
     shutil.copy(source_c, here)
-    
+
+
 def evom_conf(dire):
     """Cope the runtime config files to the specified directory.
-    
+
     This module is passed a directory location, it check whether it exists and if yes, copies the current
     runtime config files to there.
-    
+
     Args:
         dire (str): A path to directory where the config files are to be copied.
     """
     here = os.path.dirname(__file__)
     temp = os.path.join(os.path.dirname(here), "temp")
     if os.path.isdir(dire):
-        shutil.copy(os.path.join(temp, "config.json5"),os.path.join(dire, "config.json5"))
-        shutil.copy(os.path.join(temp, "paths.json5"),os.path.join(dire, "paths.json5"))
-    
+        shutil.copy(
+            os.path.join(temp, "config.json5"), os.path.join(dire, "config.json5")
+        )
+        shutil.copy(
+            os.path.join(temp, "paths.json5"), os.path.join(dire, "paths.json5")
+        )
+
+
 def update_paths(diction):
     """Update paths in the ``"paths.json5"`` config file to the passed values.
-    
+
     Goes through each entry in the passed dictionary and if it recognises it as valid configuration path,
     it saves it to the runtime config file. If it is given a path to file which doesn't exists, it raises
     a warning but saves it nonetheless.
-    
+
     Args:
         diction (dict): A dictionary containing paths to the input/output files/directories.
-        
+
     Returns:
         dict: A dictionary of the values saved. (currently the same as the inputted dictionary)
     """
@@ -79,30 +85,31 @@ def update_paths(diction):
                 if os.path.isfile(i) or os.path.isdir(i):
                     pass
                 else:
-                    if l in leg_data.keys() and len(leg_data[l])>= diction[l].index(i):
+                    if l in leg_data.keys() and len(leg_data[l]) >= diction[l].index(i):
                         F = os.path.isfile(leg_data[l][i])
                         D = os.path.isdir(leg_data[l][i])
                         if F or D:
-                            warn.raises("WTT1",diction[l][i], l, leg_data[l][i])
+                            warn.raises("WTT1", diction[l][i], l, leg_data[l][i])
                         else:
                             warn.raises("WTT2", diction[l][i], l)
                     else:
                         warn.raises("WTT2", diction[l][i], l)
     except:
         pass
-    
+
     fil = open(file_path, "w")
     fil.write("// This file stores various paths to source/output files\n")
     fil.write(json5.dumps(diction))
     fil.close()
     return diction
-    
+
+
 def fetch_paths():
     """Get paths dictionary from the runtime config file.
-    
+
     Loads the paths config file in the runtime directory (the :obj:`mib_generator.temp` sub-package) and
     extracts the paths to input/output files from it as a dictionary.
-    
+
     Returns:
         dict: A dictionary containing the paths to input/output files/directories.
     """
@@ -116,7 +123,8 @@ def fetch_paths():
     except:
         leg_data = {}
     return leg_data
-    
+
+
 def update_json(typ, data):
     """Update the runtime config file with the passed parameter.
 
@@ -137,4 +145,3 @@ def update_json(typ, data):
     dic[typ] = data
     json5.dump(dic, fil)
     fil.close()
-            
