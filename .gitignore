@@ -3,6 +3,9 @@ __pycache__
 MIB
 out.txt
 **/out.txt
+out.xltx
+**/out.xltx
+.~lock.out*
 tmp
 dist
 *.egg

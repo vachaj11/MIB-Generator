@@ -12,6 +12,7 @@ import mib_generator.construction.TM_packet_methods as tm_packet_methods
 import mib_generator.data.warn as warn
 import mib_generator.generation.gener as gener
 import mib_generator.generation.gener_doc as generd
+import mib_generator.generation.gener_xls as generx
 import mib_generator.parsing.load as load
 import mib_generator.temp.temp as temp
 import mib_generator.utilities.update as update
@@ -25,6 +26,7 @@ def main(
     paths=False,
     config=False,
     generate_t=False,
+    generate_x=False,
     custom_dir=None,
 ):
     """Run this whole hellish thing.
@@ -108,6 +110,8 @@ def main(
         if generate:
             tables = gener.generation_hub(tm_lis, tc_lis, cal, dec, ver, TcHead)
             gener.save_tables(tables)
+        if generate_x:
+            generx.gen_xls(tm_lis, tc_lis, cal, dec, ver, TcHead)
 
         if generate_t:
             docum = generd.gen_doc(tm_lis, tc_lis)

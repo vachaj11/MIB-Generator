@@ -37,8 +37,8 @@ def cli_run():
         action="store_true",
     )
     parser.add_argument(
-        "-x",
-        "--xgenerate",
+        "-n",
+        "--ngenerate",
         help="run without generating MIB files",
         action="store_true",
     )
@@ -67,6 +67,12 @@ def cli_run():
         action="store_true",
     )
     parser.add_argument(
+        "-x",
+        "--xlsgenerate",
+        help="generate an excel file summarising characteristic of the TM and TC packages, etc.",
+        action="store_true",
+    )
+    parser.add_argument(
         "-u",
         "--custom_dir",
         help='use config files in the specified directory instead (use with "-c" and "-p" flags to generate them)',
@@ -76,11 +82,12 @@ def cli_run():
     arguments = parser.parse_args()
     main.main(
         arguments.visualise,
-        not arguments.xgenerate,
+        not arguments.ngenerate,
         arguments.onlyparse,
         arguments.update_paths,
         arguments.update_config,
         arguments.docgenerate,
+        arguments.xlsgenerate,
         arguments.custom_dir,
     )
 
