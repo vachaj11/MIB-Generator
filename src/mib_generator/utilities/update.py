@@ -158,6 +158,23 @@ def update_path(directory=None):
                 "Error:\tFailed to find the specified directory into which the file should be placed, try again."
             )
         print("------")
+    valid_Xls = False
+    while not valid_Xls:
+        print("State relative or absolute path to the xls output file.")
+        print("Currently this path is: " + str(leg_data["OutXls"]))
+        print("(press Enter if you want to keep this value)")
+        path = input("Path: ")
+        if path == "" and os.path.isdir(os.path.dirname(leg_data["OutXls"])):
+            data["OutXls"] = leg_data["OutXls"]
+            valid_Xls = True
+        elif os.path.isdir(os.path.dirname(path)):
+            data["OutXls"] = os.path.abspath(path)
+            valid_Xls = True
+        else:
+            print(
+                "Error:\tFailed to find the specified directory into which the file should be placed, try again."
+            )
+        print("------")
     fil = open(file_path, "w")
     fil.write("// This file stores various paths to source/output files\n")
     fil.write(json5.dumps(data))

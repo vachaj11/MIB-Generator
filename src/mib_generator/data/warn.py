@@ -56,8 +56,10 @@ errors = {
     "EGU8": "Failed compiling TC packets characteristics from parsed files.",
     "EGU9": "Failed constructing the specified MIB tables.",
     "EGUA": "Failed constructing the .docx file.",
+    "EGUE": "Failed constructing the .xls file.",
     "EGUB": "Failed saving the constructed MIB tables.",
     "EGUC": "Failed saving the constructed .docx file.",
+    "EGUF": "Failed saving the constructed .xls file.",
     "EGUD": "Failed opening the visualisation of {} file.",
 }
 
@@ -72,8 +74,10 @@ complete = {
     "CGU8": "Finished compiling TC packets characteristics from parsed files.",
     "CGU9": "Finished constructing the specified MIB tables.",
     "CGUA": "Finished constructing the .docx file.",
+    "CGUE": "Finished constructing the .xls file.",
     "CGUB": "Saved the constructed MIB tables.",
     "CGUC": "Saved the constructed .docx file.",
+    "CGUF": "Saved the constructed .xls file.",
 }
 
 display = None

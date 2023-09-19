@@ -111,7 +111,8 @@ def main(
             tables = gener.generation_hub(tm_lis, tc_lis, cal, dec, ver, TcHead)
             gener.save_tables(tables)
         if generate_x:
-            generx.gen_xls(tm_lis, tc_lis, cal, dec, ver, TcHead)
+            wb = generx.gen_xls(tm_lis, tc_lis, cal, dec, ver, TcHead)
+            wb.save(load.out_xls)
 
         if generate_t:
             docum = generd.gen_doc(tm_lis, tc_lis)

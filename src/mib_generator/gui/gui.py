@@ -24,6 +24,7 @@ import mib_generator.construction.TM_packet_methods as tm_packet_methods
 import mib_generator.data.warn as warn
 import mib_generator.generation.gener as gener
 import mib_generator.generation.gener_doc as generd
+import mib_generator.generation.gener_xls as generx
 import mib_generator.parsing.load as load
 import mib_generator.temp.temp as temp
 import mib_generator.utilities.visualiser as visualiser
@@ -82,6 +83,7 @@ class MainWindow(QMainWindow):
         self.ver = None
         self.tables = {}
         self.docum = None
+        self.xls = None
 
         self.ui.parsebutton.clicked.connect(self.parse)
         self.ui.TmHview.clicked.connect(self.TmHshow)
@@ -92,8 +94,10 @@ class MainWindow(QMainWindow):
         self.ui.Tcbuild.clicked.connect(self.Tcinter)
         self.ui.mibgen.clicked.connect(self.MIBgen)
         self.ui.docgen.clicked.connect(self.DOCgen)
+        self.ui.xlsgen.clicked.connect(self.XLSgen)
         self.ui.mibsave.clicked.connect(self.MIBsave)
         self.ui.docsave.clicked.connect(self.DOCsave)
+        self.ui.xlssave.clicked.connect(self.XLSsave)
         self.ui.compute_all.clicked.connect(self.compute)
         self.ui.TmHbutton.clicked.connect(lambda: self.Cfile(self.ui.TmHfield))
         self.ui.TcHbutton.clicked.connect(lambda: self.Cfile(self.ui.TcHfield))
@@ -101,6 +105,7 @@ class MainWindow(QMainWindow):
         self.ui.TcTmHbutton.clicked.connect(lambda: self.Cfile(self.ui.TcTmHfield))
         self.ui.outdirbutton.clicked.connect(lambda: self.direc(self.ui.outdirfield))
         self.ui.outdocbutton.clicked.connect(self.Dfile)
+        self.ui.outxlsbutton.clicked.connect(self.Xfile)
         self.ui.configbutton.clicked.connect(lambda: self.direc(self.ui.configfield))
         self.ui.pathsbutton.clicked.connect(self.use_paths)
         self.ui.configdefault.clicked.connect(self.def_config)
@@ -128,8 +133,10 @@ class MainWindow(QMainWindow):
         self.ui.Tcbuild.click()
         self.ui.mibgen.click()
         self.ui.docgen.click()
+        self.ui.xlsgen.click()
         self.ui.mibsave.click()
         self.ui.docsave.click()
+        self.ui.xlssave.click()
 
     @Slot()
     def parse(self):
@@ -256,6 +263,7 @@ class MainWindow(QMainWindow):
                     self.tms.append(pack)
             self.ui.mibgen.setEnabled(True)
             self.ui.docgen.setEnabled(True)
+            self.ui.xlsgen.setEnabled(True)
             warn.raises("CGU7")
         except:
             warn.raises("EGU7")
@@ -291,6 +299,7 @@ class MainWindow(QMainWindow):
                 self.tcs.append(comm)
             self.ui.mibgen.setEnabled(True)
             self.ui.docgen.setEnabled(True)
+            self.ui.xlsgen.setEnabled(True)
             warn.raises("CGU8")
         except:
             warn.raises("EGU8")
@@ -331,6 +340,22 @@ class MainWindow(QMainWindow):
             warn.raises("EGUA")
 
     @Slot()
+    def XLSgen(self):
+        """Generates a ``.xls`` sheet summing up the results of the construction process.
+
+        Takes the list of representations of TC and TM packets and  generates an entry in a ``.xls`` workbook
+        based on each of them, calibrations, etc.. It then assigns this value to the :attr:`xls` attribute.
+        """
+        try:
+            self.xls = generx.gen_xls(self.tms, self.tcs, self.cal, self.dec, self.ver, self.TcHead)
+            self.ui.xlssave.setEnabled(True)
+            warn.raises("CGUE")
+        except:
+            self.xls = None
+            self.ui.xlssave.setEnabled(False)
+            warn.raises("EGUE")
+
+    @Slot()
     def MIBsave(self):
         """Save the generated MIB tables to ``.dat`` files.
 
@@ -353,6 +378,18 @@ class MainWindow(QMainWindow):
             warn.raises("CGUC")
         except:
             warn.raises("EGUC")
+
+    @Slot()
+    def XLSsave(self):
+        """Save the generated ``.xls`` document .
+
+        Looks up the location where the document should be saved to and saves it ther.
+        """
+        try:
+            self.xls.save(load.out_xls)
+            warn.raises("CGUF")
+        except:
+            warn.raises("EGUF")
 
     @Slot()
     def Cfile(self, field):
@@ -400,6 +437,19 @@ class MainWindow(QMainWindow):
             self.ui.outdocfield.setText(file[0])
 
     @Slot()
+    def Xfile(self):
+        """Open a dialog for choosing a file and use the output.
+
+        Opens a system dialog for choosing file and lets the user choose an input ``.xls`` file  through
+        it. It then assigns the path to the chosen location to the ``.xls`` path text field.
+        """
+        ftype = "Microsoft Excel files (*.xls)"
+        base = os.path.dirname(self.ui.outxlsfield.text())
+        file = QFileDialog.getSaveFileName(self, "Choose file", base, ftype)
+        if file[0] != "":
+            self.ui.outxlsfield.setText(file[0])
+
+    @Slot()
     def use_paths(self):
         """Use the paths specified in the input field.
 
@@ -415,6 +465,7 @@ class MainWindow(QMainWindow):
                 "TcHeader": self.clean(self.ui.TcHfield.toPlainText()).split(";"),
                 "OutDir": self.ui.outdirfield.text(),
                 "OutDoc": self.ui.outdocfield.text(),
+                "OutXls": self.ui.outxlsfield.text(),
             }
             dictn = temp.update_paths(dic)
             load.get_paths()
@@ -564,6 +615,8 @@ class MainWindow(QMainWindow):
             self.ui.outdirfield.setText(dic["OutDir"])
         if "OutDoc" in dic.keys():
             self.ui.outdocfield.setText(dic["OutDoc"])
+        if "OutXls" in dic.keys():
+            self.ui.outxlsfield.setText(dic["OutXls"])
 
     def to_field(self, stri):
         """Convert the passed string/list to an easily readable format.

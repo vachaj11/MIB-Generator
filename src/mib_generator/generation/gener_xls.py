@@ -1,5 +1,6 @@
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, NamedStyle
+
 import os
 
 h1 = NamedStyle(name = "h1")
@@ -182,7 +183,7 @@ def gen_xls(
     wb.remove(wb["Sheet"])
     for i in wb:
         adjust_width(i)
-    wb.save("out.xltx")
+    return wb
     
 def adjust_width(ws):
     for column in ws.column_dimensions:

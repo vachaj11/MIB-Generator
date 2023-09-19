@@ -31,6 +31,7 @@ TcH_path = ""
 TcTmH_path = ""
 out_dir = ""
 out_doc = ""
+out_xls = ""
 
 conf = ""
 
@@ -66,6 +67,7 @@ def get_paths():
         globals()["TcTmH_path"] = tctmh if type(tctmh) is list else [tctmh]
         globals()["out_dir"] = paths["OutDir"]
         globals()["out_doc"] = paths["OutDoc"]
+        globals()["out_xls"] = paths["OutXls"]
     except:
         warn.raises("EPL1")
 
