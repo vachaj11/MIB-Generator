@@ -836,9 +836,8 @@ xls_heads = {
             "VPLB",
         ],
         [
-            "TC",
+            "TC PTV Definition",
             "",
-            "PTV Definition",
             "TM Parameter",
             "Type",
             "Value",

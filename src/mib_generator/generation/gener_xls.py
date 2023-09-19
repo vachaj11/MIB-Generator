@@ -1,5 +1,13 @@
 """This module allows for generation of excel table mirroring the mib databases with a specific formatting.
 
+The main generation processes happen in the module :obj:`gen_xls` from which other modules are called each of which (of those whose
+names start with "gen_") adds one worksheet to the workbook usually containing information from one or two MIB tables. There are
+also a few specific methods here (which don't start with "gen_") which only do some specific modification to the sheets unrelated
+to their content.
+
+Attributes:
+    h1 (openpyxl.styles.NamedStyle): One of 8 ``openpyxl`` styles included as global attributes here which can be applied to cells.
+
 Note:
     Everything here is very much not finished.
 """
@@ -185,6 +193,50 @@ def gen_ccft(book, packets):
     ws = book.create_sheet("TC List")
     head_gen(ws, longdata.xls_heads["TC List"])
     ind = 6
+    
+    for i in packets:
+        ws.cell(ind, 1, "TC").style = c1
+        ws.cell(ind, 2, i.ccf["CCF_CNAME"]).style = c1
+        ws.cell(ind, 3, i.ccf["CCF_DESCR"]).style = c1
+        ws.cell(ind, 4, i.ccf["CCF_DESCR2"]).style = c1
+        #ws.cell(ind, 5, i.ccf["CCF_CTYPE"]).style = c1
+        ws.cell(ind, 6, i.ccf["CCF_TYPE"]).style = c1
+        ws.cell(ind, 7, i.ccf["CCF_STYPE"]).style = c1
+        ws.cell(ind, 8, i.ccf["CCF_APID"]).style = c1
+        ws.cell(ind, 9, i.ccf["CCF_NPARS"]).style = c1
+        #ws.cell(ind, 10, i.ccf["CCF_CRITICAL"]).style = c1
+        #ws.cell(ind, 11, i.ccf["CCF_SUBSYS"]).style = c1
+        ws.cell(ind, 12, i.ccf["CCF_PKTID"]).style = c1
+        #ws.cell(ind, 13, i.ccf["CCF_PLAN"]).style = c1
+        #ws.cell(ind, 14, i.ccf["CCF_EXEC"]).style = c1
+        #ws.cell(ind, 15, i.ccf["CCF_ILSCOPE"]).style = c1
+        #ws.cell(ind, 16, i.ccf["CCF_ILSTAGE"]).style = c1
+        #ws.cell(ind, 17, i.ccf["CCF_HIPRI"]).style = c1
+        #ws.cell(ind, 18, i.ccf["CCF_MAPID"]).style = c1
+        #ws.cell(ind, 19, i.ccf["CCF_DEFSET"]).style = c1
+        #ws.cell(ind, 20, i.ccf["CCF_RAPID"]).style = c1
+        #ws.cell(ind, 21, i.ccf["CCF_ACK"]).style = c1
+        #ws.cell(ind, 22, i.ccf["CCF_SUBSCHEDID"]).style = c1
+        ws.cell(ind, 23, i.ccf["CCF_DESCR2"]).style = c1
+        ind += 1
+        for l in i.cdf:
+            ws.cell(ind, 1, "TC Element").style = c2
+            ws.cell(ind, 3, l["CDF_CNAME"]).style = c2
+            ws.cell(ind, 4, l["CDF_VALUE"]).style = c2
+            ws.cell(ind, 5, l["CDF_ELTYPE"]).style = c2
+            ws.cell(ind, 6, l["CDF_DESCR"]).style = c2
+            ws.cell(ind, 7, l["CDF_ELLEN"]).style = c2
+            ws.cell(ind, 8, l["CDF_BIT"]).style = c2
+            ws.cell(ind, 9, l["CDF_GRPSIZE"]).style = c2
+            #ws.cell(ind, 11, l["CDF_TMID"]).style = c2
+            ind +=1
+        for l in i.cvp:
+            ws.cell(ind, 1, "TC Verif Profile").style = c4
+            ws.cell(ind, 3, l["CVP_CVSID"]).style = c4
+            ind += 1
+        ind += 1
+            
+        
 
 def gen_xls(
     Tm_packets=None,
@@ -194,6 +246,30 @@ def gen_xls(
     verifications=None,
     Tc_head=None,
 ):
+    """The main function generating the excel table.
+    
+    It first calls various other "gen_" functions, each of which adds one worksheet to the workbook based on
+    passed packets/calibrations/etc..., then a blank sheet that was initially created with the workbook is
+    deleted and the method checks whether all expected worksheets have already been created (based on information
+    in :obj:`mib_generator.data.longdata.xls_heads`). If not, then empty sheets containing only the table headers
+    are created. Finally the width of columns in all sheets is adjusted and the workbook is returned.
+    
+    Args:
+        Tm_packets (list): List of TM-packets (their Python representations), each represented by an object of type
+            :obj:`mib_generator.construction.TM_packet.TM_packet`.
+        Tc_packets (list): List of TC-commands (their Python representations), each represented by an object of type
+            :obj:`mib_generator.construction.TC_packet.TC_packet`.
+        calibrations (dict): Dictionary holding lists various calibrations (their Python representations), each calibration
+            being an object of some child-class of :obj:`mib_generator.construction.calib.calib`.
+        decalibrations (list): List of textual decalibrations (their Python representations), each represented by an object of
+            type :obj:`mib_generator.construction.calib.decalib`.
+        verifications (list): List of TC-command verifications (their Python representations), each represented by an object of
+            type :obj:`mib_generator.construction.calib.verification`.
+        Tc_head (construction.TC_packet.TC_header): A header included in all TC-commands.
+        
+    Returns:
+        openpyxl.Workbook: An excel workbook containing all the generated sheets/tables.
+    """
     wb = Workbook()
     gen_polyc(wb, calibrations["mcfs"])
     gen_logc(wb, calibrations["lgfs"])
